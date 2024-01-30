@@ -1,3 +1,3 @@
 <footer>
-	<p>Copyright - Matthieu SKRZYPCZAK - 2024</p>
+	<p>Copyright - ÉcoEnchères - 2024</p>
 </footer>
