@@ -12,17 +12,18 @@ public class Utilisateur {
     private String code_postal;
     private String ville;
     private String mot_de_passe;
-    private int credit = 200;
-    private boolean administrateur = false;
-	private boolean actif = true;
+    private int credit;
+    private boolean administrateur;
+	private boolean actif;
 	
 	public Utilisateur() {
 		super();
 	}
 	
-	public Utilisateur(String pseudo, String nom, String prenom, String email, String telephone,
-			String rue, String code_postal, String ville, String mot_de_passe) {
+	public Utilisateur(int no_utilisateur, String pseudo, String nom, String prenom, String email, String telephone,
+			String rue, String code_postal, String ville, String mot_de_passe, int credit, boolean administrateur, boolean actif) {
 		super();
+		this.no_utilisateur = no_utilisateur;
 		this.pseudo = pseudo;
 		this.nom = nom;
 		this.prenom = prenom;
@@ -32,6 +33,9 @@ public class Utilisateur {
 		this.code_postal = code_postal;
 		this.ville = ville;
 		this.mot_de_passe = mot_de_passe;
+		this.credit = credit;
+		this.administrateur = administrateur;
+		this.actif = actif;
 	}
 
 	public int getNo_utilisateur() {
@@ -145,5 +149,5 @@ public class Utilisateur {
 				+ code_postal + ", ville=" + ville + ", mot_de_passe=" + mot_de_passe + ", credit=" + credit
 				+ ", administrateur=" + administrateur + ", actif=" + actif + "]";
 	}
-		
+
 }

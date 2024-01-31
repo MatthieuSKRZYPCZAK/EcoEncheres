@@ -4,8 +4,8 @@ import fr.eni.encheres.bo.Utilisateur;
 
 public interface UtilisateurDAO {
 		
-	Utilisateur selectById(int id);
-
-	void deleteById(int no_utilisateur);
+	public Utilisateur selectById(int id);
+	public void deleteById(int no_utilisateur);
+	public Utilisateur login(String email);
 
 }
