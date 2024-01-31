@@ -47,9 +47,6 @@ public class RegisterServlet extends HttpServlet {
 		String motDePasse = request.getParameter("motDePasse");
 		String confirmationMotDePasse = request.getParameter("confirmationMotDePasse");
 		
-		//Crypte le mot de passe avec BCrypt
-		String passwordHash = BCrypt.hashpw(motDePasse, BCrypt.gensalt(12));
-		
 		try {
 			UtilisateurManager utilisateurManager = new UtilisateurManager();
 			Utilisateur utilisateur = utilisateurManager.createUtilisateur(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, confirmationMotDePasse);
@@ -58,7 +55,7 @@ public class RegisterServlet extends HttpServlet {
 			ses.setAttribute("isConnected", utilisateur);
 			ses.setAttribute("successMessage", "Votre compte a été créé avec succès");
 			response.sendRedirect("accueil");
-			return;
+			
 		}catch(RegisterException e) {
 			System.out.println("erreur message : " + e.getMessage());
 			request.setAttribute("errorMessage", e.getMessage());
@@ -70,7 +67,6 @@ public class RegisterServlet extends HttpServlet {
 			request.setAttribute("codePostal", codePostal);
 			request.setAttribute("ville", ville);
 			request.getRequestDispatcher("/register.jsp").forward(request, response);
-			return;
 		}
 		
 
