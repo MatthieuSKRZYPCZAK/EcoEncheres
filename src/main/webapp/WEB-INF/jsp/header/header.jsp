@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <header>
 	<nav class="navbar fixed-top navbar-expand-lg">
-		<div>
+		<div class="effect-big">
 			<a class="navbar-brand logo-title" href="${pageContext.request.contextPath}/accueil">
 				<img src="${pageContext.request.contextPath}/img/logo.png" alt="Logo ÉcoEnchères" width="50" height="50" class="d-inline-block align-text-mid">
 					<span>ÉcoEnchères</span>
@@ -11,21 +11,37 @@
 			<c:when test="${not empty sessionScope.isConnected}">
 				<div class="collapse navbar-collapse" id="navbarText">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<c:choose>
+						<c:when test="${sessionScope.isConnected.administrateur eq true}">
+						<li class="nav-item dropdown">
+						<button class="btn  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+							  admin
+						</button>
+						<ul class="dropdown-menu dropdown-menu-dark">
+							<li><a class="dropdown-item" href="<%=request.getContextPath()%>/utilisateurs">Liste utilisateurs</a></li>
+							<li><a class="dropdown-item" href="">Liste des ventes</a></li>
+							<li><a class="dropdown-item" href="">Catégorie</a></li>
+						</ul>
+					</li>
+						
+						</c:when>
+					</c:choose>
+					
 					<li class="nav-item">
-						<a class="nav-link effect-nav" aria-current="page" href="#">Home</a>
+						<span class="nav-link effect-big">Mes crédits 450 <img src="${pageContext.request.contextPath}/img/credits.png" alt="Logo crédits" width="20" height="20" class="d-inline-block align-text-mid"></span>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link effect-nav" href="#">Features</a>
+						<a class="nav-link effect-nav" aria-current="page" href="#">Accueil</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link effect-nav" href="#">Pricing</a>
+						<a class="nav-link effect-nav" href="#">Vendre un article</a>
 					</li>
 				</ul>
 				
 				</div>
 				<ul class="navbar-nav ms-auto">
 					<li class="nav-item">
-						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/profil?id=${sessionScope.isConnected.noUtilisateur}">Vous êtes connecté ${sessionScope.isConnected.pseudo}</a>
+						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/profil?id=${sessionScope.isConnected.noUtilisateur}">Mon profil : ${sessionScope.isConnected.pseudo}</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/logout">Se déconnecter</a>

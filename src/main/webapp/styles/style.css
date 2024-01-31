@@ -41,7 +41,7 @@ nav span {
 		transform: scale(1);
 	}
 }
-nav img:hover {
+.effect-big:hover {
 	animation: grossirEtRetrecir 1s ease;
 }
 
