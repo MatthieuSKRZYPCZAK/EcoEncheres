@@ -6,6 +6,9 @@ public interface UtilisateurDAO {
 		
 	public Utilisateur selectById(int id);
 	public void deleteById(int no_utilisateur);
-	public Utilisateur login(String email);
+	public Utilisateur login(String pseudo);
+	public boolean emailExists(String email);
+	public boolean pseudoExists(String email);
+	public Utilisateur insert(Utilisateur utilisateur);
 
 }

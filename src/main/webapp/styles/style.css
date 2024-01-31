@@ -11,7 +11,7 @@ body, html{
 /* *******************/
 
 header {
-	height: 4rem;
+	height: 5rem;
 }
 
 nav {
@@ -41,11 +41,11 @@ nav span {
 		transform: scale(1);
 	}
 }
-.logo-title:hover {
+nav img:hover {
 	animation: grossirEtRetrecir 1s ease;
 }
 
-.register-login:hover {
+.effect-nav:hover {
 	font-weight: bold;
 }
 

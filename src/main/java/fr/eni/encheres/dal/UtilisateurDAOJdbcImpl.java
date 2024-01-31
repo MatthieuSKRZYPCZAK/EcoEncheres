@@ -6,15 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-
 import fr.eni.encheres.bo.Utilisateur;
 
 public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
+	
+	//INSERT
+	private static final String INSERT="INSERT INTO UTILISATEURS(pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe) VALUES(?,?,?,?,?,?,?,?,?);";
 	
 	
 	//READ
 	private static final String SELECT_ID="SELECT * FROM UTILISATEURS WHERE no_utilisateur=?;";
 	private static final String SELECT_EMAIL="SELECT * FROM UTILISATEURS WHERE email=?;";
+	private static final String SELECT_PSEUDO="SELECT * FROM UTILISATEURS WHERE pseudo=?;";
 	
 	//DELETE
 	private static final String DELETE="DELETE FROM UTILISATEURS WHERE no_utilisateur=?;";
@@ -40,8 +43,6 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 			if(rs.next()) {
 				return utilisateurBuilder(rs);
 			}
-			rs.close();
-			cnx.close();
 			return null;
 			
 		} catch (SQLException e) {
@@ -58,17 +59,15 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	 * @throws SQLException
 	 */
 	@Override
-	public Utilisateur login(String email) {
+	public Utilisateur login(String pseudo) {
 		try(Connection cnx = ConnectionProvider.getConnection())
 		{
-			PreparedStatement pstmt = cnx.prepareStatement(SELECT_EMAIL);
-			pstmt.setString(1, email);
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_PSEUDO);
+			pstmt.setString(1, pseudo);
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
 				return utilisateurBuilder(rs);
 			}
-			rs.close();
-			cnx.close();
 			return null;
 			
 		} catch (SQLException e) {
@@ -84,18 +83,17 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	 * @throws SQLException
 	 */
 	@Override
-	public void deleteById(int no_utilisateur) {
-		if(no_utilisateur == 0) {
+	public void deleteById(int noUtilisateur) {
+		if(noUtilisateur == 0) {
 			System.out.println("Pas d'id, prévoir l'erreur (exception)");
 		}
 		
 		try(Connection cnx = ConnectionProvider.getConnection())
 		{
 			PreparedStatement pstmt = cnx.prepareStatement(DELETE);
-			pstmt.setInt(1, no_utilisateur);
+			pstmt.setInt(1, noUtilisateur);
 			pstmt.executeUpdate();
-			cnx.close();
-			System.out.println("[UtilisateurDAOJdbcImpl:deleteById] L'utilisateur id : " + no_utilisateur + "a été supprimé");
+			System.out.println("[UtilisateurDAOJdbcImpl:deleteById] L'utilisateur id : " + noUtilisateur + "a été supprimé");
 		} catch (SQLException e){
 			e.printStackTrace();
 		}
@@ -111,20 +109,112 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	private Utilisateur utilisateurBuilder(ResultSet rs) throws SQLException {
 		Utilisateur utilisateurCourant;
 		utilisateurCourant = new Utilisateur();
+		utilisateurCourant.setNoUtilisateur(rs.getInt("no_utilisateur"));
 		utilisateurCourant.setPseudo(rs.getString("pseudo"));
 		utilisateurCourant.setNom(rs.getString("nom"));
 		utilisateurCourant.setPrenom(rs.getString("prenom"));
 		utilisateurCourant.setEmail(rs.getString("email"));
 		utilisateurCourant.setTelephone(rs.getString("telephone"));
 		utilisateurCourant.setRue(rs.getString("rue"));
-		utilisateurCourant.setCode_postal(rs.getString("code_postal"));
+		utilisateurCourant.setCodePostal(rs.getString("code_postal"));
 		utilisateurCourant.setVille(rs.getString("ville"));
-		utilisateurCourant.setMot_de_passe(rs.getString("mot_de_passe"));
+		utilisateurCourant.setMotDePasse(rs.getString("mot_de_passe"));
 		utilisateurCourant.setCredit(rs.getInt("credit"));
 		utilisateurCourant.setAdministrateur(rs.getBoolean("administrateur"));
 		utilisateurCourant.setActif(rs.getBoolean("actif"));
 		
 		return utilisateurCourant;
+	}
+
+	/**
+	 * Vérifie si l'email existe déjà dans la base de données.
+	 * @param email de l'adresse email à vérifier.
+	 * @return {@code true} si l'email existe déjà, {@code false} sinon.
+	 * @throws SQLException
+	 */
+	@Override
+	public boolean emailExists(String email) {
+		try(Connection cnx = ConnectionProvider.getConnection())
+		{
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_EMAIL);
+			pstmt.setString(1, email);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return true;
+			}
+			return false;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
+	 * Vérifie si le pseudo existe déjà dans la base de données.
+	 * @param pseudo Le pseudo à vérifier
+	 * @return {@code true} si le pseudo existe déjà, {@code false} sinon.
+	 * @throws SQLException
+	 */
+	@Override
+	public boolean pseudoExists(String pseudo) {
+		try(Connection cnx = ConnectionProvider.getConnection())
+		{
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_PSEUDO);
+			pstmt.setString(1, pseudo);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return true;
+			}
+			return false;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
+	 * Insère un nouvel utilisateur dans la base de données
+	 * @param utilisateur L'utilisateur à insérer dans la base de données
+	 * @return L'utilisateur avec ses données mises à jour, y compris son ID
+	 * @throws SQLException
+	 */
+	@Override
+	public Utilisateur insert(Utilisateur utilisateur) {
+
+
+		try(Connection cnx = ConnectionProvider.getConnection())
+		{
+			PreparedStatement pstmt = cnx.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
+			pstmt.setString(1, utilisateur.getPseudo());
+			pstmt.setString(2, utilisateur.getNom());
+			pstmt.setString(3, utilisateur.getPrenom());
+			pstmt.setString(4, utilisateur.getEmail());
+			pstmt.setString(5, utilisateur.getTelephone());
+			pstmt.setString(6, utilisateur.getRue());
+			pstmt.setString(7, utilisateur.getCodePostal());
+			pstmt.setString(8, utilisateur.getVille());
+			pstmt.setString(9, utilisateur.getMotDePasse());
+			pstmt.executeUpdate();
+			ResultSet rs = pstmt.getGeneratedKeys();
+
+
+			if(rs.next())
+			{
+				int id = rs.getInt(1);
+				utilisateur = selectById(id);
+			}
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		return utilisateur;
 	}
 
 }

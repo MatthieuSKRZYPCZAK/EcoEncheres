@@ -1,36 +1,50 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <header>
-	<nav class="navbar navbar-expand-lg">
-		<div class="container-fluid">
+	<nav class="navbar fixed-top navbar-expand-lg">
+		<div>
 			<a class="navbar-brand logo-title" href="${pageContext.request.contextPath}/accueil">
 				<img src="${pageContext.request.contextPath}/img/logo.png" alt="Logo ÉcoEnchères" width="50" height="50" class="d-inline-block align-text-mid">
 					<span>ÉcoEnchères</span>
 			</a>
 		</div>
 		<c:choose>
-					<c:when test="${not empty sessionScope.userConnected}">
-						<ul class="navbar-nav ms-auto">
-							<li class="nav-item">
-								<a class="nav-link" href="<%=request.getContextPath()%>/profil?id=${sessionScope.userConnected.id}">Vous êtes connecté ${sessionScope.userConnected.identifiant}</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="<%=request.getContextPath()%>/logout">Se déconnecter</a>
-							</li>
-						</ul>
-					</c:when>
-					<c:otherwise>
-						<ul class="navbar-nav ms-auto">
-							<li class="nav-item">
-								<a class="nav-link register-login" href="<%=request.getContextPath()%>/register">Inscription</a>
-							</li>
-							<li class="nav-item">
+			<c:when test="${not empty sessionScope.isConnected}">
+				<div class="collapse navbar-collapse" id="navbarText">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item">
+						<a class="nav-link effect-nav" aria-current="page" href="#">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link effect-nav" href="#">Features</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link effect-nav" href="#">Pricing</a>
+					</li>
+				</ul>
+				
+				</div>
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item">
+						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/profil?id=${sessionScope.isConnected.noUtilisateur}">Vous êtes connecté ${sessionScope.isConnected.pseudo}</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/logout">Se déconnecter</a>
+					</li>
+				</ul>
+			</c:when>
+			<c:otherwise>
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item">
+						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/register">Inscription</a>
+					</li>
+					<li class="nav-item">
 
-							</li>
-							<li class="nav-item">
-								<a class="nav-link register-login" href="<%=request.getContextPath()%>/login">Connection</a>
-							</li>
-						</ul>
-					</c:otherwise>
-			</c:choose>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/login">Connection</a>
+					</li>
+				</ul>
+			</c:otherwise>
+		</c:choose>
 	</nav>
 </header>
