@@ -6,6 +6,7 @@ import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.DAOFactory;
 import fr.eni.encheres.dal.UtilisateurDAO;
 import fr.eni.encheres.exception.RegisterException;
+import fr.eni.encheres.exception.UpdateException;
 import fr.eni.encheres.services.BCrypt;
 
 public class UtilisateurManager {
@@ -143,14 +144,116 @@ private UtilisateurDAO utilisateurDAO;
 		//Crypte le mot de passe de l'utilisateur avec BCrypt
 		String passwordHash = BCrypt.hashpw(motDePasse, BCrypt.gensalt(12));
 		
-		System.out.println("Utilisateur manager - pseudo : " + pseudo.toLowerCase() +" nom : " + nom.toLowerCase()+" prenom : " +  prenom.toLowerCase()+" email : " +  email.toLowerCase()+" telephone : " +  telephone+" rue : " +  rue.toLowerCase()+" code postal : " +  codePostal+" ville : " +  ville.toUpperCase()+" password : " +  passwordHash);
+		System.out.println("Utilisateur manager - pseudo : " + pseudo.toLowerCase() +" nom : " + nom.toUpperCase()+" prenom : " +  prenom.toLowerCase()+" email : " +  email.toLowerCase()+" telephone : " +  telephone+" rue : " +  rue.toLowerCase()+" code postal : " +  codePostal+" ville : " +  ville.toUpperCase()+" password : " +  passwordHash);
 		
 		//création de l'utilisateur et retourne l'utilisateur crée
-		Utilisateur utilisateur = new Utilisateur(pseudo.toLowerCase(), nom.toLowerCase(), prenom.toLowerCase(), email.toLowerCase(), telephone, rue.toLowerCase(), codePostal, ville.toUpperCase(), passwordHash);
+		Utilisateur utilisateur = new Utilisateur(pseudo.toLowerCase(), nom.toUpperCase(), prenom.toLowerCase(), email.toLowerCase(), telephone, rue.toLowerCase(), codePostal, ville.toUpperCase(), passwordHash);
 		utilisateur = utilisateurDAO.insert(utilisateur);
 		
 		return utilisateur;
 	}
 	
+	
+	/**
+	 * 
+	 * @param id
+	 * @param pseudo
+	 * @param nom
+	 * @param prenom
+	 * @param email
+	 * @param telephone
+	 * @param rue
+	 * @param codePostal
+	 * @param ville
+	 * @param motDePasse
+	 * @param nouveauMotDePasse
+	 * @param confirmationMotDePasse
+	 * @return
+	 * @throws UpdateException
+	 */
+	public Utilisateur updateUtilisateur(int id, String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal, String ville, String motDePasse, String nouveauMotDePasse,String confirmationMotDePasse) throws UpdateException {
+		Utilisateur utilisateurSession = getById(id);
+		Utilisateur updateUtilisateur = new Utilisateur();
+		
+		//Vérifie si les champs sont vides ou null
+				if (	   pseudo.isEmpty() || pseudo == null
+						&& nom.isEmpty() || nom == null 
+						&& prenom.isEmpty() || prenom == null
+						&& email.isEmpty() || email == null 
+						&& telephone.isEmpty() || telephone == null 
+						&& rue.isEmpty() || rue == null
+						&& codePostal.isEmpty() || codePostal == null
+						&& ville.isEmpty() || ville == null)
+				{ 
+					throw new UpdateException("Il y a des champs qui n'ont pas été renseignés.");
+				}
 
+				boolean emailExists = emailExists(email.toLowerCase());
+				boolean pseudoExists = pseudoExists(pseudo.toLowerCase());
+				String errorMessage = "";
+				
+				if(!BCrypt.checkpw(motDePasse, utilisateurSession.getMotDePasse())){
+					throw new UpdateException("mauvais mot de passe");
+				}
+				
+				if(!nouveauMotDePasse.isEmpty()) {
+					if(!nouveauMotDePasse.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$")) {
+						errorMessage += " le mot de passe doit contenir au moins 8 caractères, dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial";
+					}
+					if(!nouveauMotDePasse.equals(confirmationMotDePasse)) {
+						errorMessage += " Le nouveau mot de passe ne correspond pas avec le mot de passe de confirmation";
+					}
+				} 
+				
+				if(emailExists){
+					if((!utilisateurSession.getEmail().toLowerCase().equals(email.toLowerCase()))) {
+						errorMessage += " L'adresse email est déjà utilisée.";
+					}
+				}
+				
+				if(pseudoExists) {
+					if((!utilisateurSession.getPseudo().toLowerCase().equals(pseudo.toLowerCase()))){
+						errorMessage += " Le pseudo est déjà pris.";
+					}
+				}
+				
+				if(!pseudo.matches("^[a-zA-Z0-9]{3,30}$")) {
+					errorMessage += " Le pseudo doit contenir entre 3 et 30 caractères alphanumériques (lettres majuscule, lettre minuscules ou chiffres).";
+				}
+				if(telephone.length() != 10) {
+					errorMessage += " le numéro de téléphone doit contenir 10 chiffres";
+				}
+				if(!telephone.matches("^[0-9]{10}$")) {
+					errorMessage += " le numéro de téléphone doit contenir 10 chiffres consécutifs";
+				}
+				if(codePostal.length() !=5) {
+					errorMessage += " Le code postal doit contenir 5 chiffres";
+				}
+				if(!codePostal.matches("^[0-9]{5}")) {
+					errorMessage += " Le code postal doit contenir 5 chiffres consécutifs";
+				}
+				
+				if(errorMessage.length() > 0) {
+					throw new RuntimeException(errorMessage.toString());
+				}
+				
+				if(!nouveauMotDePasse.isEmpty()) {
+					String passwordHash = BCrypt.hashpw(nouveauMotDePasse, BCrypt.gensalt(12));
+					updateUtilisateur.setMotDePasse(passwordHash);
+				} else {
+					updateUtilisateur.setMotDePasse(utilisateurSession.getMotDePasse());
+				}
+				updateUtilisateur.setPseudo(pseudo.toLowerCase());
+				updateUtilisateur.setNom(nom.toUpperCase());
+				updateUtilisateur.setPrenom(prenom.toLowerCase());
+				updateUtilisateur.setEmail(email.toLowerCase());
+				updateUtilisateur.setCodePostal(codePostal);
+				updateUtilisateur.setRue(rue.toLowerCase());
+				updateUtilisateur.setNoUtilisateur(id);
+				updateUtilisateur.setVille(ville.toUpperCase());
+				updateUtilisateur.setTelephone(telephone);
+			
+				updateUtilisateur = utilisateurDAO.updateUtilisateur(updateUtilisateur);
+				return updateUtilisateur;
+	}
 }

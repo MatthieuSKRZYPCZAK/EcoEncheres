@@ -10,5 +10,6 @@ public interface UtilisateurDAO {
 	public boolean emailExists(String email);
 	public boolean pseudoExists(String email);
 	public Utilisateur insert(Utilisateur utilisateur);
+	public Utilisateur updateUtilisateur(Utilisateur utilisateur);
 
 }

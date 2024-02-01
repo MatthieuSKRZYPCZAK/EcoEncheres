@@ -64,17 +64,13 @@ public class LoginServlet extends HttpServlet {
 		
 		UtilisateurManager utilisateurManager = new UtilisateurManager();
 		Utilisateur utilisateur = utilisateurManager.login(pseudo);
-		System.out.println("test login");
 		if (utilisateur != null) {
-			System.out.println("utilisateur existe");
 			if(BCrypt.checkpw(request.getParameter("password"), utilisateur.getMotDePasse())) {
-				System.out.println("password correcte");
 				HttpSession ses;
 				ses = request.getSession();
 				ses.setAttribute("isConnected", utilisateur);
 				response.sendRedirect(request.getContextPath()+"/accueil");
 			} else {
-				System.out.println("erreur password");
 				request.setAttribute("lastLogin", pseudo);
 				request.setAttribute("erreur", "identifiant/password incorrect");
 				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
