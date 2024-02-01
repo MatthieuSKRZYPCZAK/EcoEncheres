@@ -28,7 +28,7 @@
 					</c:choose>
 					
 					<li class="nav-item">
-						<span class="nav-link effect-big">Mes crédits 450 <img src="${pageContext.request.contextPath}/img/credits.png" alt="Logo crédits" width="20" height="20" class="d-inline-block align-text-mid"></span>
+						<span class="nav-link effect-big">Mes crédits ${sessionScope.isConnected.credit} <img src="${pageContext.request.contextPath}/img/credits.png" alt="Logo crédits" width="20" height="20" class="d-inline-block align-text-mid"></span>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link effect-nav" aria-current="page" href="#">Accueil</a>
