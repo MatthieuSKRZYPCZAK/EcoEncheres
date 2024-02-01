@@ -52,10 +52,10 @@ public class loginServlet extends HttpServlet {
 //			seSouvenir = true;
 //		}
 //		
-//		//Création du cookie pour le pseudo
-//		Cookie cookiePseudo = new Cookie("lastLogin",pseudo);
-//		cookiePseudo.setMaxAge(8*24*60*60);
-//		response.addCookie(cookiePseudo);
+		//Création du cookie pour le pseudo
+		Cookie cookiePseudo = new Cookie("lastLogin",pseudo);
+		cookiePseudo.setMaxAge(8*24*60*60);
+		response.addCookie(cookiePseudo);
 //		
 //		//Création du cooke pour seSouvenir
 //		Cookie cookieSeSouvenir = new Cookie("seSouvenir", seSouvenir.toString());
@@ -75,14 +75,14 @@ public class loginServlet extends HttpServlet {
 				response.sendRedirect(request.getContextPath()+"/accueil");
 			} else {
 				System.out.println("erreur password");
-				request.setAttribute("lastLoginEmail", pseudo);
-				request.setAttribute("erreur", "email/password incorrect");
+				request.setAttribute("lastLogin", pseudo);
+				request.setAttribute("erreur", "identifiant/password incorrect");
 				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 			}			
 		} else {
 			System.out.println("utilisateur non trouvé");
-			request.setAttribute("erreur", "email/password incorrect");
-			request.setAttribute("lastLoginEmail", pseudo);
+			request.setAttribute("erreur", "identifiant/password incorrect");
+			request.setAttribute("lastLogin", pseudo);
 			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 		}
 	}

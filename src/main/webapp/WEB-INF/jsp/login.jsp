@@ -2,19 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%-- Récupération des cookies pour se souvenir de l'utilisateur --%>
 <%
-Cookie[] cookies = request.getCookies();
-String lastLogin = "";
-Boolean seSouvenir = false;
-if (cookies != null) {
-	for(Cookie cookie : cookies) {
-		if("lastLogin".equals(cookie.getName())) {
-			lastLogin = cookie.getValue();
-			request.setAttribute("lastLogin", lastLogin);
-		} else if ("seSouvenir".equals(cookie.getName())) {
-			seSouvenir = Boolean.parseBoolean(cookie.getValue());
-		}
+	Cookie[] pseudo;
+	String lastLogin="";
+	pseudo=request.getCookies();
+	for(Cookie c:pseudo){
+		if(c.getName().equals("lastLogin")) {
+			lastLogin = c.getValue();
+		} 
 	}
-}
 %>
 	<title>ÉcoEnchères - Login</title>
 </head>
@@ -28,7 +23,7 @@ if (cookies != null) {
 					<form action="login" method="post">
 						<div class="form-group">
 							<label for="pseudo">Identifiant :</label>
-							<input type="text" id="pseudo" name="pseudo" class="form-control" value="${pseudo}" required>
+							<input type="text" id="pseudo" name="pseudo" class="form-control" value="${lastLogin}" required>
 						</div>
 						<div class="form-group">
 							<label for="password">Mot de passe :</label>
@@ -37,7 +32,7 @@ if (cookies != null) {
 						<div class="form-group d-flex justify-content-between">
 							<div>
 								<label for="seSouvenir">Se souvenir de moi :</label>
-								<input type="checkbox" id="seSouvenir" name="seSouvenir" <%if(seSouvenir) {%>checked<%}%>>
+								<input type="checkbox" id="seSouvenir" name="seSouvenir" >
 							</div>
 							<a class="float-right" href="passePerdu">Mot de passe oublié</a>
 						</div>
@@ -45,6 +40,11 @@ if (cookies != null) {
 							<button type="submit" class="btn btn-primary">Se connecter</button>
 							<a class="btn btn-primary" href="register">S'inscrire</a>
 						</div>
+						<c:choose>
+							<c:when test="${not empty requestScope.erreur}">
+								<strong class="erreur"><c:out value="${requestScope.erreur}" /></strong>
+							</c:when>
+						</c:choose>
 					</form>
 				</div>
 			</div>
