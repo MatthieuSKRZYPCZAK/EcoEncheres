@@ -2,6 +2,8 @@ package fr.eni.encheres.bll;
 
 
 
+import java.util.List;
+
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.DAOFactory;
 import fr.eni.encheres.dal.UtilisateurDAO;
@@ -255,5 +257,28 @@ private UtilisateurDAO utilisateurDAO;
 			
 				updateUtilisateur = utilisateurDAO.updateUtilisateur(updateUtilisateur);
 				return updateUtilisateur;
+	}
+	
+	/**
+	 * Récupère la liste de tous les utilisateurs
+	 * @return Retourne la liste des utilisateurs
+	 */
+	public List<Utilisateur> selectionnerTousLesUtilisateurs() {
+		return this.utilisateurDAO.selectAllUsers();
+	}
+
+	public void supprimer(int no_utilisateur) {
+		this.utilisateurDAO.delete(no_utilisateur);
+		
+	}
+
+	public void desactive(int id) {
+		this.utilisateurDAO.disable(id);
+		
+	}
+
+	public void active(int id) {
+		this.utilisateurDAO.enable(id);
+		
 	}
 }

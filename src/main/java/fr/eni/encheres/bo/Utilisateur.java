@@ -1,5 +1,9 @@
 package fr.eni.encheres.bo;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class Utilisateur {
 
 	private int noUtilisateur;
@@ -15,9 +19,10 @@ public class Utilisateur {
     private int credit;
     private boolean administrateur;
 	private boolean actif;
+	private List<Utilisateur> listeUtilisateurs;
 	
 	public Utilisateur() {
-		super();
+		this.listeUtilisateurs = new ArrayList<Utilisateur>();
 	}
 	
 	public Utilisateur(int noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone,
@@ -154,6 +159,13 @@ public class Utilisateur {
 
 	public void setActif(boolean actif) {
 		this.actif = actif;
+	}
+	
+	public List<Utilisateur> getListeUtilisateurs() {
+		return listeUtilisateurs;
+	}
+	public void setListeUtilisateurs(List<Utilisateur> listeUtilisateurs) {
+		this.listeUtilisateurs = listeUtilisateurs;
 	}
 
 	@Override

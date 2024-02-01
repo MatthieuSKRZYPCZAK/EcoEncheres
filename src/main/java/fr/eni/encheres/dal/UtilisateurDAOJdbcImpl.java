@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 import fr.eni.encheres.bo.Utilisateur;
@@ -12,9 +14,13 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	
 	//INSERT
 	private static final String INSERT="INSERT INTO UTILISATEURS(pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe) VALUES(?,?,?,?,?,?,?,?,?);";
+	private static final String SELECT_ALL="SELECT * FROM UTILISATEURS ORDER BY no_utilisateur desc;";
 	
 	//UPDATE
 	private static final String UPDATE="UPDATE UTILISATEURS SET pseudo=?, nom=?, prenom=?, email=?, telephone=?, rue=?, code_postal=?, ville=?, mot_de_passe=? WHERE no_utilisateur=?;";
+	private static final String ENABLE="UPDATE UTILISATEURS SET actif=1 WHERE no_utilisateur=?;";
+	private static final String DISABLE="UPDATE UTILISATEURS SET actif=0 WHERE no_utilisateur=?;";
+	
 	
 	//READ
 	private static final String SELECT_ID="SELECT * FROM UTILISATEURS WHERE no_utilisateur=?;";
@@ -23,6 +29,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	
 	//DELETE
 	private static final String DELETE="DELETE FROM UTILISATEURS WHERE no_utilisateur=?;";
+	
 
 
 	/**
@@ -245,6 +252,81 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 			e.printStackTrace();
 			return null;
 		}
+		
+	}
+
+	/**
+	 * Récupère et renvoie la liste de tous les utilisateurs depuis la base de donnée
+	 * @return Retourne une liste de tous les utilisateurs présents dans la base de donnée
+	 */
+	@Override
+	public List<Utilisateur> selectAllUsers() {
+		List<Utilisateur> listeUtilisateurs= new ArrayList<Utilisateur>();
+		try(Connection cnx = ConnectionProvider.getConnection())
+		{
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ALL);
+			ResultSet rs = pstmt.executeQuery();
+			Utilisateur utilisateurCourant=new Utilisateur();
+			while(rs.next())
+			{
+				if(rs.getInt("no_utilisateur")!=utilisateurCourant.getNoUtilisateur())
+				{
+					utilisateurCourant = utilisateurBuilder(rs);
+					listeUtilisateurs.add(utilisateurCourant);
+				}
+				Utilisateur utilisateur = utilisateurBuilder(rs);
+				utilisateurCourant.getListeUtilisateurs().add(utilisateur);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return listeUtilisateurs;
+	}
+
+	@Override
+	public void delete(int no_utilisateur) {
+		
+		try(Connection cnx = ConnectionProvider.getConnection())
+		{
+			PreparedStatement pstmt = cnx.prepareStatement(DELETE);
+			pstmt.setInt(1, no_utilisateur);
+			pstmt.executeUpdate();
+	
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public void disable(int id) {
+		try(Connection cnx = ConnectionProvider.getConnection())
+		{
+			PreparedStatement pstmt = cnx.prepareStatement(DISABLE);
+			pstmt.setInt(1, id);
+			pstmt.executeUpdate();
+	
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public void enable(int id) {
+		try(Connection cnx = ConnectionProvider.getConnection())
+		{
+			PreparedStatement pstmt = cnx.prepareStatement(ENABLE);
+			pstmt.setInt(1, id);
+			pstmt.executeUpdate();
+	
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		
 	}
 
 }
