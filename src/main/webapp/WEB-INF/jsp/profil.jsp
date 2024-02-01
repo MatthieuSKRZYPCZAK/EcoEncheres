@@ -10,6 +10,20 @@
 			<div class="col-12 text-center">
 				<h1>Mon profil</h1>
 			</div>
+			<div class="message">
+				<c:choose>
+					<c:when test="${not empty sessionScope.erreur}">
+						<strong class="erreur"><c:out value="${sessionScope.erreur}" /></strong>
+						<c:remove var="erreur" scope="session" />
+					</c:when>
+				</c:choose>
+				<c:choose>
+					<c:when test="${not empty sessionScope.successMessage}">
+						<strong class="succes"><c:out value="${sessionScope.successMessage}" /></strong>
+						<c:remove var="successMessage" scope="session" />
+					</c:when>
+				</c:choose>
+			</div>
 			<c:choose>
 				<c:when test="${not empty sessionScope.isConnected}">
 					<p class="credit text-center display-6 effect-big">Mes crédit : ${sessionScope.isConnected.credit} <img src="${pageContext.request.contextPath}/img/credits.png" alt="Logo crédits" width="50" height="50" class="d-inline-block align-text-mid"></p>
@@ -93,16 +107,6 @@
 								</div>
 							</div>
 						</div>
-						<c:choose>
-							<c:when test="${not empty requestScope.erreur}">
-								<strong class="erreur"><c:out value="${requestScope.erreur}" /></strong>
-							</c:when>
-						</c:choose>
-						<c:choose>
-						<c:when test="${not empty requestScope.successMessage}">
-								<strong class="succes"><c:out value="${requestScope.successMessage}" /></strong>
-						</c:when>
-						</c:choose>
 						<div class="row justify-content-center">
 							<div class="col-3 d-grid mt-3">
 								<input class="btn btn-primary" type="submit" value="Modifier" id="submit"> 

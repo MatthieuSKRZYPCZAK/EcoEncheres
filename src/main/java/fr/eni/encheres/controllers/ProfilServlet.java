@@ -51,21 +51,21 @@ public class ProfilServlet extends HttpServlet {
 		//Je récupère les informations saisie dans le formulaire
 		HttpSession session = request.getSession();
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("isConnected");
-		int id = utilisateur.getNoUtilisateur();
-		String pseudo = request.getParameter("pseudo");
-		String nom = request.getParameter("nom");
-		String prenom = request.getParameter("prenom");
-		String email = request.getParameter("email");
-		String telephone = request.getParameter("telephone");
-		String rue = request.getParameter("rue");
-		String codePostal = request.getParameter("codePostal");
-		String ville = request.getParameter("ville").toUpperCase();
-		String motDePasse = request.getParameter("motDePasse");
-		String nouveauMotDePasse = request.getParameter("nouveauMotDePasse");
-		String confirmationMotDePasse = request.getParameter("confirmationMotDePasse");
-		
 		
 		if(utilisateur != null) {
+			int id = utilisateur.getNoUtilisateur();
+			String pseudo = request.getParameter("pseudo");
+			String nom = request.getParameter("nom");
+			String prenom = request.getParameter("prenom");
+			String email = request.getParameter("email");
+			String telephone = request.getParameter("telephone");
+			String rue = request.getParameter("rue");
+			String codePostal = request.getParameter("codePostal");
+			String ville = request.getParameter("ville").toUpperCase();
+			String motDePasse = request.getParameter("motDePasse");
+			String nouveauMotDePasse = request.getParameter("nouveauMotDePasse");
+			String confirmationMotDePasse = request.getParameter("confirmationMotDePasse");
+
 			UtilisateurManager utilisateurManager = new UtilisateurManager();
 			
 			try {
@@ -73,18 +73,19 @@ public class ProfilServlet extends HttpServlet {
 				updateUtilisateur = utilisateurManager.updateUtilisateur(id, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, nouveauMotDePasse, confirmationMotDePasse);
 
 				session.setAttribute("isConnected", updateUtilisateur);
-				request.setAttribute("successMessage", "la modification a été validé avec succes");
+				session.setAttribute("successMessage", "la modification a été validé avec succes");
 				System.out.println("utilisateur modifié");
+				response.sendRedirect(request.getContextPath() + "/profil?id=" + id);
 				
 
 			} catch (UpdateException e) {
-				request.setAttribute("erreur", e);
-				
+				session.setAttribute("erreur", e);
+				System.out.println("id :" +id);
+				System.out.println("erreur catch profilservlet post");
+				response.sendRedirect(request.getContextPath() + "/profil?id=" + id);
 			}
+		} else {
+			response.sendRedirect(request.getContextPath() + "/login");
 		}
-
-
-
 	}
-
 }

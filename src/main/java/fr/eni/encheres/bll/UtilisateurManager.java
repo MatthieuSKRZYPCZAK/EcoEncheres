@@ -234,7 +234,7 @@ private UtilisateurDAO utilisateurDAO;
 				}
 				
 				if(errorMessage.length() > 0) {
-					throw new RuntimeException(errorMessage.toString());
+					throw new UpdateException(errorMessage.toString());
 				}
 				
 				if(!nouveauMotDePasse.isEmpty()) {

@@ -82,6 +82,10 @@ footer {
 /* *******************/
 /*       all         */
 /* *******************/
+
+.message{
+	text-align: center;
+}
 .erreur {
 	color:red;
 }
