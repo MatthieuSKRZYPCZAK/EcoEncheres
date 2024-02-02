@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
 import fr.eni.encheres.bll.UtilisateurManager;
 import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.services.BCrypt;
 
 
 
@@ -37,6 +39,45 @@ public class SupprimerUtilisateurServlet extends HttpServlet {
 		}
 		response.sendRedirect("accueil");
 		
+	}
+	
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		System.out.println("Je suis dans le Post de supprimer");
+		try {
+			String id = request.getParameter("id");
+			//Vérifie si l'utilisateur est connecté
+			HttpSession session = request.getSession();
+			if(session != null) {
+				Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
+				if(utilisateurSession.getNoUtilisateur() == Integer.parseInt(request.getParameter("id"))){
+					System.out.println("je suis le bonne utilisateur id = " +id);
+					if(BCrypt.checkpw(request.getParameter("motDePasse"), utilisateurSession.getMotDePasse())) {
+						System.out.println("Et mon passe est correcte");
+						UtilisateurManager utilisateurManager = new UtilisateurManager();
+						utilisateurManager.supprimer(utilisateurSession.getNoUtilisateur());
+						session.invalidate();
+						response.sendRedirect(request.getContextPath() + "/login");
+						return;
+					} else {
+						System.out.println("mon passe est incorrecte et l'id est : " + id);
+						request.getSession().setAttribute("erreur", "mauvais mot de passe");
+						response.sendRedirect(request.getContextPath() + "/profil?id=" + id);
+						return;
+					}
+				}
+				
+			}
+			request.getRequestDispatcher("accueil");
+			
+			} catch(Exception e) {
+			request.setAttribute("erreur", e.getMessage());
+			request.getRequestDispatcher("login");
+		}
 	}
 
 

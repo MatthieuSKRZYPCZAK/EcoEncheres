@@ -34,13 +34,18 @@ public class ProfilServlet extends HttpServlet {
 			if(session != null) {
 				Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
 				if(utilisateurSession != null && utilisateurSession.getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
+					request.setAttribute("moi", true);
+					request.setAttribute("utilisateur", utilisateur);
 					request.getRequestDispatcher("/WEB-INF/jsp/profil.jsp").forward(request, response);
 					return;
 				}
 			}
+			request.setAttribute("utilisateur", utilisateur);
+			
+			
 		}
 
-		response.sendRedirect(request.getContextPath()+"/accueil");
+		request.getRequestDispatcher("/WEB-INF/jsp/profil.jsp").forward(request, response);
 	}
 	
 
