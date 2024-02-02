@@ -94,6 +94,11 @@ footer {
 	color: green;
 }
 
+.no-border-style {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
 
 
 

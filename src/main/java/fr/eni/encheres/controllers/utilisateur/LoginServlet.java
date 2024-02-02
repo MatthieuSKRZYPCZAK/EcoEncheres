@@ -1,4 +1,4 @@
-package fr.eni.encheres.controllers;
+package fr.eni.encheres.controllers.utilisateur;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -27,6 +27,7 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 	}
 

@@ -1,15 +1,13 @@
 package fr.eni.encheres.exception;
 
-public class RegisterException extends Exception{
+public class CategorieException extends Exception{
 	private static final long serialVersionUID = 1L;
-	
-	public RegisterException(String message) {
+
+	public CategorieException(String message) {
 		super(message);
 	}
-	
 	@Override
 	public String toString() {
 		return getMessage();
 	}
-
 }

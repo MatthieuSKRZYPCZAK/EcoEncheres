@@ -274,8 +274,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 					utilisateurCourant = utilisateurBuilder(rs);
 					listeUtilisateurs.add(utilisateurCourant);
 				}
-				Utilisateur utilisateur = utilisateurBuilder(rs);
-				utilisateurCourant.getListeUtilisateurs().add(utilisateur);
+
 			}
 		}
 		catch(SQLException e)

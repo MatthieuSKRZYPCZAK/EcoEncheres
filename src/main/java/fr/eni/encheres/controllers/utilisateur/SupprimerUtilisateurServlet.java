@@ -1,4 +1,4 @@
-package fr.eni.encheres.controllers;
+package fr.eni.encheres.controllers.utilisateur;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -6,8 +6,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.bll.UtilisateurManager;
+import fr.eni.encheres.bo.Utilisateur;
 
 
 
@@ -23,9 +25,18 @@ public class SupprimerUtilisateurServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UtilisateurManager utilisateurManager = new UtilisateurManager();
-		utilisateurManager.supprimer(Integer.parseInt(request.getParameter("id")));
-		response.sendRedirect("utilisateurs");
+		HttpSession session = request.getSession();
+		if(session != null) {
+			Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
+			if(utilisateurSession.isAdministrateur()) {
+				UtilisateurManager utilisateurManager = new UtilisateurManager();
+				utilisateurManager.supprimer(Integer.parseInt(request.getParameter("id")));
+				response.sendRedirect("utilisateurs");
+				return;
+			}
+		}
+		response.sendRedirect("accueil");
+		
 	}
 
 
