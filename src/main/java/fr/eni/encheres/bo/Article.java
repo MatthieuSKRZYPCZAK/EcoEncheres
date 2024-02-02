@@ -3,47 +3,49 @@ package fr.eni.encheres.bo;
 import java.time.LocalDate;
 
 public class Article {
-	private int no_article;
-	private String nom_article;
+	private int noArticle;
+	private String nomArticle;
 	private String description;
-	private LocalDate date_debut_encheres;
-	private LocalDate date_fin_encheres;
-	private int prix_initial;
-	private int prix_vente;
+	private LocalDate dateDebutEncheres;
+	private LocalDate dateFinEncheres;
+	private int prixInitial;
+	private int prixVente;
 	private Utilisateur utilisateur;
 	private Categorie categorie;
+	private String etatVente;
 	
 	public Article() {
-		
+		super();
 	}
 	
-	public Article(int no_article, String nom_article, String description, LocalDate date_debut_encheres, LocalDate date_fin_encheres, int prix_initial, int prix_vente, Utilisateur utilisateur, Categorie categorie) {
+	public Article(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int prixInitial, int prixVente, String etatVente, Utilisateur utilisateur, Categorie categorie) {
 		super();
-		this.no_article = no_article;
-		this.nom_article = nom_article;
+		this.noArticle = noArticle;
+		this.nomArticle = nomArticle;
 		this.description = description;
-		this.date_debut_encheres = date_debut_encheres;
-		this.date_fin_encheres = date_fin_encheres;
-		this.prix_initial = prix_initial;
-		this.prix_vente = prix_vente;
+		this.dateDebutEncheres = dateDebutEncheres;
+		this.dateFinEncheres = dateFinEncheres;
+		this.prixInitial = prixInitial;
+		this.prixVente = prixVente;
+		this.etatVente = etatVente;
 		this.utilisateur = utilisateur;
 		this.categorie = categorie;
 	}
 
-	public int getNo_article() {
-		return no_article;
+	public int getNoArticle() {
+		return noArticle;
 	}
 
-	public void setNo_article(int no_article) {
-		this.no_article = no_article;
+	public void setNoArticle(int noArticle) {
+		this.noArticle = noArticle;
 	}
 
-	public String getNom_article() {
-		return nom_article;
+	public String getNomArticle() {
+		return nomArticle;
 	}
 
-	public void setNom_article(String nom_article) {
-		this.nom_article = nom_article;
+	public void setNomArticle(String nomArticle) {
+		this.nomArticle = nomArticle;
 	}
 
 	public String getDescription() {
@@ -54,36 +56,36 @@ public class Article {
 		this.description = description;
 	}
 
-	public LocalDate getDate_debut_encheres() {
-		return date_debut_encheres;
+	public LocalDate getDateDebutZncheres() {
+		return dateDebutEncheres;
 	}
 
-	public void setDate_debut_encheres(LocalDate date_debut_encheres) {
-		this.date_debut_encheres = date_debut_encheres;
+	public void setDateDebutEncheres(LocalDate dateDebutEncheres) {
+		this.dateDebutEncheres = dateDebutEncheres;
 	}
 
-	public LocalDate getDate_fin_encheres() {
-		return date_fin_encheres;
+	public LocalDate getDateFinEncheres() {
+		return dateFinEncheres;
 	}
 
-	public void setDate_fin_encheres(LocalDate date_fin_encheres) {
-		this.date_fin_encheres = date_fin_encheres;
+	public void setDate_fin_encheres(LocalDate dateFinEncheres) {
+		this.dateFinEncheres = dateFinEncheres;
 	}
 
-	public int getPrix_initial() {
-		return prix_initial;
+	public int getPrixInitial() {
+		return prixInitial;
 	}
 
-	public void setPrix_initial(int prix_initial) {
-		this.prix_initial = prix_initial;
+	public void setPrixInitial(int prixInitial) {
+		this.prixInitial = prixInitial;
 	}
 
-	public int getPrix_vente() {
-		return prix_vente;
+	public int getPrixVente() {
+		return prixVente;
 	}
 
-	public void setPrix_vente(int prix_vente) {
-		this.prix_vente = prix_vente;
+	public void setPrixVente(int prixVente) {
+		this.prixVente = prixVente;
 	}
 
 	public Utilisateur getUtilisateur() {
@@ -100,6 +102,14 @@ public class Article {
 
 	public void setCategorie(Categorie categorie) {
 		this.categorie = categorie;
+	}
+
+	public String getEtatVente() {
+		return etatVente;
+	}
+
+	public void setEtatVente(String etatVente) {
+		this.etatVente = etatVente;
 	}
 	
 }
