@@ -16,4 +16,6 @@ public interface CategorieDAO {
 
 	boolean existe(String libelle);
 
+	List<Categorie> selectAll();
+
 }

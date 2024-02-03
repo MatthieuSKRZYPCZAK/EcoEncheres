@@ -115,7 +115,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	 * @return Retourne un Objet Utilisateur avec les données extraites du ResultSet
 	 * @throws SQLException
 	 */
-	private Utilisateur utilisateurBuilder(ResultSet rs) throws SQLException {
+	static Utilisateur utilisateurBuilder(ResultSet rs) throws SQLException {
 		Utilisateur utilisateurCourant;
 		utilisateurCourant = new Utilisateur();
 		utilisateurCourant.setNoUtilisateur(rs.getInt("no_utilisateur"));

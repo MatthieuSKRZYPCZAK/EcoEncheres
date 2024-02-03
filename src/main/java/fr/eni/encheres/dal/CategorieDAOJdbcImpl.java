@@ -10,6 +10,7 @@ import java.util.List;
 import fr.eni.encheres.bo.Categorie;
 
 
+
 public class CategorieDAOJdbcImpl implements CategorieDAO{
 	
 	//READ
@@ -116,6 +117,41 @@ public class CategorieDAOJdbcImpl implements CategorieDAO{
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+
+
+	@Override
+	public List<Categorie> selectAll() {
+		List<Categorie> listCategorie = new ArrayList<>();
+		try(Connection cnx = ConnectionProvider.getConnection())
+		{
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ALL);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				int noCategorie = rs.getInt("no_categorie");
+				String libelle = rs.getString("libelle");
+				Categorie categorie = new Categorie(noCategorie, libelle);
+				listCategorie.add(categorie);
+			}
+			
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return listCategorie;
+	}
+	
+	static Categorie categorieBuilder(ResultSet rs) throws SQLException {
+		Categorie categorieCourant;
+		categorieCourant = new Categorie();
+		categorieCourant.setNoCategorie(rs.getInt("no_categorie"));
+		categorieCourant.setLibelle(rs.getString("libelle"));
+
+		
+		return categorieCourant;
 	}
 
 }

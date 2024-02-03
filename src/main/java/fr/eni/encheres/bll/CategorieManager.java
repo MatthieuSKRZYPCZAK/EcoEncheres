@@ -9,6 +9,10 @@ import fr.eni.encheres.dal.DAOFactory;
 public class CategorieManager {
 	private CategorieDAO categorieDAO;
 	
+	public List<Categorie> selectAllCategorie() {
+		return this.categorieDAO.selectAll();
+	}
+	
 	public CategorieManager() {
 		this.categorieDAO=DAOFactory.getCategorieDAO();
 	}

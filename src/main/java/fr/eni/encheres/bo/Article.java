@@ -1,24 +1,27 @@
 package fr.eni.encheres.bo;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Article {
 	private int noArticle;
 	private String nomArticle;
 	private String description;
-	private LocalDate dateDebutEncheres;
-	private LocalDate dateFinEncheres;
+	private Date dateDebutEncheres;
+	private Date dateFinEncheres;
 	private int prixInitial;
 	private int prixVente;
 	private Utilisateur utilisateur;
 	private Categorie categorie;
 	private String etatVente;
+	private String image;
 	
 	public Article() {
 		super();
 	}
 	
-	public Article(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int prixInitial, int prixVente, String etatVente, Utilisateur utilisateur, Categorie categorie) {
+	
+
+	public Article(int noArticle, String nomArticle, String description, Date dateDebutEncheres, Date dateFinEncheres, int prixInitial, int prixVente, String etatVente, Utilisateur utilisateur, Categorie categorie, String image) {
 		super();
 		this.noArticle = noArticle;
 		this.nomArticle = nomArticle;
@@ -30,6 +33,7 @@ public class Article {
 		this.etatVente = etatVente;
 		this.utilisateur = utilisateur;
 		this.categorie = categorie;
+		this.image = image;
 	}
 
 	public int getNoArticle() {
@@ -56,19 +60,19 @@ public class Article {
 		this.description = description;
 	}
 
-	public LocalDate getDateDebutZncheres() {
+	public Date getDateDebutEncheres() {
 		return dateDebutEncheres;
 	}
 
-	public void setDateDebutEncheres(LocalDate dateDebutEncheres) {
+	public void setDateDebutEncheres(Date dateDebutEncheres) {
 		this.dateDebutEncheres = dateDebutEncheres;
 	}
 
-	public LocalDate getDateFinEncheres() {
+	public Date getDateFinEncheres() {
 		return dateFinEncheres;
 	}
 
-	public void setDate_fin_encheres(LocalDate dateFinEncheres) {
+	public void setDateFinEncheres(Date dateFinEncheres) {
 		this.dateFinEncheres = dateFinEncheres;
 	}
 
@@ -112,4 +116,12 @@ public class Article {
 		this.etatVente = etatVente;
 	}
 	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 }
