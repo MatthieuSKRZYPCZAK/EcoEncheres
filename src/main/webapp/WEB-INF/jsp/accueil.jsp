@@ -5,6 +5,18 @@
 <body>
 	<%@ include file="/WEB-INF/jsp/header/header.jsp" %>
 	<main>
+	<div class="container mt-1">
+		<div class="row justify-content-center text-center">
+			<c:choose>
+				<c:when test="${not empty requestScope.erreur}">
+					<strong class="erreur"><c:out value="${requestScope.erreur}" /></strong>
+				</c:when>
+				<c:when test="${not empty requestScope.successMessage}">
+					<strong class="succes"><c:out value="${requestScope.successMessage}" /></strong>
+				</c:when>
+			</c:choose>
+		</div>
+	</div>
 
 		<h1>Accueil - ÉcoEnchères</h1>
 

@@ -51,13 +51,13 @@
 			<c:otherwise>
 				<ul class="navbar-nav ms-auto">
 					<li class="nav-item">
-						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/register">Inscription</a>
+						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/register">M'inscrire</a>
 					</li>
 					<li class="nav-item">
 
 					</li>
 					<li class="nav-item">
-						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/login">Connection</a>
+						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/login">Se connecter</a>
 					</li>
 				</ul>
 			</c:otherwise>

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.bll.UtilisateurManager;
 import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.exception.UtilisateurException;
 import fr.eni.encheres.services.BCrypt;
 
 
@@ -27,18 +28,36 @@ public class SupprimerUtilisateurServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		if(session != null) {
-			Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
-			if(utilisateurSession.isAdministrateur()) {
-				UtilisateurManager utilisateurManager = new UtilisateurManager();
-				utilisateurManager.supprimer(Integer.parseInt(request.getParameter("id")));
-				response.sendRedirect("utilisateurs");
-				return;
+		try {
+			HttpSession session = request.getSession();
+			if(session != null) {
+				Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
+				if(utilisateurSession.isAdministrateur()) {
+					UtilisateurManager utilisateurManager = new UtilisateurManager();
+					Utilisateur utilisateur = new Utilisateur();
+					utilisateur = utilisateurManager.getById(Integer.parseInt(request.getParameter("id")));
+					if(utilisateur.isAdministrateur()) {
+						request.setAttribute("erreur", "Vous ne pouvez pas supprimer un compte administrateur");
+						request.getRequestDispatcher("/utilisateurs").forward(request, response);
+						
+					} else {
+						utilisateurManager.supprimer(Integer.parseInt(request.getParameter("id")));
+						request.setAttribute("successMessage", "Vous avez bien supprimé l'utilisateur "+ utilisateur.getPseudo() + " " + utilisateur.getPrenom()+ " " + utilisateur.getNom() + " " + utilisateur.getEmail());
+						request.getRequestDispatcher("/utilisateurs").forward(request, response);
+//						response.sendRedirect("utilisateurs");
+//						return;
+					}
+				} else {
+					throw new Exception("Vous devez être administrateur pour faire celà");
+				}
 			}
-		}
-		response.sendRedirect("accueil");
-		
+		} catch (UtilisateurException e) {
+			request.setAttribute("erreur", e.getMessage());
+			request.getRequestDispatcher("/accueil").forward(request, response);
+		} catch (Exception e) {
+			request.setAttribute("erreur", e.getMessage());
+			request.getRequestDispatcher("/accueil").forward(request, response);
+		}		
 	}
 	
 
@@ -47,7 +66,6 @@ public class SupprimerUtilisateurServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		System.out.println("Je suis dans le Post de supprimer");
 		try {
 			String id = request.getParameter("id");
 			//Vérifie si l'utilisateur est connecté
@@ -69,11 +87,17 @@ public class SupprimerUtilisateurServlet extends HttpServlet {
 						response.sendRedirect(request.getContextPath() + "/profil?id=" + id);
 						return;
 					}
+				} else {
+					throw new UtilisateurException("Vous n'êtes pas autorisé à supprimer ce compte");
 				}
 				
+			} else {
+				throw new UtilisateurException("Vous devez être connecté");
 			}
-			request.getRequestDispatcher("accueil");
 			
+			} catch(UtilisateurException e) {
+			request.setAttribute("erreur", e.getMessage());
+			request.getRequestDispatcher("/accueil").forward(request, response);
 			} catch(Exception e) {
 			request.setAttribute("erreur", e.getMessage());
 			request.getRequestDispatcher("login");

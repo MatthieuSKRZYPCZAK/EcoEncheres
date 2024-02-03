@@ -128,18 +128,13 @@ private UtilisateurDAO utilisateurDAO;
 			if(!pseudo.matches("^[a-zA-Z0-9]{3,30}$")) {
 				errorMessage += " Le pseudo doit contenir entre 3 et 30 caractères alphanumériques (lettres majuscule, lettre minuscules ou chiffres).";
 			}
-			if(telephone.length() != 10) {
+			if(telephone.length() != 10 || !telephone.matches("^[0-9]{10}$")) {
 				errorMessage += " le numéro de téléphone doit contenir 10 chiffres";
 			}
-			if(!telephone.matches("^[0-9]{10}$")) {
-				errorMessage += " le numéro de téléphone doit contenir 10 chiffres consécutifs";
-			}
-			if(codePostal.length() !=5) {
-				errorMessage += " Le code postal doit contenir 5 chiffres";
-			}
-			if(!codePostal.matches("^[0-9]{5}")) {
+			if(codePostal.length() !=5 || !codePostal.matches("^[0-9]{5}")) {
 				errorMessage += " Le code postal doit contenir 5 chiffres consécutifs";
 			}
+
 			
 			throw new RegisterException(errorMessage);
 		}
@@ -222,18 +217,13 @@ private UtilisateurDAO utilisateurDAO;
 				if(!pseudo.matches("^[a-zA-Z0-9]{3,30}$")) {
 					errorMessage += " Le pseudo doit contenir entre 3 et 30 caractères alphanumériques (lettres majuscule, lettre minuscules ou chiffres).";
 				}
-				if(telephone.length() != 10) {
+				if(telephone.length() != 10 || !telephone.matches("^[0-9]{10}$")) {
 					errorMessage += " le numéro de téléphone doit contenir 10 chiffres";
 				}
-				if(!telephone.matches("^[0-9]{10}$")) {
-					errorMessage += " le numéro de téléphone doit contenir 10 chiffres consécutifs";
-				}
-				if(codePostal.length() !=5) {
-					errorMessage += " Le code postal doit contenir 5 chiffres";
-				}
-				if(!codePostal.matches("^[0-9]{5}")) {
+				if(codePostal.length() !=5 || !codePostal.matches("^[0-9]{5}")) {
 					errorMessage += " Le code postal doit contenir 5 chiffres consécutifs";
 				}
+
 				
 				if(errorMessage.length() > 0) {
 					throw new UpdateException(errorMessage.toString());

@@ -9,7 +9,24 @@
 	<c:choose>
 		<c:when test="${sessionScope.isConnected.administrateur eq true}">
 		<h1>Liste des utilisateurs</h1>
-				
+		
+			<c:choose>
+				<c:when test="${not empty requestScope.erreur}">
+					<div class="container mt-1">
+						<div class="row justify-content-center text-center">
+							<strong class="erreur"><c:out value="${requestScope.erreur}" /></strong>
+						</div>
+					</div>
+				</c:when>
+				<c:when test="${not empty requestScope.successMessage}">
+					<div class="container mt-1">
+						<div class="row justify-content-center text-center">
+							<strong class="succes"><c:out value="${requestScope.successMessage}" /></strong>
+						</div>
+					</div>
+				</c:when>
+			</c:choose>
+
 		</c:when>
 		<c:otherwise>
 			<span class="message">Vous n'avez pas accès à cette ressource</span>
@@ -120,6 +137,7 @@
 		</c:choose>
 
 	</main>
+	<%@ include file="/WEB-INF/jsp/footer/footer.jsp" %>	
 
 </body>
 </html>

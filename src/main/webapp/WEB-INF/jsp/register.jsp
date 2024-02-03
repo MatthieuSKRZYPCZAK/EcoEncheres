@@ -20,7 +20,7 @@
 					<div class="col-4 mt-3">
 						<div class="input-group">
 							<span class="input-group-text" id="pseudo"><i class="bi bi-person-circle"></i></span>
-							<input type="text" pattern="^[a-zA-Z0-9]{3,30}$" class="form-control" name="pseudo" aria-label="Pseudo" aria-describedby="Pseudo" value="${pseudo}" placeholder="Pseudo" required>
+							<input type="text" pattern="^[a-zA-Z0-9]{3,30}$" class="form-control" name="pseudo" aria-label="Pseudo" aria-describedby="Pseudo" value="${pseudo}" placeholder="Pseudo" title="Le pseudo doit être alphanumérique et ne doit pas contenir d'espace, 3 caractères minimum" required>
 						</div>	
 					</div>
 					<div class="col-4 mt-3">

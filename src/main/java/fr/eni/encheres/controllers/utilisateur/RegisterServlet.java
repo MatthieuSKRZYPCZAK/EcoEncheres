@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import fr.eni.encheres.bll.UtilisateurManager;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.RegisterException;
-import fr.eni.encheres.services.BCrypt;
 
 
 
@@ -65,13 +64,10 @@ public class RegisterServlet extends HttpServlet {
 			request.setAttribute("prenom", prenom);
 			request.setAttribute("email", email);
 			request.setAttribute("rue", rue);
+			request.setAttribute("telephone", telephone);
 			request.setAttribute("codePostal", codePostal);
 			request.setAttribute("ville", ville);
-			request.getRequestDispatcher("/register.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(request, response);
 		}
-		
-
-
 	}
-
 }

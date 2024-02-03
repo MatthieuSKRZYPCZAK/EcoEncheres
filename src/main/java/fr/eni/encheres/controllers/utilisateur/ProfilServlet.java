@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import fr.eni.encheres.bll.UtilisateurManager;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.UpdateException;
+import fr.eni.encheres.exception.UtilisateurException;
 
 
 
@@ -26,26 +27,43 @@ public class ProfilServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id = request.getParameter("id");
-		if (request.getParameter("id") != null) {
-			UtilisateurManager utilisateurManager = new UtilisateurManager();
-			Utilisateur utilisateur = utilisateurManager.getById(Integer.parseInt(id));
-			HttpSession session = request.getSession();
-			if(session != null) {
-				Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
-				if(utilisateurSession != null && utilisateurSession.getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
-					request.setAttribute("moi", true);
-					request.setAttribute("utilisateur", utilisateur);
-					request.getRequestDispatcher("/WEB-INF/jsp/profil.jsp").forward(request, response);
-					return;
-				}
-			}
-			request.setAttribute("utilisateur", utilisateur);
-			
-			
-		}
 
-		request.getRequestDispatcher("/WEB-INF/jsp/profil.jsp").forward(request, response);
+		try {
+			
+			HttpSession session = request.getSession();
+
+			if (request.getParameter("id")!= null) {
+				UtilisateurManager utilisateurManager = new UtilisateurManager();
+				Utilisateur utilisateur = utilisateurManager.getById(Integer.parseInt(request.getParameter("id")));
+				if(utilisateur == null) {
+					throw new UtilisateurException("L'utilisateur n'existe pas");
+				}
+				if(session != null) {
+					Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
+					if(utilisateurSession != null && utilisateurSession.getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
+						request.setAttribute("moi", true);
+						request.setAttribute("utilisateur", utilisateur);
+						request.getRequestDispatcher("/WEB-INF/jsp/profil.jsp").forward(request, response);
+						return;
+					} else {
+						request.setAttribute("utilisateur", utilisateur);
+						request.getRequestDispatcher("/WEB-INF/jsp/profil.jsp").forward(request, response);
+					}
+				} else {
+					response.sendRedirect("login");
+				}
+			} else {
+				throw new UtilisateurException("La page demandé n'existe pas");
+			}
+		} catch (UtilisateurException e) {
+			request.setAttribute("erreur", e.getMessage());
+			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
+		} catch(NumberFormatException e) {
+			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
+		} catch (Error e) {
+			request.setAttribute("erreur", e.getMessage());
+			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
+		}
 	}
 	
 
