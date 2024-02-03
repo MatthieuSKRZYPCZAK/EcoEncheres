@@ -51,7 +51,9 @@
 						<th>X</th>
 					</tr>
 					<tr>
-						<td>${sessionScope.isConnected.noUtilisateur} </td>
+						<td>
+							<a class="bi bi-link-45deg" href="<%=request.getContextPath()%>/profil?id=${sessionScope.isConnected.noUtilisateur}">${sessionScope.isConnected.noUtilisateur}</a>	 
+						</td>
 						<td>${sessionScope.isConnected.pseudo}</td>
 						<td>${sessionScope.isConnected.nom}</td>
 						<td>${sessionScope.isConnected.prenom}</td>
@@ -71,7 +73,9 @@
 					<c:forEach var="u" items="${listeUtilisateurs}">
 						<c:if test="${u.noUtilisateur != sessionScope.isConnected.noUtilisateur}">
 							<tr>
-								<td>${u.noUtilisateur} </td>
+								<td>
+									<a class="bi bi-link-45deg" href="<%=request.getContextPath()%>/profil?id=${u.noUtilisateur}">${u.noUtilisateur}</a>
+								 </td>
 								<td>${u.pseudo}</td>
 								<td>${u.nom}</td>
 								<td>${u.prenom}</td>

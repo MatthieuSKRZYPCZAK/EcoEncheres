@@ -112,31 +112,28 @@ private UtilisateurDAO utilisateurDAO;
 				|| codePostal.length() !=5
 				|| !codePostal.matches("^[0-9]{5}")
 				|| !pseudo.matches("^[a-zA-Z0-9]{3,30}$")) {
-			String errorMessage = "";
 			if(!motDePasse.equals(confirmationMotDePasse)) {
-				errorMessage = "La confirmation du mot de passe ne correspond pas";
+				throw new RegisterException("La confirmation du mot de passe ne correspond pas.");
 			}
 			if(!motDePasse.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$")) {
-				errorMessage += " le mot de passe doit contenir au moins 8 caractères, dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial";
+				throw new RegisterException("Le mot de passe doit contenir au moins 8 caractères, dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.");
 			}
 			if(emailExists) {
-				errorMessage += " L'adresse email est déjà utilisée.";
+				throw new RegisterException(" L'adresse email est déjà utilisée.");
 			}
 			if(pseudoExists) {
-				errorMessage += " Le pseudo est déjà pris";
+				throw new RegisterException("Le pseudo est déjà pris.");
 			}
 			if(!pseudo.matches("^[a-zA-Z0-9]{3,30}$")) {
-				errorMessage += " Le pseudo doit contenir entre 3 et 30 caractères alphanumériques (lettres majuscule, lettre minuscules ou chiffres).";
+				throw new RegisterException("Le pseudo doit contenir entre 3 et 30 caractères alphanumériques (lettres majuscule, lettre minuscules ou chiffres).");
 			}
 			if(telephone.length() != 10 || !telephone.matches("^[0-9]{10}$")) {
-				errorMessage += " le numéro de téléphone doit contenir 10 chiffres";
+				throw new RegisterException("Le numéro de téléphone doit contenir 10 chiffres.");
 			}
 			if(codePostal.length() !=5 || !codePostal.matches("^[0-9]{5}")) {
-				errorMessage += " Le code postal doit contenir 5 chiffres consécutifs";
+				throw new RegisterException("Le code postal doit contenir 5 chiffres consécutifs.");
 			}
 
-			
-			throw new RegisterException(errorMessage);
 		}
 		//Crypte le mot de passe de l'utilisateur avec BCrypt
 		String passwordHash = BCrypt.hashpw(motDePasse, BCrypt.gensalt(12));
@@ -187,47 +184,46 @@ private UtilisateurDAO utilisateurDAO;
 
 				boolean emailExists = emailExists(email.toLowerCase());
 				boolean pseudoExists = pseudoExists(pseudo.toLowerCase());
-				String errorMessage = "";
 				
 				if(!BCrypt.checkpw(motDePasse, utilisateurSession.getMotDePasse())){
-					throw new UpdateException("mauvais mot de passe");
+					throw new UpdateException("Mot de passe incorrect");
 				}
-				
-				if(!nouveauMotDePasse.isEmpty()) {
-					if(!nouveauMotDePasse.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$")) {
-						errorMessage += " le mot de passe doit contenir au moins 8 caractères, dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial";
-					}
-					if(!nouveauMotDePasse.equals(confirmationMotDePasse)) {
-						errorMessage += " Le nouveau mot de passe ne correspond pas avec le mot de passe de confirmation";
-					}
-				} 
 				
 				if(emailExists){
 					if((!utilisateurSession.getEmail().toLowerCase().equals(email.toLowerCase()))) {
-						errorMessage += " L'adresse email est déjà utilisée.";
+						throw new UpdateException("L'adresse email est déjà utilisée.");
 					}
 				}
 				
 				if(pseudoExists) {
 					if((!utilisateurSession.getPseudo().toLowerCase().equals(pseudo.toLowerCase()))){
-						errorMessage += " Le pseudo est déjà pris.";
+						throw new UpdateException(" Le pseudo est déjà pris.");
 					}
 				}
 				
 				if(!pseudo.matches("^[a-zA-Z0-9]{3,30}$")) {
-					errorMessage += " Le pseudo doit contenir entre 3 et 30 caractères alphanumériques (lettres majuscule, lettre minuscules ou chiffres).";
+					throw new UpdateException("Le pseudo doit contenir entre 3 et 30 caractères alphanumériques (lettres majuscule, lettre minuscules ou chiffres).");
 				}
 				if(telephone.length() != 10 || !telephone.matches("^[0-9]{10}$")) {
-					errorMessage += " le numéro de téléphone doit contenir 10 chiffres";
+					throw new UpdateException("Le numéro de téléphone doit contenir 10 chiffres.");
 				}
 				if(codePostal.length() !=5 || !codePostal.matches("^[0-9]{5}")) {
-					errorMessage += " Le code postal doit contenir 5 chiffres consécutifs";
+					throw new UpdateException("Le code postal doit contenir 5 chiffres consécutifs.");
 				}
+				
+				if(!nouveauMotDePasse.isEmpty()) {
+					if(!nouveauMotDePasse.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$")) {
+						throw new UpdateException("Le mot de passe doit contenir au moins 8 caractères, dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.");
+					}
+					if(!nouveauMotDePasse.equals(confirmationMotDePasse)) {
+						throw new UpdateException("Le nouveau mot de passe ne correspond pas avec le mot de passe de confirmation.");
+					}
+				} 
 
 				
-				if(errorMessage.length() > 0) {
-					throw new UpdateException(errorMessage.toString());
-				}
+//				if(errorMessage.length() > 0) {
+//					throw new UpdateException(errorMessage.toString());
+//				}
 				
 				if(!nouveauMotDePasse.isEmpty()) {
 					String passwordHash = BCrypt.hashpw(nouveauMotDePasse, BCrypt.gensalt(12));

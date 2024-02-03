@@ -27,11 +27,9 @@ public class ProfilServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		request.setCharacterEncoding("UTF-8");
 		try {
-			
 			HttpSession session = request.getSession();
-
 			if (request.getParameter("id")!= null) {
 				UtilisateurManager utilisateurManager = new UtilisateurManager();
 				Utilisateur utilisateur = utilisateurManager.getById(Integer.parseInt(request.getParameter("id")));
@@ -65,16 +63,15 @@ public class ProfilServlet extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
 		}
 	}
-	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		//Je récupère les informations saisie dans le formulaire
 		HttpSession session = request.getSession();
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("isConnected");
-		
 		if(utilisateur != null) {
 			int id = utilisateur.getNoUtilisateur();
 			String pseudo = request.getParameter("pseudo");
@@ -88,19 +85,15 @@ public class ProfilServlet extends HttpServlet {
 			String motDePasse = request.getParameter("motDePasse");
 			String nouveauMotDePasse = request.getParameter("nouveauMotDePasse");
 			String confirmationMotDePasse = request.getParameter("confirmationMotDePasse");
-
 			UtilisateurManager utilisateurManager = new UtilisateurManager();
 			
 			try {
 				Utilisateur updateUtilisateur = new Utilisateur();
 				updateUtilisateur = utilisateurManager.updateUtilisateur(id, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, nouveauMotDePasse, confirmationMotDePasse);
-
 				session.setAttribute("isConnected", updateUtilisateur);
 				session.setAttribute("successMessage", "la modification a été validé avec succes");
 				System.out.println("utilisateur modifié");
 				response.sendRedirect(request.getContextPath() + "/profil?id=" + id);
-				
-
 			} catch (UpdateException e) {
 				session.setAttribute("erreur", e);
 				System.out.println("id :" +id);

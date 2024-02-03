@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import fr.eni.encheres.bll.CategorieManager;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.exception.CategorieException;
+
 
 /**
  * Servlet implementation class ModifierCategorieServlet

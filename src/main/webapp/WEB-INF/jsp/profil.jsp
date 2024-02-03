@@ -39,6 +39,18 @@
 									</div>
 					</c:otherwise>
 			</c:choose>
+			<c:choose>
+				<c:when test="${sessionScope.isConnected.actif eq false}">
+					<div class="container mt-5">
+						<div class="row justify-content-center">
+							<div class="col-12 text-center">
+								<strong class="erreur">Votre compte a été désactivé par un administrateur</strong>
+								<p>Vous ne pouvez plus vendre ou acheter d'article</p>
+							</div>
+						</div>
+					</div>
+				</c:when>
+			</c:choose>
 					
 					<form id="profil" action="${pageContext.request.contextPath}/profil?id=${utilisateur.noUtilisateur}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir modifier vos informations ?');">
 						<div class="row justify-content-center">
