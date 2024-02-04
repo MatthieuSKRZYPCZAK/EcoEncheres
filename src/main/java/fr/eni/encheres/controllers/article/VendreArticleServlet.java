@@ -1,8 +1,14 @@
 package fr.eni.encheres.controllers.article;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -10,8 +16,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
+import fr.eni.encheres.bll.ArticleManager;
 import fr.eni.encheres.bll.CategorieManager;
+import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.ArticleException;
@@ -21,12 +30,13 @@ import fr.eni.encheres.exception.ArticleException;
  */
 @WebServlet("/vendre")
 @MultipartConfig(
-		  fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
-		  maxFileSize = 1024 * 1024 * 10,      // 10 MB
-		  maxRequestSize = 1024 * 1024 * 100)  // 100 MB
+		  fileSizeThreshold = 1024 * 1024,
+		  maxFileSize = 1024 * 1024 * 5,
+		  maxRequestSize = 1024 * 1024 * 5 * 5)
 public class VendreArticleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
+	 
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -57,38 +67,88 @@ public class VendreArticleServlet extends HttpServlet {
 				throw new ArticleException("Votre compte est désactivé, vous ne pouvez pas vendre d'article");
 			}
 			
+			// Date et heure de la création de la vente
+			Date date = new Date();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy-HHmm");
+			String dateFormatee = dateFormat.format(date);
+			
+			// Génère un nombre aléatoire qui servira pour le nom de l'image
+			Random random = new Random();
+			int nombreAleatoire = random.nextInt(3999) + 1;
+			String nombreAleatoireStr = String.valueOf(nombreAleatoire);
+			
 			//Je récupère les informations saisie dans le formulaire
 			String nomArticle = request.getParameter("nomArticle");
 			String description = request.getParameter("description");
-			String dateDebutEncheres = request.getParameter("dateDebutEncheres");
-			String dateFinEncheres = request.getParameter("dateFinEncheres");
-			String prixInitial = request.getParameter("prixInitial");
+			String dateDebutEncheresStr = request.getParameter("dateDebutEncheres");
+			String dateFinEncheresStr = request.getParameter("dateFinEncheres");
+			String prixInitialStr = request.getParameter("prixInitial");
 			Categorie categorie = new Categorie(Integer.parseInt(request.getParameter("listCategorie")), null);
 			String rue = request.getParameter("rue");
 			String codePostal = request.getParameter("codePostal");
 			String ville = request.getParameter("ville");
-			// penser à récupérer l'image.
+
+			//************************//
+			//** GESTION DE L'IMAGE **//
+			//************************//
+			//Chemin enregistré dans le context.xml
+			String relativePath = getServletContext().getInitParameter("uploadPath");
+
+			Part part = request.getPart("image");
+
+			String filePath = null;
+			String fileName = getFileName(part);
 			
-			System.out.println(nomArticle);
-			System.out.println(description);
-			System.out.println(dateDebutEncheres);
-			System.out.println(dateFinEncheres);
-			System.out.println(prixInitial);
-			System.out.println(rue);
-			System.out.println(codePostal);
-			System.out.println(ville);
-			System.out.println(categorie.getNoCategorie());
-			
+			//sépare l'extention du fichier
+			String[] fn = fileName.split("(\\.)");
+			fileName = fn[0];
+			System.out.println("filename fn[0] : " + fileName);
+			String ext = fn[(fn.length - 1)];
+			if (!ext.isEmpty()) {
+				// Génère le nom du fichier (Nombre aléatoire + nom de l'article + pseudo utilisateur + date)
+				fileName = nombreAleatoireStr+ "-" +nomArticle.trim().toLowerCase() + "-" + utilisateur.getPseudo() + "-" + dateFormatee + "." + ext;
+				System.out.println("le filename savefile 2 ici :" +fileName);
+				if (fileName != null && fileName.length() > 0) {
+					filePath = relativePath + File.separator + fileName;
+					part.write(filePath);
+				}
+			}
+			String image = fileName;
+
+			// Création de l'article
+			int prixInitial = Integer.parseInt(prixInitialStr);
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+			 Date dateDebutEncheres = sdf.parse(dateDebutEncheresStr);
+			 Date dateFinEncheres = sdf.parse(dateFinEncheresStr);
+
+			Article article = new Article(nomArticle, description, dateDebutEncheres, dateFinEncheres, prixInitial, utilisateur, categorie, image);
+			ArticleManager articleManager = new ArticleManager();
+			articleManager.create(article);
+			request.setAttribute("successMessage", "Votre vente a été créée avec succès");
 			response.sendRedirect("accueil");
 			
 		} catch(ArticleException e) {
+			System.out.println("erreur post vente" + e);
 			request.setAttribute("erreur", e.getMessage());
 			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
 			
 		} catch(Exception e) {
-			
+			System.out.println("erreur post vente" + e);
 		}
 		
 	}
+	
+	/*
+     * Récupération du nom du fichier dans la requête.
+     */
+	private String getFileName( Part part ) {
+		for ( String content : part.getHeader( "content-disposition" ).split( ";" ) ) {
+			if ( content.trim().startsWith( "filename" ) )
+			return content.substring( content.indexOf( "=" ) + 2, content.length() - 1 );
+		}
+		return "Default.file";
+	}
+
+
 
 }

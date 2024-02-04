@@ -18,6 +18,11 @@ public class ArticleManager {
 		return this.articleDAO.getById(id);
 
 	}
+
+	public void create(Article article) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	

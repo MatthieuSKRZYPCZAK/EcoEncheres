@@ -64,6 +64,7 @@ local.properties
 .project
 .classpath
 context.xml
+/src/main/webapp/uploads
 
 ### Eclipse Patch ###
 # Spring Boot Tooling

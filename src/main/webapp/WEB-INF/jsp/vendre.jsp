@@ -66,7 +66,7 @@
 											</select>
 										</div>	
 										<div class="form-group mt-3">
-											<label for="pictureFile">Photo de l'article</label>
+											<label for="image">Photo de l'article</label>
 											<input type="file" class="form-control" id="image" name="image" accept="image/png, image/jpeg" required>
 										</div>
 										<div class="input-group mt-3">
