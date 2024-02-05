@@ -79,8 +79,7 @@ public class SupprimerUtilisateurServlet extends HttpServlet {
 						UtilisateurManager utilisateurManager = new UtilisateurManager();
 						utilisateurManager.supprimer(utilisateurSession.getNoUtilisateur());
 						session.invalidate();
-						response.sendRedirect(request.getContextPath() + "/login");
-						return;
+						
 					} else {
 						System.out.println("mon passe est incorrecte et l'id est : " + id);
 						request.getSession().setAttribute("erreur", "mauvais mot de passe");
@@ -94,6 +93,8 @@ public class SupprimerUtilisateurServlet extends HttpServlet {
 			} else {
 				throw new UtilisateurException("Vous devez être connecté");
 			}
+			
+			response.sendRedirect(request.getContextPath() + "/accueil");
 			
 			} catch(UtilisateurException e) {
 			request.setAttribute("erreur", e.getMessage());

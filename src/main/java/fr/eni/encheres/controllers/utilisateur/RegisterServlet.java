@@ -54,7 +54,7 @@ public class RegisterServlet extends HttpServlet {
 			ses = request.getSession();
 			ses.setAttribute("isConnected", utilisateur);
 			ses.setAttribute("successMessage", "Votre compte a été créé avec succès");
-			response.sendRedirect("profil?id="+ utilisateur.getNoUtilisateur());
+			response.sendRedirect(request.getContextPath() + "/accueil");
 			
 		}catch(RegisterException e) {
 			System.out.println("erreur message : " + e.getMessage());

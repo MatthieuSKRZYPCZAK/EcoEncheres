@@ -7,6 +7,8 @@ import fr.eni.encheres.bo.Article;
 public interface ArticleDAO {
 
 	Article getById(int id);
+
+	Article create(Article article);
 	
 
 }

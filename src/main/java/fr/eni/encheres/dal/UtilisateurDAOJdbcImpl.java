@@ -14,7 +14,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	
 	//INSERT
 	private static final String INSERT="INSERT INTO UTILISATEURS(pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe) VALUES(?,?,?,?,?,?,?,?,?);";
-	private static final String SELECT_ALL="SELECT * FROM UTILISATEURS ORDER BY no_utilisateur desc;";
+	
 	
 	//UPDATE
 	private static final String UPDATE="UPDATE UTILISATEURS SET pseudo=?, nom=?, prenom=?, email=?, telephone=?, rue=?, code_postal=?, ville=?, mot_de_passe=? WHERE no_utilisateur=?;";
@@ -23,6 +23,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	
 	
 	//READ
+	private static final String SELECT_ALL="SELECT * FROM UTILISATEURS ORDER BY no_utilisateur desc;";
 	private static final String SELECT_ID="SELECT * FROM UTILISATEURS WHERE no_utilisateur=?;";
 	private static final String SELECT_EMAIL="SELECT * FROM UTILISATEURS WHERE email=?;";
 	private static final String SELECT_PSEUDO="SELECT * FROM UTILISATEURS WHERE pseudo=?;";

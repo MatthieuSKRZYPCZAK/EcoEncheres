@@ -14,14 +14,14 @@ public class Article {
 	private Categorie categorie;
 	private String etatVente;
 	private String image;
-	
+
 	public Article() {
 		super();
 	}
-	
-	
 
-	public Article(int noArticle, String nomArticle, String description, Date dateDebutEncheres, Date dateFinEncheres, int prixInitial, int prixVente, String etatVente, Utilisateur utilisateur, Categorie categorie, String image) {
+	public Article(int noArticle, String nomArticle, String description, Date dateDebutEncheres, Date dateFinEncheres,
+			int prixInitial, int prixVente, String etatVente, Utilisateur utilisateur, Categorie categorie,
+			String image) {
 		super();
 		this.noArticle = noArticle;
 		this.nomArticle = nomArticle;
@@ -35,8 +35,9 @@ public class Article {
 		this.categorie = categorie;
 		this.image = image;
 	}
-	
-	public Article(String nomArticle, String description, Date dateDebutEncheres, Date dateFinEncheres, int prixInitial, Utilisateur utilisateur, Categorie categorie, String image) {
+
+	public Article(String nomArticle, String description, Date dateDebutEncheres, Date dateFinEncheres, int prixInitial,
+			Utilisateur utilisateur, Categorie categorie, String image) {
 		super();
 		this.nomArticle = nomArticle;
 		this.description = description;
@@ -127,7 +128,7 @@ public class Article {
 	public void setEtatVente(String etatVente) {
 		this.etatVente = etatVente;
 	}
-	
+
 	public String getImage() {
 		return image;
 	}

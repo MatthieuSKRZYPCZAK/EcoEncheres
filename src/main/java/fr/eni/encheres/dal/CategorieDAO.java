@@ -6,7 +6,7 @@ import fr.eni.encheres.bo.Categorie;
 
 public interface CategorieDAO {
 
-	void insert(String categorie);
+	void create(String categorie);
 
 	void delete(int id);
 
@@ -17,5 +17,7 @@ public interface CategorieDAO {
 	boolean existe(String libelle);
 
 	List<Categorie> selectAll();
+
+	Categorie getById(int id);
 
 }

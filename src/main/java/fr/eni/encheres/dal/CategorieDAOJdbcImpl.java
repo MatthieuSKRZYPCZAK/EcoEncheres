@@ -9,149 +9,146 @@ import java.util.List;
 
 import fr.eni.encheres.bo.Categorie;
 
+public class CategorieDAOJdbcImpl implements CategorieDAO {
 
+	// READ
+	private static final String SELECT_ALL = "SELECT * FROM CATEGORIES;";
+	private static final String SELECT_CATEGORIE = "SELECT COUNT(*) FROM CATEGORIES WHERE LOWER(libelle) = LOWER(?)";
+	private static final String SELECT_ID = "SELECT * FROM CATEGORIES WHERE no_categorie=?;";
 
-public class CategorieDAOJdbcImpl implements CategorieDAO{
-	
-	//READ
-	private static final String SELECT_ALL="SELECT * FROM CATEGORIES;";
-	private static final String SELECT_CATEGORIE="SELECT COUNT(*) FROM CATEGORIES WHERE LOWER(libelle) = LOWER(?)";
+	// INSERT
+	private static final String INSERT = "INSERT INTO CATEGORIES (libelle) VALUES(?);";
 
-	
-	//INSERT
-	private static final String INSERT="INSERT INTO CATEGORIES (libelle) VALUES(?);";
-	
-	//UPDATE
-	private static final String UPDATE="UPDATE CATEGORIES SET libelle=? WHERE no_categorie = ?;";
-	
-	//DELETE
-	private static final String DELETE="DELETE FROM CATEGORIES WHERE no_categorie=?;";
+	// UPDATE
+	private static final String UPDATE = "UPDATE CATEGORIES SET libelle=? WHERE no_categorie = ?;";
+
+	// DELETE
+	private static final String DELETE = "DELETE FROM CATEGORIES WHERE no_categorie=?;";
 
 	@Override
-	public void insert(String categorie) {
+	public void create(String categorie) {
 
-
-		try(Connection cnx = ConnectionProvider.getConnection())
-		{
+		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(INSERT);
 			pstmt.setString(1, categorie);
 			pstmt.executeUpdate();
 
-
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	
-
 	@Override
 	public void delete(int id) {
-		try(Connection cnx = ConnectionProvider.getConnection())
-		{
+		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(DELETE);
 			pstmt.setInt(1, id);
 			pstmt.executeUpdate();
-	
-		} catch (SQLException e){
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
 	public void update(int id, String libelle) {
-		try(Connection cnx = ConnectionProvider.getConnection())
-		{
+		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(UPDATE);
 			pstmt.setString(1, libelle);
 			pstmt.setInt(2, id);
 			pstmt.executeUpdate();
 
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
 	public List<Categorie> allCategories() {
-		List<Categorie> listeCategories= new ArrayList<>();
-		try(Connection cnx = ConnectionProvider.getConnection())
-		{
+		List<Categorie> listeCategories = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ALL);
 			ResultSet rs = pstmt.executeQuery();
-			
-			while(rs.next())
-			{
+
+			while (rs.next()) {
 				int noCategorie = rs.getInt("no_categorie");
 				String libelle = rs.getString("libelle");
-				Categorie categorieCourant=new Categorie(noCategorie, libelle);
+				Categorie categorieCourant = new Categorie(noCategorie, libelle);
 				listeCategories.add(categorieCourant);
 			}
-		}
-		catch(SQLException e)
-		{
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return listeCategories;
 	}
 
-
-
 	@Override
 	public boolean existe(String libelle) {
-		try(Connection cnx = ConnectionProvider.getConnection())
-		{
+		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_CATEGORIE);
 			pstmt.setString(1, libelle);
 			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				return rs.getInt(1) > 0;
 			}
 			return false;
-			
+
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
 	}
 
-
-
 	@Override
 	public List<Categorie> selectAll() {
 		List<Categorie> listCategorie = new ArrayList<>();
-		try(Connection cnx = ConnectionProvider.getConnection())
-		{
+		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ALL);
 			ResultSet rs = pstmt.executeQuery();
-			while(rs.next())
-			{
+			while (rs.next()) {
 				int noCategorie = rs.getInt("no_categorie");
 				String libelle = rs.getString("libelle");
 				Categorie categorie = new Categorie(noCategorie, libelle);
 				listCategorie.add(categorie);
 			}
-			
-		}
-		catch(SQLException e)
-		{
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return listCategorie;
 	}
-	
+
 	static Categorie categorieBuilder(ResultSet rs) throws SQLException {
 		Categorie categorieCourant;
 		categorieCourant = new Categorie();
 		categorieCourant.setNoCategorie(rs.getInt("no_categorie"));
 		categorieCourant.setLibelle(rs.getString("libelle"));
 
-		
 		return categorieCourant;
+	}
+
+	@Override
+	public Categorie getById(int id) {
+		if (id == 0) {
+			System.out.println("Pas d'id, prévoir l'erreur (exception)");
+		}
+
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ID);
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return categorieBuilder(rs);
+			}
+			return null;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

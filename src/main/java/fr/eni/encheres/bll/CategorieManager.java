@@ -31,7 +31,7 @@ public class CategorieManager {
 	}
 
 	public void create(String categorie) {
-		this.categorieDAO.insert(categorie);
+		this.categorieDAO.create(categorie);
 	}
 
 
