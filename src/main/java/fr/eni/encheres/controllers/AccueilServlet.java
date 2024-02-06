@@ -29,9 +29,11 @@ public class AccueilServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		CategorieManager categorieManager = new CategorieManager();
 //		List<Categorie> listCategorie = categorieManager.selectAllCategorie();
 		ArticleManager articleManager = new ArticleManager();
+		articleManager.majEtatVenteAll();
 		List<Article> listArticle = articleManager.getAllArticleEnchere();
 		
 		// Je récupère uniquement les categories présentes dans la liste articles :

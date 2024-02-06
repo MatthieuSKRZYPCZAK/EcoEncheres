@@ -21,6 +21,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS;";
 	private static final String SELECT_ID = "SELECT * FROM ARTICLES_VENDUS WHERE no_article=?;";
 	private static final String SELECT_ALL_START = "SELECT *FROM ARTICLES_VENDUS WHERE date_debut_encheres <= GETDATE();";
+	
+	//UPDATE
+	private static final String UPDATE_ETAT = "UPDATE ARTICLES_VENDUS SET etat_vente = ? WHERE no_article=?;";
 
 	/**
 	 * 
@@ -143,6 +146,18 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		}
 
 		return listeArticles;
+	}
+
+	@Override
+	public void articleUpdateEtat(String etat, int noArticle) {
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pstmt = cnx.prepareStatement(UPDATE_ETAT);
+			pstmt.setString(1, etat);
+			pstmt.setInt(2, noArticle);
+			pstmt.executeUpdate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

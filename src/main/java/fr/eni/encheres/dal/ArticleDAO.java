@@ -15,6 +15,10 @@ public interface ArticleDAO {
 	List<Article> getAll();
 
 	List<Article> getAllArticleEnchere();
+
+	void articleUpdateEtat(String etat, int noArticle);
+
+
 	
 
 }

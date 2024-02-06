@@ -31,36 +31,35 @@ public class DetailVenteServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		try {
-			
+
 			HttpSession session = request.getSession();
-			if(session.getAttribute("isConnected") == null) {
-				System.out.println("test sessions");
+			if (session.getAttribute("isConnected") == null) {
 				throw new ArticleException("vous devez avoir un compte ou vous identifer pour accéder à ce contenu");
 			}
 			if (request.getParameter("id") != null) {
-				
+
 				ArticleManager articleManager = new ArticleManager();
 				RetraitsManager retraitManager = new RetraitsManager();
 				Article article = articleManager.getById(Integer.parseInt(request.getParameter("id")));
-				
 
 				if (article == null) {
 					throw new ArticleException("L'article n'existe pas");
 				}
-				if(session != null) {
+				if (session != null) {
 					Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
-					if(utilisateurSession != null && utilisateurSession.getNoUtilisateur() == article.getUtilisateur().getNoUtilisateur()) {
+					if (utilisateurSession != null
+							&& utilisateurSession.getNoUtilisateur() == article.getUtilisateur().getNoUtilisateur()) {
 						request.setAttribute("moi", true);
 						request.setAttribute("utilisateur", utilisateurSession);
 
-					} else if (utilisateurSession !=null ){
+					} else if (utilisateurSession != null) {
 						request.setAttribute("utilisateur", utilisateurSession);
 
 					} else {
 						response.sendRedirect("login");
 						return;
 					}
-				} 
+				}
 
 				Retraits retrait = retraitManager.getByNoArticle(article.getNoArticle());
 				request.setAttribute("retrait", retrait);

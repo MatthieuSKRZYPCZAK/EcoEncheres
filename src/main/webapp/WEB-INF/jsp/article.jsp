@@ -77,11 +77,18 @@
 									<div class="card-body">
 										<c:choose>
 											<c:when test="${sessionScope.isConnected.actif eq true}">
-												<form>
-													<c:set var="montantConditionnel"
+												<form action="enchere" method="post">
+												<c:set var="montantConditionnel"
 														value="${empty enchere ? article.prixInitial : enchere.montantEnchere}" />
 													<c:set var="readOnly"
-														value="${sessionScope.isConnected.credit <= montantConditionnel}" />
+														value="${sessionScope.isConnected.credit < montantConditionnel}" />
+												<fieldset
+												<c:if test="${readOnly || (sessionScope.isConnected.noUtilisateur == article.utilisateur.noUtilisateur)}">
+												disabled
+												</c:if>
+												
+												>
+												<input type="hidden" name="noArticle" value="${article.noArticle}" />
 													<p>
 														Je possède actuellement :
 														${sessionScope.isConnected.credit} <img
@@ -89,7 +96,7 @@
 															alt="Logo crédits" width="20" height="20"
 															class="d-inline-block align-text-mid">
 													</p>
-													<c:if test="${readOnly}">
+													<c:if test="${readOnly && !(sessionScope.isConnected.noUtilisateur == article.utilisateur.noUtilisateur)}">
 														<strong class="erreur">Vous ne possédez pas assez
 															de <img
 															src="${pageContext.request.contextPath}/img/credits.png"
@@ -98,18 +105,27 @@
 															enchérir.
 														</strong>
 													</c:if>
-													<div class="input-group mt-3">
-
-														<span class="input-group-text" id="prixInitial"><b>Ma
-																proposition :</b></span> <input type="number" class="form-control"
-															name="prixInitial" aria-label="Prix initial"
-															aria-describedby="Prix initial"
-															value="${empty enchere.montantEnchere ? article.prixInitial : enchere.montantEnchere + 10}"
-															maxlength="5" min="0" max="50000"
-															required
-											 ${readOnly ? "readonly
-															style='background-color: #f2f2f2; color: #666;'" : ''}>
+													<div class="row justify-content-center">
+														<div class="input-group mt-3 col-1 mt-3">
+															<span class="input-group-text" id="prixInitial"><b>Ma
+																	proposition :</b></span> <input type="number" class="form-control"
+																name="prixInitial" aria-label="Prix initial"
+																aria-describedby="Prix initial"
+																value="${empty enchere.montantEnchere ? article.prixInitial : enchere.montantEnchere + 10}"
+																maxlength="5" min="0" max="50000"
+																required
+												 ${readOnly ? "readonly
+																style='background-color: #f2f2f2; color: #666;'" : ''}>
+														</div>
+														<div class="col-2 mt-3">
+															<div class="input-group">
+																<button class="btn btn-outline-success my-2 my-sm-0"
+																	type="submit"
+																	onsubmit="return confirm('Êtes-vous sûr de vouloir enchérir ?');">Enchérir</button>
+															</div>
+														</div>
 													</div>
+													</fieldset>
 												</form>
 											</c:when>
 											<c:otherwise>

@@ -20,7 +20,7 @@
 						<ul class="dropdown-menu dropdown-menu-dark">
 							<li><a class="dropdown-item" href="<%=request.getContextPath()%>/utilisateurs">Liste utilisateurs</a></li>
 							<li><a class="dropdown-item" href="<%=request.getContextPath()%>/utilisateurs">Liste des ventes</a></li>
-							<li><a class="dropdown-item" href="<%=request.getContextPath()%>/categorie">Catégorie</a></li>
+							<li><a class="dropdown-item" href="<%=request.getContextPath()%>/categorie">Liste des catégories</a></li>
 						</ul>
 					</li>
 						
@@ -31,7 +31,7 @@
 						<span class="nav-link effect-big">Mes crédits ${sessionScope.isConnected.credit} <img src="${pageContext.request.contextPath}/img/credits.png" alt="Logo crédits" width="20" height="20" class="d-inline-block align-text-mid"></span>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link effect-nav" aria-current="page" href="accueil">Accueil</a>
+						<a class="nav-link effect-nav" aria-current="page" href="accueil">Liste des enchères</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link effect-nav" href="vendre">Vendre un article</a>
