@@ -6,4 +6,6 @@ public interface RetraitsDAO {
 
 	void create(Retraits retrait);
 
+	Retraits getByNoArticle(int noArticle);
+
 }

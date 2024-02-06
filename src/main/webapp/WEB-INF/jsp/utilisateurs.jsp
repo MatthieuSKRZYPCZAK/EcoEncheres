@@ -29,12 +29,14 @@
 
 		</c:when>
 		<c:otherwise>
+		<div class="row justify-content-center text-center">
 			<span class="message">Vous n'avez pas accès à cette ressource</span>
 			<a href="accueil">Accueil</a>
+			</div>
 		</c:otherwise>
 	</c:choose>
 	<c:choose>
-			<c:when test="${not empty sessionScope.isConnected}">
+			<c:when test="${sessionScope.isConnected.administrateur eq true}">
 			<div class="container mt-5">
 				<table class="table table-sm table-hover align-middle" border="1">
 					<tr class="table-primary">

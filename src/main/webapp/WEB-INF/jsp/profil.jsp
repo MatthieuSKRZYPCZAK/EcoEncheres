@@ -40,7 +40,7 @@
 					</c:otherwise>
 			</c:choose>
 			<c:choose>
-				<c:when test="${sessionScope.isConnected.actif eq false}">
+				<c:when test="${sessionScope.isConnected.actif eq false && sessionScope.isConnected.noUtilisateur eq utilisateur.noUtilisateur}">
 					<div class="container mt-5">
 						<div class="row justify-content-center">
 							<div class="col-12 text-center">

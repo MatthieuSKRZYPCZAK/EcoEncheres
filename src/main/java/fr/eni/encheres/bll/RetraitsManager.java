@@ -16,4 +16,8 @@ public class RetraitsManager {
 		
 	}
 
+	public Retraits getByNoArticle(int noArticle) {
+		return this.retraitsDAO.getByNoArticle(noArticle);
+	}
+
 }
