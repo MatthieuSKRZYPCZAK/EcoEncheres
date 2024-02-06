@@ -3,6 +3,7 @@ package fr.eni.encheres.bll;
 
 
 import java.util.Date;
+import java.util.List;
 
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.dal.ArticleDAO;
@@ -48,6 +49,15 @@ public class ArticleManager {
 		
 		
 		return this.articleDAO.create(article);
+	}
+
+	public List<Article> getAll() {
+
+		return this.articleDAO.getAll();
+	}
+
+	public List<Article> getAllArticleEnchere() {
+		return this.articleDAO.getAllArticleEnchere();
 	}
 	
 	

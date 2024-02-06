@@ -40,6 +40,10 @@ public class CategorieManager {
 		
 	}
 	
+	public Categorie getById(int id) {
+		return this.categorieDAO.getById(id);
+	}
+	
 	
 	
 	

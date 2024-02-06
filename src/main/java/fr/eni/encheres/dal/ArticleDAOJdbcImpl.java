@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
@@ -16,8 +18,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	private static final String INSERT = "INSERT INTO ARTICLES_VENDUS(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, no_utilisateur, no_categorie, image) VALUES(?,?,?,?,?,?,?,?);";
 
 	// READ
-//		private static final String SELECT_ALL="SELECT * FROM ARTICLES_VENDUS;";
+	private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS;";
 	private static final String SELECT_ID = "SELECT * FROM ARTICLES_VENDUS WHERE no_article=?;";
+	private static final String SELECT_ALL_START = "SELECT *FROM ARTICLES_VENDUS WHERE date_debut_encheres <= GETDATE();";
 
 	/**
 	 * 
@@ -104,6 +107,42 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			return null;
 		}
 		return article;
+	}
+
+	@Override
+	public List<Article> getAll() {
+		List<Article> listeArticles = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ALL);
+			ResultSet rs = pstmt.executeQuery();
+			Article articleCourant = new Article();
+			while (rs.next()) {
+				articleCourant = articleBuilder(rs);
+				listeArticles.add(articleCourant);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return listeArticles;
+	}
+
+	@Override
+	public List<Article> getAllArticleEnchere() {
+		List<Article> listeArticles = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ALL_START);
+			ResultSet rs = pstmt.executeQuery();
+			Article articleCourant = new Article();
+			while (rs.next()) {
+				articleCourant = articleBuilder(rs);
+				listeArticles.add(articleCourant);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return listeArticles;
 	}
 
 }

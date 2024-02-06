@@ -1,11 +1,21 @@
 package fr.eni.encheres.controllers;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import fr.eni.encheres.bll.ArticleManager;
+import fr.eni.encheres.bll.CategorieManager;
+import fr.eni.encheres.bo.Article;
+import fr.eni.encheres.bo.Categorie;
 
 /**
  * Servlet implementation class AccueilServlet
@@ -19,6 +29,35 @@ public class AccueilServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		CategorieManager categorieManager = new CategorieManager();
+//		List<Categorie> listCategorie = categorieManager.selectAllCategorie();
+		ArticleManager articleManager = new ArticleManager();
+		List<Article> listArticle = articleManager.getAllArticleEnchere();
+		
+		// Je récupère uniquement les categories présentes dans la liste articles :
+		Set<Integer> categorieId = new HashSet<>();
+		for(Article article : listArticle) {
+			Categorie categorie = article.getCategorie();
+			if(categorie != null) {
+				int noCategorie = categorie.getNoCategorie();
+				categorieId.add(noCategorie);
+			}
+		}
+		
+		List<Categorie> categories = new ArrayList<>();
+		for (int noCategorie : categorieId) {
+			Categorie categorie = categorieManager.getById(noCategorie);
+			if(categorie != null) {
+				categories.add(categorie);
+			}
+		}
+		
+		
+		
+		
+		
+		request.setAttribute("listCategorie", categories);
+		request.setAttribute("listArticle", listArticle);
 		request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
 	}
 
