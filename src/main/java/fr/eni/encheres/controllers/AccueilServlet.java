@@ -24,45 +24,39 @@ import fr.eni.encheres.bo.Categorie;
 public class AccueilServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		CategorieManager categorieManager = new CategorieManager();
-//		List<Categorie> listCategorie = categorieManager.selectAllCategorie();
 		ArticleManager articleManager = new ArticleManager();
 		articleManager.majEtatVenteAll();
 		List<Article> listArticle = articleManager.getAllArticleEnchere();
-		
+
 		// Je récupère uniquement les categories présentes dans la liste articles :
 		Set<Integer> categorieId = new HashSet<>();
-		for(Article article : listArticle) {
+		for (Article article : listArticle) {
 			Categorie categorie = article.getCategorie();
-			if(categorie != null) {
+			if (categorie != null) {
 				int noCategorie = categorie.getNoCategorie();
 				categorieId.add(noCategorie);
 			}
 		}
-		
+
 		List<Categorie> categories = new ArrayList<>();
 		for (int noCategorie : categorieId) {
 			Categorie categorie = categorieManager.getById(noCategorie);
-			if(categorie != null) {
+			if (categorie != null) {
 				categories.add(categorie);
 			}
 		}
-		
-		
-		
-		
-		
+
 		request.setAttribute("listCategorie", categories);
 		request.setAttribute("listArticle", listArticle);
 		request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
 	}
-
-
 
 }

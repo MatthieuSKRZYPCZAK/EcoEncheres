@@ -7,13 +7,11 @@ public class Encheres {
 	private int montantEnchere;
 	private Utilisateur utilisateur;
 	private Article article;
-	
-	
-	
+
 	public Encheres() {
 		super();
 	}
-	
+
 	public Encheres(Date dateEnchere, int montantEnchere, Utilisateur utilisateur, Article article) {
 		super();
 		this.dateEnchere = dateEnchere;
@@ -38,21 +36,17 @@ public class Encheres {
 		this.montantEnchere = montantEnchere;
 	}
 
-
 	public Utilisateur getUtilisateur() {
 		return utilisateur;
 	}
-
 
 	public void setUtilisateur(Utilisateur utilisateur) {
 		this.utilisateur = utilisateur;
 	}
 
-
 	public Article getArticle() {
 		return article;
 	}
-
 
 	public void setArticle(Article article) {
 		this.article = article;

@@ -107,10 +107,10 @@
 													</c:if>
 													<div class="row justify-content-center">
 														<div class="input-group mt-3 col-1 mt-3">
-															<span class="input-group-text" id="prixInitial"><b>Ma
+															<span class="input-group-text" id="prixEnchere"><b>Ma
 																	proposition :</b></span> <input type="number" class="form-control"
-																name="prixInitial" aria-label="Prix initial"
-																aria-describedby="Prix initial"
+																name="prixEnchere" aria-label="Prix Enchere"
+																aria-describedby="Prix Enchere"
 																value="${empty enchere.montantEnchere ? article.prixInitial : enchere.montantEnchere + 10}"
 																maxlength="5" min="0" max="50000"
 																required
