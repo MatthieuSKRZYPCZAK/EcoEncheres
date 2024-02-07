@@ -20,7 +20,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	// READ
 	private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS;";
 	private static final String SELECT_ID = "SELECT * FROM ARTICLES_VENDUS WHERE no_article=?;";
-	private static final String SELECT_ALL_START = "SELECT *FROM ARTICLES_VENDUS WHERE date_debut_encheres <= GETDATE();";
+	private static final String SELECT_ALL_START = "SELECT *FROM ARTICLES_VENDUS WHERE etat_vente = 'en cours';";
 	
 	//UPDATE
 	private static final String UPDATE_ETAT = "UPDATE ARTICLES_VENDUS SET etat_vente = ? WHERE no_article=?;";

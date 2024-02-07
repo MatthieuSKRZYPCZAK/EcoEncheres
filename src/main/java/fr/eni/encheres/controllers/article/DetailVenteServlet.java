@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.bll.ArticleManager;
+import fr.eni.encheres.bll.EnchereManager;
 import fr.eni.encheres.bll.RetraitsManager;
 import fr.eni.encheres.bo.Article;
+import fr.eni.encheres.bo.Encheres;
 import fr.eni.encheres.bo.Retraits;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.ArticleException;
@@ -30,9 +32,9 @@ public class DetailVenteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		HttpSession session = request.getSession();
 		try {
 
-			HttpSession session = request.getSession();
 			if (session.getAttribute("isConnected") == null) {
 				throw new ArticleException("vous devez avoir un compte ou vous identifer pour accéder à ce contenu");
 			}
@@ -40,6 +42,7 @@ public class DetailVenteServlet extends HttpServlet {
 
 				ArticleManager articleManager = new ArticleManager();
 				RetraitsManager retraitManager = new RetraitsManager();
+				EnchereManager enchereManager = new EnchereManager();
 				Article article = articleManager.getById(Integer.parseInt(request.getParameter("id")));
 
 				if (article == null) {
@@ -60,7 +63,11 @@ public class DetailVenteServlet extends HttpServlet {
 						return;
 					}
 				}
-
+				Encheres enchere = enchereManager.enchereExist(article.getNoArticle());
+				if (enchere != null) {
+					System.out.println("enchere existe : " + enchere.getMontantEnchere());
+					request.setAttribute("enchere", enchere);
+				}
 				Retraits retrait = retraitManager.getByNoArticle(article.getNoArticle());
 				request.setAttribute("retrait", retrait);
 				request.setAttribute("article", article);
@@ -70,13 +77,14 @@ public class DetailVenteServlet extends HttpServlet {
 				throw new ArticleException("La page demandé n'existe pas");
 			}
 		} catch (ArticleException e) {
-			request.setAttribute("erreur", e.getMessage());
-			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+			session.setAttribute("erreur", e);
+			response.sendRedirect(request.getContextPath() + "/article?id=" + request.getParameter("id"));
 		} catch (NumberFormatException e) {
-			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
+			session.setAttribute("erreur", e);
+			response.sendRedirect(request.getContextPath() + "/article?id=" + request.getParameter("id"));
 		} catch (Error e) {
-			request.setAttribute("erreur", e.getMessage());
-			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
+			session.setAttribute("erreur", e);
+			response.sendRedirect(request.getContextPath() + "/article?id=" + request.getParameter("id"));
 		}
 	}
 

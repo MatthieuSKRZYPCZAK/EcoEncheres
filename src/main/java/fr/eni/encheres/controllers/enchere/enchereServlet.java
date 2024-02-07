@@ -1,6 +1,7 @@
 package fr.eni.encheres.controllers.enchere;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,10 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.bll.ArticleManager;
+
 import fr.eni.encheres.bll.EnchereManager;
-import fr.eni.encheres.bll.UtilisateurManager;
+import fr.eni.encheres.bll.RetraitsManager;
 import fr.eni.encheres.bo.Article;
+
 import fr.eni.encheres.bo.Encheres;
+import fr.eni.encheres.bo.Retraits;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.ArticleException;
 
@@ -29,8 +33,59 @@ public class enchereServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		HttpSession session = request.getSession();
+		String id = request.getParameter("id");
+		try {
+
+			if (session.getAttribute("isConnected") == null) {
+				throw new ArticleException("vous devez avoir un compte ou vous identifer pour accéder à ce contenu");
+			}
+
+			ArticleManager articleManager = new ArticleManager();
+			RetraitsManager retraitManager = new RetraitsManager();
+			EnchereManager enchereManager = new EnchereManager();
+			Article article = articleManager.getById(Integer.parseInt(request.getParameter("id")));
+
+			if (article == null) {
+				throw new ArticleException("L'article n'existe pas");
+			}
+			if (session != null) {
+				Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
+				if (utilisateurSession != null
+						&& utilisateurSession.getNoUtilisateur() == article.getUtilisateur().getNoUtilisateur()) {
+					request.setAttribute("moi", true);
+					request.setAttribute("utilisateur", utilisateurSession);
+
+				} else if (utilisateurSession != null) {
+					request.setAttribute("utilisateur", utilisateurSession);
+
+				} else {
+					response.sendRedirect("login");
+					return;
+				}
+			}
+			Encheres enchere = enchereManager.enchereExist(article.getNoArticle());
+			if (enchere != null) {
+				request.setAttribute("enchere", enchere);
+			}
+			Retraits retrait = retraitManager.getByNoArticle(article.getNoArticle());
+			request.setAttribute("retrait", retrait);
+			request.setAttribute("article", article);
+			request.getRequestDispatcher("/WEB-INF/jsp/article.jsp").forward(request, response);
+
+		} catch (ArticleException e) {
+			System.out.println("erreur enchereServlet Article Exception");
+			session.setAttribute("erreur", e);
+			response.sendRedirect(request.getContextPath() + "/article?id=" + id);
+		} catch (NumberFormatException e) {
+			System.out.println("erreur enchereServlet NumberFormat");
+			session.setAttribute("erreur", e);
+			response.sendRedirect(request.getContextPath() + "/article?id=" + id);
+		} catch (Error e) {
+			System.out.println("erreur enchereServlet Erreur");
+			session.setAttribute("erreur", e);
+			response.sendRedirect(request.getContextPath() + "/article?id=" + id);
+		}
 	}
 
 	/**
@@ -40,8 +95,9 @@ public class enchereServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		HttpSession session = request.getSession();
 		try {
-			HttpSession session = request.getSession();
+
 			Utilisateur utilisateur = (Utilisateur) session.getAttribute("isConnected");
 			if (session.getAttribute("isConnected") == null) {
 				System.out.println("test sessions");
@@ -54,20 +110,19 @@ public class enchereServlet extends HttpServlet {
 			EnchereManager enchereManager = new EnchereManager();
 			Article article = articleManager.getById(noArticle);
 			int montantDeLEnchere = Integer.parseInt(request.getParameter("prixEnchere"));
+			System.out.println("montant de l'enchere : " + montantDeLEnchere);
 			enchereManager.enchere(utilisateur, article, montantDeLEnchere);
-			UtilisateurManager utilisateurManager = new UtilisateurManager();
-			Utilisateur updateUser = utilisateurManager.getById(utilisateur.getNoUtilisateur());
 			Encheres updateEnchere = enchereManager.enchereExist(article.getNoArticle());
-			session.setAttribute("article", article);
-			session.setAttribute("isConnected", updateUser);
-			session.setAttribute("enchere", updateEnchere);
-			session.setAttribute("successMessage", "la modification a été validé avec succes");
+			utilisateur.setCredit(utilisateur.getCredit() - montantDeLEnchere);
+			request.setAttribute("article", article);
+			session.setAttribute("isConnected", utilisateur);
+			request.setAttribute("enchere", updateEnchere);
 
-			response.sendRedirect(request.getContextPath() + "/article?id=" + noArticle);
+			response.sendRedirect("article?id=" + request.getParameter("noArticle"));
 
 		} catch (Exception e) {
-			request.setAttribute("erreur", e.getMessage());
-			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
+			session.setAttribute("erreur", e);
+			response.sendRedirect(request.getContextPath() + "/article?id=" + request.getParameter("noArticle"));
 		}
 
 	}

@@ -139,8 +139,7 @@ public class VendreArticleServlet extends HttpServlet {
 			RetraitsManager retraitsManager = new RetraitsManager();
 			retraitsManager.create(retrait);
 
-			session.setAttribute("successMessage", "Votre vente a été créée avec succès");
-			response.sendRedirect("accueil");
+			response.sendRedirect(request.getContextPath() + "/article?id=" + articleCreate.getNoArticle());
 
 		} catch (ArticleException e) {
 			System.out.println("erreur post vente" + e);

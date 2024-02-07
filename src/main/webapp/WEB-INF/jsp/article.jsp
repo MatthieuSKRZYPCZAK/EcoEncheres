@@ -7,6 +7,23 @@
 <body>
 	<%@ include file="/WEB-INF/jsp/header/header.jsp"%>
 	<main>
+		<div class="message">
+			<c:choose>
+				<c:when test="${not empty sessionScope.erreur}">
+					<strong class="erreur"><c:out
+							value="${sessionScope.erreur}" /></strong>
+					<c:remove var="erreur" scope="session" />
+				</c:when>
+			</c:choose>
+			<c:choose>
+				<c:when test="${not empty sessionScope.successMessage}">
+					<strong class="succes"><c:out
+							value="${sessionScope.successMessage}" /></strong>
+					<c:remove var="successMessage" scope="session" />
+
+				</c:when>
+			</c:choose>
+		</div>
 		<c:choose>
 			<c:when test="${not empty sessionScope.isConnected}">
 				<c:choose>
@@ -49,12 +66,18 @@
 									<b>Catétorie :</b> ${article.categorie.libelle}
 								</p>
 								<p class="card-text">
-									<b>Meilleur offre :</b> ${empty enchere.montantEnchere ? "pas d'offre pour le moment" : 
-							"<img
-												src='${pageContext.request.contextPath}/img/credits.png'
-												alt='Logo crédits' width='20' height='20'
-												class='d-inline-block align-text-mid'>" +
-							enchere.montantEnchere + " par " + enchere.utilisateur.pseudo}
+									<b>Meilleur offre : <c:choose>
+											<c:when test="${empty enchere.montantEnchere}">
+										pas d'offre pour le moment
+									</c:when>
+											<c:otherwise>
+										${enchere.montantEnchere} <img
+													src='${pageContext.request.contextPath}/img/credits.png'
+													alt='Logo crédits' width='20' height='20'
+													class='d-inline-block align-text-mid'> par ${enchere.utilisateur.pseudo}
+									</c:otherwise>
+										</c:choose>
+									</b>
 								</p>
 								<p class="card-text">
 									<b>Mise à prix :</b> ${article.prixInitial} <img
@@ -78,53 +101,55 @@
 										<c:choose>
 											<c:when test="${sessionScope.isConnected.actif eq true}">
 												<form action="enchere" method="post">
-												<c:set var="montantConditionnel"
+													<c:set var="montantConditionnel"
 														value="${empty enchere ? article.prixInitial : enchere.montantEnchere}" />
 													<c:set var="readOnly"
 														value="${sessionScope.isConnected.credit < montantConditionnel}" />
-												<fieldset
-												<c:if test="${readOnly || (sessionScope.isConnected.noUtilisateur == article.utilisateur.noUtilisateur)}">
+													<fieldset
+														<c:if test="${readOnly || (sessionScope.isConnected.noUtilisateur == article.utilisateur.noUtilisateur) || (sessionScope.isConnected.noUtilisateur == enchere.utilisateur.noUtilisateur)}">
 												disabled
-												</c:if>
+												</c:if>>
 												
-												>
-												<input type="hidden" name="noArticle" value="${article.noArticle}" />
-													<p>
-														Je possède actuellement :
-														${sessionScope.isConnected.credit} <img
-															src="${pageContext.request.contextPath}/img/credits.png"
-															alt="Logo crédits" width="20" height="20"
-															class="d-inline-block align-text-mid">
-													</p>
-													<c:if test="${readOnly && !(sessionScope.isConnected.noUtilisateur == article.utilisateur.noUtilisateur)}">
-														<strong class="erreur">Vous ne possédez pas assez
-															de <img
-															src="${pageContext.request.contextPath}/img/credits.png"
-															alt="Logo crédits" width="20" height="20"
-															class="d-inline-block align-text-mid"> pour
-															enchérir.
-														</strong>
-													</c:if>
-													<div class="row justify-content-center">
-														<div class="input-group mt-3 col-1 mt-3">
-															<span class="input-group-text" id="prixEnchere"><b>Ma
-																	proposition :</b></span> <input type="number" class="form-control"
-																name="prixEnchere" aria-label="Prix Enchere"
-																aria-describedby="Prix Enchere"
-																value="${empty enchere.montantEnchere ? article.prixInitial : enchere.montantEnchere + 10}"
-																maxlength="5" min="0" max="50000"
-																required
+														<input type="hidden" name="noArticle"
+															value="${article.noArticle}" />
+														<p>
+															Je possède actuellement :
+															${sessionScope.isConnected.credit} <img
+																src="${pageContext.request.contextPath}/img/credits.png"
+																alt="Logo crédits" width="20" height="20"
+																class="d-inline-block align-text-mid">
+														</p>
+														<c:if
+															test="${readOnly && !(sessionScope.isConnected.noUtilisateur == article.utilisateur.noUtilisateur)}">
+															<strong class="erreur">Vous ne possédez pas
+																assez de <img
+																src="${pageContext.request.contextPath}/img/credits.png"
+																alt="Logo crédits" width="20" height="20"
+																class="d-inline-block align-text-mid"> pour
+																enchérir.
+															</strong>
+														</c:if>
+														<div class="row justify-content-center">
+															<div class="input-group mt-3 col-1 mt-3">
+																<span class="input-group-text" id="prixEnchere"><b>Ma
+																		proposition :</b></span> <input type="number"
+																	class="form-control" name="prixEnchere"
+																	aria-label="Prix Enchere"
+																	aria-describedby="Prix Enchere"
+																	value="${empty enchere.montantEnchere ? article.prixInitial : enchere.montantEnchere + 10}"
+																	maxlength="5" min="0" max="50000"
+																	required
 												 ${readOnly ? "readonly
-																style='background-color: #f2f2f2; color: #666;'" : ''}>
-														</div>
-														<div class="col-2 mt-3">
-															<div class="input-group">
-																<button class="btn btn-outline-success my-2 my-sm-0"
-																	type="submit"
-																	onsubmit="return confirm('Êtes-vous sûr de vouloir enchérir ?');">Enchérir</button>
+																	style='background-color: #f2f2f2; color: #666;'" : ''}>
+															</div>
+															<div class="col-2 mt-3">
+																<div class="input-group">
+																	<button class="btn btn-outline-success my-2 my-sm-0"
+																		type="submit"
+																		onsubmit="return confirm('Êtes-vous sûr de vouloir enchérir ?');">Enchérir</button>
+																</div>
 															</div>
 														</div>
-													</div>
 													</fieldset>
 												</form>
 											</c:when>

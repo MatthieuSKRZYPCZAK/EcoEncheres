@@ -11,11 +11,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.bll.ArticleManager;
 import fr.eni.encheres.bll.CategorieManager;
+import fr.eni.encheres.bll.EnchereManager;
+import fr.eni.encheres.bll.UtilisateurManager;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Encheres;
+import fr.eni.encheres.bo.Utilisateur;
 
 /**
  * Servlet implementation class AccueilServlet
@@ -54,6 +59,17 @@ public class AccueilServlet extends HttpServlet {
 			}
 		}
 
+		HttpSession session = request.getSession();
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("isConnected");
+		UtilisateurManager utilisateurManager = new UtilisateurManager();
+		if(utilisateur != null) {
+			utilisateur = utilisateurManager.getById(utilisateur.getNoUtilisateur());
+			session.setAttribute("isConnected", utilisateur);
+		}
+		EnchereManager enchereManager = new EnchereManager();
+		List<Encheres> listEncheres = enchereManager.getAll();
+		
+		request.setAttribute("encheres", listEncheres);
 		request.setAttribute("listCategorie", categories);
 		request.setAttribute("listArticle", listArticle);
 		request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);

@@ -114,7 +114,17 @@
 									</div>
 									<div class="card-body">
 										<div class="clearfix mb-3">
-											<span class="float-start badge rounded-pill bg-success">${article.prixInitial}
+											<span class="float-start badge rounded-pill bg-success">
+											<c:set var="enchereTrouvee" value="false" />
+												<c:forEach var="enchere" items="${encheres}">
+													<c:if test="${not empty enchere && enchere.article.noArticle == article.noArticle}">
+														${enchere.montantEnchere}
+														<c:set var="enchereTrouvee" value="true" />
+													</c:if>
+												</c:forEach>
+													<c:if test="${not enchereTrouvee}">
+														${article.prixInitial}
+													</c:if>
 												<img
 												src="${pageContext.request.contextPath}/img/credits.png"
 												alt="Logo crédits" width="20" height="20"

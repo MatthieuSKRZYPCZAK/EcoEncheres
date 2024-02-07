@@ -13,8 +13,6 @@ import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.UpdateException;
 import fr.eni.encheres.exception.UtilisateurException;
 
-
-
 /**
  * Servlet implementation class ProfilServlet
  */
@@ -22,23 +20,25 @@ import fr.eni.encheres.exception.UtilisateurException;
 public class ProfilServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		try {
 			HttpSession session = request.getSession();
-			if (request.getParameter("id")!= null) {
+			if (request.getParameter("id") != null) {
 				UtilisateurManager utilisateurManager = new UtilisateurManager();
 				Utilisateur utilisateur = utilisateurManager.getById(Integer.parseInt(request.getParameter("id")));
-				if(utilisateur == null) {
+				if (utilisateur == null) {
 					throw new UtilisateurException("L'utilisateur n'existe pas");
 				}
-				if(session != null) {
+				if (session != null) {
 					Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
-					if(utilisateurSession != null && utilisateurSession.getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
+					if (utilisateurSession != null
+							&& utilisateurSession.getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
 						request.setAttribute("moi", true);
 						request.setAttribute("utilisateur", utilisateur);
 						request.getRequestDispatcher("/WEB-INF/jsp/profil.jsp").forward(request, response);
@@ -56,7 +56,7 @@ public class ProfilServlet extends HttpServlet {
 		} catch (UtilisateurException e) {
 			request.setAttribute("erreur", e.getMessage());
 			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
-		} catch(NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
 		} catch (Error e) {
 			request.setAttribute("erreur", e.getMessage());
@@ -65,14 +65,16 @@ public class ProfilServlet extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		//Je récupère les informations saisie dans le formulaire
+		// Je récupère les informations saisie dans le formulaire
 		HttpSession session = request.getSession();
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("isConnected");
-		if(utilisateur != null) {
+		if (utilisateur != null) {
 			int id = utilisateur.getNoUtilisateur();
 			String pseudo = request.getParameter("pseudo");
 			String nom = request.getParameter("nom");
@@ -86,17 +88,18 @@ public class ProfilServlet extends HttpServlet {
 			String nouveauMotDePasse = request.getParameter("nouveauMotDePasse");
 			String confirmationMotDePasse = request.getParameter("confirmationMotDePasse");
 			UtilisateurManager utilisateurManager = new UtilisateurManager();
-			
+
 			try {
 				Utilisateur updateUtilisateur = new Utilisateur();
-				updateUtilisateur = utilisateurManager.updateUtilisateur(id, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, nouveauMotDePasse, confirmationMotDePasse);
+				updateUtilisateur = utilisateurManager.updateUtilisateur(id, pseudo, nom, prenom, email, telephone, rue,
+						codePostal, ville, motDePasse, nouveauMotDePasse, confirmationMotDePasse);
 				session.setAttribute("isConnected", updateUtilisateur);
 				session.setAttribute("successMessage", "la modification a été validé avec succes");
 				System.out.println("utilisateur modifié");
 				response.sendRedirect(request.getContextPath() + "/profil?id=" + id);
 			} catch (UpdateException e) {
 				session.setAttribute("erreur", e);
-				System.out.println("id :" +id);
+				System.out.println("id :" + id);
 				System.out.println("erreur catch profilservlet post");
 				response.sendRedirect(request.getContextPath() + "/profil?id=" + id);
 			}
