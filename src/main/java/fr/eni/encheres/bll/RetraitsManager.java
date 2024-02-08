@@ -20,4 +20,9 @@ public class RetraitsManager {
 		return this.retraitsDAO.getByNoArticle(noArticle);
 	}
 
+	public void update(Retraits retrait) {
+		this.retraitsDAO.update(retrait);
+		
+	}
+
 }

@@ -8,4 +8,6 @@ public interface RetraitsDAO {
 
 	Retraits getByNoArticle(int noArticle);
 
+	void update(Retraits retrait);
+
 }

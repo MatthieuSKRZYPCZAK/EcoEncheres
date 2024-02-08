@@ -13,6 +13,9 @@ public class RetraitsDAOJdbcImpl implements RetraitsDAO {
 	// INSERT
 	private static final String INSERT = "INSERT INTO RETRAITS (no_article, rue, code_postal, ville) VALUES(?,?,?,?);";
 	private static final String SELECT_BY_NO_ARTICLE = "SELECT * FROM RETRAITS WHERE no_article=?;";
+	
+	// UPDATE
+	private static final String UPDATE = "UPDATE RETRAITS SET rue=?, code_postal=?, ville=? WHERE no_article = ?;";
 
 	@Override
 	public void create(Retraits retrait) {
@@ -62,6 +65,22 @@ public class RetraitsDAOJdbcImpl implements RetraitsDAO {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public void update(Retraits retrait) {
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pstmt = cnx.prepareStatement(UPDATE);
+			pstmt.setString(1, retrait.getRue());
+			pstmt.setString(2, retrait.getCodePostal());
+			pstmt.setString(3, retrait.getVille());
+			pstmt.setInt(4, retrait.getArticle().getNoArticle());
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

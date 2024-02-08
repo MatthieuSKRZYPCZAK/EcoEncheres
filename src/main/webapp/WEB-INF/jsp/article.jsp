@@ -99,7 +99,91 @@
 								src="${pageContext.request.contextPath}/uploads/${article.image}"
 								alt="${article.nomArticle}">
 						</div>
-						<div class="col-md-6">
+						<c:choose>
+						<c:when test="${article.etatVente == 'créé' }">
+							<div class="col-md-6">
+							<div class="card-body">
+							<form action="article" method="post"
+									enctype="multipart/form-data">
+									<input type="hidden" name="noArticle" value="${article.noArticle}">
+								<div class="input-group">
+										<span class="input-group-text" id="nomArticle">Nom de
+											l'article</span> <input type="text" class="form-control"
+											name="nomArticle" aria-label="Nom article"
+											aria-describedby="Nom article" value="${article.nomArticle}" required>
+									</div>
+									<div class="input-group mt-3">
+										<span class="input-group-text" id="description">Description</span>
+										<textarea class="form-control" name="description"
+											aria-label="Description" aria-describedby="Description"
+											required>${article.description}</textarea>
+									</div>
+									<div class="form-group mt-3">
+										<label for="listCategorie">Catégorie</label> <select
+											class="form-control" name="listCategorie" id="listCategorie">
+											<c:forEach var="categorie" items="${listCategorie}">
+												<option value="${categorie.noCategorie}" id="listCategorie">${categorie.libelle}</option>
+											</c:forEach>
+										</select>
+									</div>
+									<div class="form-group mt-3">
+										<label for="image">Photo de l'article</label> <input
+											type="file" class="form-control" id="image" name="image"
+											accept="image/png, image/jpeg">
+									</div>
+									<div class="input-group mt-3">
+										<span class="input-group-text" id="prixInitial">Mise à
+											prix</span> <input type="number" class="form-control"
+											name="prixInitial" aria-label="Prix initial"
+											aria-describedby="Prix initial" value="${article.prixInitial}"
+											minlength="1" maxlength="5" min="0" max="50000" required>
+									</div>
+									<div class="form-group mt-3">
+										<label for="dateDebutEncheres">Début de l'enchère:</label> <input
+											type="datetime-local" class="form-control"
+											name="dateDebutEncheres" id="dateDebutEncheres"
+											value="${article.dateDebutEncheres}" required>
+									</div>
+									<div class="form-group mt-3">
+										<label for="dateFinEncheres">Fin de l'enchère:</label> <input
+											type="datetime-local" class="form-control"
+											name="dateFinEncheres" id="dateFinEncheres"
+											value="${article.dateFinEncheres}" required>
+									</div>
+									<fieldset class="rounded-3 border mt-3 p-3">
+										<legend class="float-none w-auto px-3 ">Retrait</legend>
+										<div class="input-group mt-3">
+											<span class="input-group-text" id="rue">Rue</span> <input
+												type="text" class="form-control" name="rue" aria-label="Rue"
+												aria-describedby="Rue" value="${retrait.rue}" required>
+										</div>
+										<div class="input-group mt-3">
+											<span class="input-group-text" id="codePostal">Code
+												postal</span> <input type="number" class="form-control"
+												name="codePostal" aria-label="codePostal"
+												aria-describedby="codePostal" value="${retrait.codePostal}"
+												minlength="5" maxlength="5" required>
+										</div>
+										<div class="input-group mt-3">
+											<span class="input-group-text" id="ville">Ville</span> <input
+												type="text" class="form-control" name="ville"
+												aria-label="Ville" aria-describedby="Ville" value="${retrait.ville}"
+												required>
+										</div>
+									</fieldset>
+									<div class="row justify-content-center">
+										<div class="col-3 d-grid mt-3">
+											<input class="btn btn-primary" type="submit" value="Modifier la vente"
+												id="submit">
+										</div>
+										<div class="col-3 d-grid mt-3">
+											<a class="btn btn-danger" href="supprimerVente">Annuler la vente</a>
+										</div>
+									</div>
+								</form>
+						</c:when>
+						<c:otherwise>
+							<div class="col-md-6">
 							<div class="card-body">
 								<h3>${article.nomArticle}</h3>
 								<p class="card-text">
@@ -139,6 +223,9 @@
 									<b>Vendeur :</b> <a class="bi bi-link-45deg decoration-none"
 										href="<%=request.getContextPath()%>/profil?id=${article.utilisateur.noUtilisateur}">${article.utilisateur.pseudo}</a>
 								</p>
+						</c:otherwise>
+						</c:choose>
+						
 								
 										<c:choose>
 											<c:when test="${sessionScope.isConnected.actif eq true && article.etatVente == 'en cours'}">

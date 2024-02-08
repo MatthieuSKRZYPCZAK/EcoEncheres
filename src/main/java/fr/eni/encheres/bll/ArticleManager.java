@@ -101,4 +101,32 @@ public class ArticleManager {
 		return this.articleDAO.getAllArticleEnchere();
 	}
 
+	public Article update(Article article) throws ArticleException {
+		Date dateActuelle = new Date();
+		if (article.getNomArticle().isEmpty() || article.getNomArticle() == null) {
+			throw new ArticleException("Veuillez donner un nom à votre article.");
+		}
+		if (article.getDescription().isEmpty() || article.getDescription() == null) {
+			throw new ArticleException("Veuillez donner une description.");
+		}
+		if (article.getPrixInitial() > 50000 || article.getPrixInitial() < 0) {
+			throw new ArticleException("Le prix doit être supérieur à 0 et inférieur à 50 000.");
+		}
+		if (!article.getUtilisateur().isActif()) {
+			throw new ArticleException("Vous n'avez pas l'autorisation de vendre");
+		}
+		if (article.getCategorie() == null) {
+			throw new ArticleException("Vous n'avez selectionné aucune categorie");
+		}
+		if (article.getDateDebutEncheres().before(dateActuelle)) {
+			throw new ArticleException(
+					"Vous ne pouvez pas fixer une date de début d'enchère antérieure à la date actuelle");
+		}
+		if (article.getDateDebutEncheres().after(article.getDateFinEncheres())) {
+			throw new ArticleException(
+					"Vous ne pouvez pas fixer une date de fin d'enchère antérieure à la date de début d'enchère.");
+		}
+		return this.articleDAO.update(article);
+	}
+
 }

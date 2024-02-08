@@ -25,6 +25,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 
 	
 	//UPDATE
+	private static final String UPDATE="UPDATE ARTICLES_VENDUS SET nom_article=?, description=?, date_debut_encheres=?, date_fin_encheres=?, prix_initial=?, no_utilisateur=?, no_categorie=?, image=? WHERE no_article=?;";
 	private static final String UPDATE_ETAT = "UPDATE ARTICLES_VENDUS SET etat_vente = ? WHERE no_article=?;";
 	private static final String UPDATE_PRIX_VENTE = "UPDATE ARTICLES_VENDUS SET prix_vente = ? WHERE no_article=?;";
 
@@ -213,6 +214,33 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		}
 
 		return listeArticles;
+	}
+//nom_article=?, description=?, date_debut_encheres=?, date_fin_encheres=?, prix_initial=?, no_utilisateur=?, no_categorie=?, image=?
+	@Override
+	public Article update(Article article) {
+		try(Connection cnx = ConnectionProvider.getConnection())
+		{
+			PreparedStatement pstmt = cnx.prepareStatement(UPDATE);
+			pstmt.setString(1, article.getNomArticle());
+			pstmt.setString(2, article.getDescription());
+			pstmt.setTimestamp(3, new Timestamp(article.getDateDebutEncheres().getTime()));
+			pstmt.setTimestamp(4, new Timestamp(article.getDateFinEncheres().getTime()));
+			pstmt.setInt(5, article.getPrixInitial());
+			pstmt.setInt(6, article.getUtilisateur().getNoUtilisateur());
+			pstmt.setInt(7, article.getCategorie().getNoCategorie());
+			pstmt.setString(8, article.getImage());
+			pstmt.setInt(9, article.getNoArticle());
+			int rowsUpdated = pstmt.executeUpdate();
+			if(rowsUpdated > 0) {
+				Article updateArticle = getById(article.getNoArticle());
+				return updateArticle;
+			}else {
+				return null;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

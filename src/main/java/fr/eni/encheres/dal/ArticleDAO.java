@@ -22,6 +22,8 @@ public interface ArticleDAO {
 
 	List<Article> getAllForDate();
 
+	Article update(Article article);
+
 
 	
 

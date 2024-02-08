@@ -35,6 +35,20 @@ public class Article {
 		this.categorie = categorie;
 		this.image = image;
 	}
+	
+	public Article(int noArticle, String nomArticle, String description, Date dateDebutEncheres, Date dateFinEncheres, int prixInitial,
+			Utilisateur utilisateur, Categorie categorie, String image) {
+		super();
+		this.noArticle = noArticle;
+		this.nomArticle = nomArticle;
+		this.description = description;
+		this.dateDebutEncheres = dateDebutEncheres;
+		this.dateFinEncheres = dateFinEncheres;
+		this.prixInitial = prixInitial;
+		this.utilisateur = utilisateur;
+		this.categorie = categorie;
+		this.image = image;
+	}
 
 	public Article(String nomArticle, String description, Date dateDebutEncheres, Date dateFinEncheres, int prixInitial,
 			Utilisateur utilisateur, Categorie categorie, String image) {
