@@ -24,6 +24,8 @@ public interface ArticleDAO {
 
 	Article update(Article article);
 
+	void detele(int noArticle);
+
 
 	
 

@@ -87,7 +87,7 @@ public class DetailVenteServlet extends HttpServlet {
 				request.getRequestDispatcher("/WEB-INF/jsp/article.jsp").forward(request, response);
 
 			} else {
-				throw new Error("La page demandé n'existe pas");
+				throw new Error("La page demandée n'existe pas");
 			}
 		} catch (NumberFormatException e) {
 			session.setAttribute("erreur", e.getMessage());

@@ -129,4 +129,9 @@ public class ArticleManager {
 		return this.articleDAO.update(article);
 	}
 
+	public void delete(int noArticle) {
+		this.articleDAO.detele(noArticle);
+		
+	}
+
 }

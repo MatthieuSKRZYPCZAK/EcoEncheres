@@ -100,7 +100,7 @@
 								alt="${article.nomArticle}">
 						</div>
 						<c:choose>
-						<c:when test="${article.etatVente == 'créé' }">
+						<c:when test="${article.etatVente == 'créé' && (sessionScope.isConnected.noUtilisateur == article.utilisateur.noUtilisateur)}">
 							<div class="col-md-6">
 							<div class="card-body">
 							<form action="article" method="post"
@@ -177,7 +177,7 @@
 												id="submit">
 										</div>
 										<div class="col-3 d-grid mt-3">
-											<a class="btn btn-danger" href="supprimerVente">Annuler la vente</a>
+											<a class="btn btn-danger" href="supprimerVente?id=${article.noArticle}">Annuler la vente</a>
 										</div>
 									</div>
 								</form>

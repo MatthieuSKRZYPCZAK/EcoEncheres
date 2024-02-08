@@ -28,6 +28,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	private static final String UPDATE="UPDATE ARTICLES_VENDUS SET nom_article=?, description=?, date_debut_encheres=?, date_fin_encheres=?, prix_initial=?, no_utilisateur=?, no_categorie=?, image=? WHERE no_article=?;";
 	private static final String UPDATE_ETAT = "UPDATE ARTICLES_VENDUS SET etat_vente = ? WHERE no_article=?;";
 	private static final String UPDATE_PRIX_VENTE = "UPDATE ARTICLES_VENDUS SET prix_vente = ? WHERE no_article=?;";
+	
+	// DELETE
+	private static final String DELETE = "DELETE FROM ARTICLES_VENDUS WHERE no_article=?;";
 
 	/**
 	 * 
@@ -241,6 +244,20 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public void detele(int noArticle) {
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pstmt = cnx.prepareStatement(DELETE);
+			pstmt.setInt(1, noArticle);
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		
 	}
 
 }

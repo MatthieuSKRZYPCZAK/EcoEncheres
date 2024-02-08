@@ -1,16 +1,11 @@
 <%@ include file="/WEB-INF/jsp/head/head.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-<%-- Récupération des cookies pour se souvenir de l'utilisateur --%>
+
+
 <%
-	Cookie[] pseudo;
-	String lastLogin="";
-	pseudo=request.getCookies();
-	for(Cookie c:pseudo){
-		if(c.getName().equals("lastLogin")) {
-			lastLogin = c.getValue();
-		} 
-	}
+boolean seSouvenir = (boolean) request.getAttribute("seSouvenir");
 %>
+
 	<title>ÉcoEnchères - Login</title>
 </head>
 <body>
@@ -32,7 +27,7 @@
 						<div class="form-group d-flex justify-content-between">
 							<div>
 								<label for="seSouvenir">Se souvenir de moi :</label>
-								<input type="checkbox" id="seSouvenir" name="seSouvenir" >
+								<input type="checkbox" id="seSouvenir" name="seSouvenir" <%if(seSouvenir == true) {%>checked<%}%>>
 							</div>
 							<a class="float-right" href="passePerdu">Mot de passe oublié</a>
 						</div>
