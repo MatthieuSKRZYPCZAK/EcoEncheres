@@ -47,8 +47,51 @@
 				<div class="container-md px-5 mx-0">
 					<div class="title text-center">
 						<h1 class="text-uppercase my-5">Détail vente</h1>
+						 <c:if test="${article.etatVente == 'créé'}">
+							<h2>L'enchère commencera le ${article.dateDebutEncheres}</h2>
+						</c:if>
+						<c:if test="${article.etatVente == 'terminé' || article.etatVente == 'retiré'}">
+							<c:choose>
+								<c:when test="${enchere.utilisateur.noUtilisateur == sessionScope.isConnected.noUtilisateur}">
+									<c:choose>
+										<c:when test="${article.etatVente == 'retiré'}">
+										 	<div class="container mt-5">
+												<div class="alert alert-success" role="alert">
+													<h2 class="text-center">Vous avez remporté la vente - l'article a été retiré</h2>
+												</div>
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div class="container mt-5">
+												<div class="alert alert-success" role="alert">
+													<h2 class="text-center">Vous avez remporté la vente</h2> 
+													<a href="retrait?id=${article.noArticle}" id="lien" class="btn btn-outline-success mt-3">Confirmer le retrait</a>
+												</div>
+											</div>
+										 </c:otherwise>
+									</c:choose>
+								</c:when>
+								
+								
+								<c:otherwise>
+								<div class="container mt-5">
+			<div class="alert alert-secondary" role="alert">
+				<c:choose>
+					<c:when test="${not empty enchere.utilisateur.pseudo}">
+							<h2>${enchere.utilisateur.pseudo} a remporté l'enchère</h2>
+					</c:when>
+					<c:otherwise>
+								<h2>Enchère terminée sans offre.</h2>
+					</c:otherwise>
+				</c:choose>
+				
+			</div>
+		</div>
+									
+								</c:otherwise>
+							</c:choose>
+						</c:if> 
 					</div>
-
 					<div class="row">
 						<div class="col-md-1"></div>
 						<div class="col-md-5 photo-container">
@@ -96,11 +139,13 @@
 									<b>Vendeur :</b> <a class="bi bi-link-45deg decoration-none"
 										href="<%=request.getContextPath()%>/profil?id=${article.utilisateur.noUtilisateur}">${article.utilisateur.pseudo}</a>
 								</p>
-								<div class="card">
-									<div class="card-body">
+								
 										<c:choose>
-											<c:when test="${sessionScope.isConnected.actif eq true}">
+											<c:when test="${sessionScope.isConnected.actif eq true && article.etatVente == 'en cours'}">
+											<div class="card">
+													<div class="card-body">
 												<form action="enchere" method="post">
+												
 													<c:set var="montantConditionnel"
 														value="${empty enchere ? article.prixInitial : enchere.montantEnchere}" />
 													<c:set var="readOnly"
@@ -152,22 +197,23 @@
 														</div>
 													</fieldset>
 												</form>
+												</div>
+												</div>
 											</c:when>
-											<c:otherwise>
-												<strong class="erreur">Votre compte a été désactivé
-													par un administrateur</strong>
-												<p>Vous ne pouvez plus vendre ou acheter d'article</p>
-											</c:otherwise>
 										</c:choose>
-									</div>
-								</div>
+										<c:if test="${sessionScope.isConnected.actif eq false && article.etatVente == 'en cours'}">
+											<div class="card">
+													<div class="card-body">
+														<strong class="erreur">Votre compte a été désactivé
+															par un administrateur</strong>
+												<p>Vous ne pouvez plus vendre ou acheter d'article</p>
+												</div>
+											</div>
+										</c:if>
 							</div>
 						</div>
-
-
 					</div>
 				</div>
-
 			</c:when>
 			<c:otherwise>
 				<span class="message">Vous devez vous connecter pour accéder
@@ -179,3 +225,11 @@
 	<%@ include file="/WEB-INF/jsp/footer/footer.jsp"%>
 </body>
 </html>
+
+<script>
+	document.getElementById("lien").addEventListener("click", function(event) {
+		if (!confirm("Êtes-vous sûr de vouloir confirmer le retrait ?")) {
+			event.preventDefault();
+		}
+	});
+</script>

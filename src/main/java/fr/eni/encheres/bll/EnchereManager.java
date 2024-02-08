@@ -53,13 +53,8 @@ public class EnchereManager {
 			}
 			placeNewBid(utilisateur.getNoUtilisateur(), article.getNoArticle(), montantDeLEnchere);
 		}
-		System.out.println("montant de l'enchere dans manager methode enchere : " + montantDeLEnchere);
-		System.out.println(
-				"montant de crédit de l'utilisateur dans manager methode enchere : " + utilisateur.getCredit());
+
 		paidBid(utilisateur.getNoUtilisateur(), (utilisateur.getCredit() - montantDeLEnchere));
-		System.out.println("enchere manager place new bid (user credt - montant de l'enchere : "
-				+ (utilisateur.getCredit() - montantDeLEnchere));
-		
 
 	}
 
@@ -81,10 +76,9 @@ public class EnchereManager {
 	public void refundPreviousBidder(int credit, int bidder) {
 		this.enchereDAO.refundPreviousBidder(credit, bidder);
 	}
-	
+
 	public List<Encheres> getAll() {
 		return this.enchereDAO.getAll();
 	}
-
 
 }

@@ -18,6 +18,10 @@ public interface ArticleDAO {
 
 	void articleUpdateEtat(String etat, int noArticle);
 
+	void updatePrixVente(int montantEnchere, int noArticle);
+
+	List<Article> getAllForDate();
+
 
 	
 

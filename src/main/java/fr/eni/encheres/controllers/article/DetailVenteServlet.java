@@ -16,7 +16,7 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Encheres;
 import fr.eni.encheres.bo.Retraits;
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.exception.ArticleException;
+
 
 /**
  * Servlet implementation class DetailVenteServlet
@@ -36,7 +36,7 @@ public class DetailVenteServlet extends HttpServlet {
 		try {
 
 			if (session.getAttribute("isConnected") == null) {
-				throw new ArticleException("vous devez avoir un compte ou vous identifer pour accéder à ce contenu");
+				throw new Error("vous devez avoir un compte ou vous identifer pour accéder à ce contenu");
 			}
 			if (request.getParameter("id") != null) {
 
@@ -46,7 +46,7 @@ public class DetailVenteServlet extends HttpServlet {
 				Article article = articleManager.getById(Integer.parseInt(request.getParameter("id")));
 
 				if (article == null) {
-					throw new ArticleException("L'article n'existe pas");
+					throw new Error("L'article n'existe pas");
 				}
 				if (session != null) {
 					Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
@@ -65,7 +65,6 @@ public class DetailVenteServlet extends HttpServlet {
 				}
 				Encheres enchere = enchereManager.enchereExist(article.getNoArticle());
 				if (enchere != null) {
-					System.out.println("enchere existe : " + enchere.getMontantEnchere());
 					request.setAttribute("enchere", enchere);
 				}
 				Retraits retrait = retraitManager.getByNoArticle(article.getNoArticle());
@@ -74,17 +73,14 @@ public class DetailVenteServlet extends HttpServlet {
 				request.getRequestDispatcher("/WEB-INF/jsp/article.jsp").forward(request, response);
 
 			} else {
-				throw new ArticleException("La page demandé n'existe pas");
+				throw new Error("La page demandé n'existe pas");
 			}
-		} catch (ArticleException e) {
-			session.setAttribute("erreur", e);
-			response.sendRedirect(request.getContextPath() + "/article?id=" + request.getParameter("id"));
 		} catch (NumberFormatException e) {
-			session.setAttribute("erreur", e);
-			response.sendRedirect(request.getContextPath() + "/article?id=" + request.getParameter("id"));
+			session.setAttribute("erreur", e.getMessage());
+			response.sendRedirect(request.getContextPath() + "/accueil");
 		} catch (Error e) {
-			session.setAttribute("erreur", e);
-			response.sendRedirect(request.getContextPath() + "/article?id=" + request.getParameter("id"));
+			session.setAttribute("erreur", e.getMessage());
+			response.sendRedirect(request.getContextPath() + "/accueil");
 		}
 	}
 

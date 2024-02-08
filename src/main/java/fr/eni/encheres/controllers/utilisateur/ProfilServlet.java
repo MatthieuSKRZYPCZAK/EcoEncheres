@@ -27,8 +27,9 @@ public class ProfilServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		HttpSession session = request.getSession();
 		try {
-			HttpSession session = request.getSession();
+
 			if (request.getParameter("id") != null) {
 				UtilisateurManager utilisateurManager = new UtilisateurManager();
 				Utilisateur utilisateur = utilisateurManager.getById(Integer.parseInt(request.getParameter("id")));
@@ -54,13 +55,13 @@ public class ProfilServlet extends HttpServlet {
 				throw new UtilisateurException("La page demandé n'existe pas");
 			}
 		} catch (UtilisateurException e) {
-			request.setAttribute("erreur", e.getMessage());
-			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
+			session.setAttribute("erreur", e.getMessage());
+			response.sendRedirect(request.getContextPath() + "/accueil");
 		} catch (NumberFormatException e) {
-			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/accueil");
 		} catch (Error e) {
-			request.setAttribute("erreur", e.getMessage());
-			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
+			session.setAttribute("erreur", e.getMessage());
+			response.sendRedirect(request.getContextPath() + "/accueil");
 		}
 	}
 
@@ -95,12 +96,9 @@ public class ProfilServlet extends HttpServlet {
 						codePostal, ville, motDePasse, nouveauMotDePasse, confirmationMotDePasse);
 				session.setAttribute("isConnected", updateUtilisateur);
 				session.setAttribute("successMessage", "la modification a été validé avec succes");
-				System.out.println("utilisateur modifié");
 				response.sendRedirect(request.getContextPath() + "/profil?id=" + id);
 			} catch (UpdateException e) {
 				session.setAttribute("erreur", e);
-				System.out.println("id :" + id);
-				System.out.println("erreur catch profilservlet post");
 				response.sendRedirect(request.getContextPath() + "/profil?id=" + id);
 			}
 		} else {

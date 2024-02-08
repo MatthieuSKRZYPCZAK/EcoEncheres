@@ -74,15 +74,12 @@ public class enchereServlet extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/jsp/article.jsp").forward(request, response);
 
 		} catch (ArticleException e) {
-			System.out.println("erreur enchereServlet Article Exception");
 			session.setAttribute("erreur", e);
 			response.sendRedirect(request.getContextPath() + "/article?id=" + id);
 		} catch (NumberFormatException e) {
-			System.out.println("erreur enchereServlet NumberFormat");
 			session.setAttribute("erreur", e);
 			response.sendRedirect(request.getContextPath() + "/article?id=" + id);
 		} catch (Error e) {
-			System.out.println("erreur enchereServlet Erreur");
 			session.setAttribute("erreur", e);
 			response.sendRedirect(request.getContextPath() + "/article?id=" + id);
 		}
@@ -110,7 +107,6 @@ public class enchereServlet extends HttpServlet {
 			EnchereManager enchereManager = new EnchereManager();
 			Article article = articleManager.getById(noArticle);
 			int montantDeLEnchere = Integer.parseInt(request.getParameter("prixEnchere"));
-			System.out.println("montant de l'enchere : " + montantDeLEnchere);
 			enchereManager.enchere(utilisateur, article, montantDeLEnchere);
 			Encheres updateEnchere = enchereManager.enchereExist(article.getNoArticle());
 			utilisateur.setCredit(utilisateur.getCredit() - montantDeLEnchere);

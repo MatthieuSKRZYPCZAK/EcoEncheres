@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import fr.eni.encheres.bo.Article;
@@ -21,9 +22,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS;";
 	private static final String SELECT_ID = "SELECT * FROM ARTICLES_VENDUS WHERE no_article=?;";
 	private static final String SELECT_ALL_START = "SELECT *FROM ARTICLES_VENDUS WHERE etat_vente = 'en cours';";
+
 	
 	//UPDATE
 	private static final String UPDATE_ETAT = "UPDATE ARTICLES_VENDUS SET etat_vente = ? WHERE no_article=?;";
+	private static final String UPDATE_PRIX_VENTE = "UPDATE ARTICLES_VENDUS SET prix_vente = ? WHERE no_article=?;";
 
 	/**
 	 * 
@@ -158,6 +161,58 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void updatePrixVente(int montantEnchere, int noArticle) {
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pstmt = cnx.prepareStatement(UPDATE_PRIX_VENTE);
+			pstmt.setInt(1, montantEnchere);
+			pstmt.setInt(2, noArticle);
+			pstmt.executeUpdate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public List<Article> getAllForDate() {
+		List<Article> listeArticles = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ALL);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Article articleCourant;
+				articleCourant = new Article();
+				articleCourant.setNoArticle(rs.getInt("no_article"));
+				articleCourant.setNomArticle(rs.getString("nom_article"));
+				articleCourant.setDescription(rs.getString("description"));
+				Timestamp debut = rs.getTimestamp("date_debut_encheres");
+				Date dateDebut = new Date(debut.getTime());
+				Timestamp fin = rs.getTimestamp("date_fin_encheres");
+				Date dateFin = new Date(fin.getTime());
+				articleCourant.setDateDebutEncheres(dateDebut);
+				articleCourant.setDateFinEncheres(dateFin);
+				articleCourant.setPrixInitial(rs.getInt("prix_initial"));
+				articleCourant.setPrixVente(rs.getInt("prix_vente"));
+				articleCourant.setEtatVente(rs.getString("etat_vente"));
+				articleCourant.setImage(rs.getString("image"));
+				Utilisateur utilisateur = new Utilisateur();
+				UtilisateurDAOJdbcImpl uDAOJdbc = new UtilisateurDAOJdbcImpl();
+				utilisateur = uDAOJdbc.selectById(rs.getInt("no_utilisateur"));
+				Categorie categorie = new Categorie();
+				CategorieDAOJdbcImpl cDAOJdbc = new CategorieDAOJdbcImpl();
+				categorie = cDAOJdbc.getById(rs.getInt("no_categorie"));
+				articleCourant.setCategorie(categorie);
+				articleCourant.setUtilisateur(utilisateur);
+				listeArticles.add(articleCourant);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return listeArticles;
 	}
 
 }

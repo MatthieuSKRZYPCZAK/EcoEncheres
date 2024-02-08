@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import fr.eni.encheres.bo.Article;
+import fr.eni.encheres.bo.Encheres;
 import fr.eni.encheres.dal.ArticleDAO;
 import fr.eni.encheres.dal.DAOFactory;
 import fr.eni.encheres.exception.ArticleException;
@@ -46,32 +47,54 @@ public class ArticleManager {
 			throw new ArticleException(
 					"Vous ne pouvez pas fixer une date de fin d'enchère antérieure à la date de début d'enchère.");
 		}
-
 		return this.articleDAO.create(article);
 	}
 
+	/**
+	 * méthode qui permet de mettre à jour l'état de vente des articles
+	 */
 	public void majEtatVenteAll() {
 		List<Article> listeArticles = new ArrayList<>();
-		listeArticles = getAll();
+		listeArticles = getAllForDate();
+		String cree = "créé";
 		String enCours = "en cours";
 		String termine = "terminé";
-		Date now = new Date();
+
 		for (Article article : listeArticles) {
-			if (article.getDateDebutEncheres().before(now) && article.getDateFinEncheres().after(now)
-					&& !article.getEtatVente().contains(enCours)) {
-				articleUpdateEtat(enCours, article.getNoArticle());
-			} else if (article.getDateFinEncheres().before(now)) {
-				articleUpdateEtat(termine, article.getNoArticle());
+			Date nowDate = new Date();
+			if (article.getEtatVente().contains(enCours)) {
+				if (article.getDateFinEncheres().before(nowDate)) {
+					articleUpdateEtat(termine, article.getNoArticle());
+					EnchereManager enchereManager = new EnchereManager();
+					Encheres encheres = enchereManager.enchereExist(article.getNoArticle());
+					if (encheres != null) {
+						articleUpdatePrixVente(encheres.getMontantEnchere(), article.getNoArticle());
+					}
+				}
+			}
+			if (article.getEtatVente().contains(cree)) {
+				if (article.getDateDebutEncheres().before(nowDate)) {
+					articleUpdateEtat(enCours, article.getNoArticle());
+				}
 			}
 		}
 	}
 
-	private void articleUpdateEtat(String etat, int noArticle) {
+	private void articleUpdatePrixVente(int montantEnchere, int noArticle) {
+		this.articleDAO.updatePrixVente(montantEnchere, noArticle);
+
+	}
+
+	public void articleUpdateEtat(String etat, int noArticle) {
 		this.articleDAO.articleUpdateEtat(etat, noArticle);
 	}
 
 	public List<Article> getAll() {
 		return this.articleDAO.getAll();
+	}
+
+	public List<Article> getAllForDate() {
+		return this.articleDAO.getAllForDate();
 	}
 
 	public List<Article> getAllArticleEnchere() {
