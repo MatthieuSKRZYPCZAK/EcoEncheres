@@ -43,7 +43,6 @@ public class ModifierCategorieServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String libelle = request.getParameter("categorie");
-		System.out.println("je rentre bien sur modifier categorie voila le libelle" + libelle);
 		try {
 			// Vérifie si l'utilisateur est connecté et si il est administrateur
 			HttpSession session = request.getSession();
@@ -52,7 +51,6 @@ public class ModifierCategorieServlet extends HttpServlet {
 				if (utilisateurSession.isAdministrateur()) {
 					CategorieManager categorieManager = new CategorieManager();
 					if (categorieManager.existe(libelle)) {
-						System.out.println("libelle existe deja servler ModifierCategorie nom = " + libelle);
 					} else {
 						categorieManager.update(Integer.parseInt(request.getParameter("id")), libelle);
 						request.setAttribute("successMessage", "Le libellé a bien été modifié");

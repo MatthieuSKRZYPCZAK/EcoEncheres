@@ -25,6 +25,11 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 	// DELETE
 	private static final String DELETE = "DELETE FROM CATEGORIES WHERE no_categorie=?;";
 
+	/**
+	 * Crée une nouvelle catégorie avec le libellé spécifié.
+	 * 
+	 * @param categorie Le libellé de la nouvelle catégorie à créer.
+	 */
 	@Override
 	public void create(String categorie) {
 
@@ -38,6 +43,11 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 		}
 	}
 
+	/**
+	 * Supprime la catégorie avec l'identifiant spécifié.
+	 * 
+	 * @param id L'identifiant de la catégorie (no_categorie) à supprimer.
+	 */
 	@Override
 	public void delete(int id) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -51,6 +61,12 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 
 	}
 
+	/**
+	 * Met à jour le libellé de la catégorie avec l'identifiant spécifié.
+	 * 
+	 * @param id      L'identifiant de la catégorie à mettre à jour.
+	 * @param libelle Le nouveau libellé de la catégorie.
+	 */
 	@Override
 	public void update(int id, String libelle) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -65,6 +81,12 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 
 	}
 
+	/**
+	 * Récupère toutes les catégories présentes dans la base de données.
+	 * 
+	 * @return Une liste contenant toutes les catégories présentes dans la base de
+	 *         données.
+	 */
 	@Override
 	public List<Categorie> allCategories() {
 		List<Categorie> listeCategories = new ArrayList<>();
@@ -85,6 +107,13 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 		return listeCategories;
 	}
 
+	/**
+	 * Vérifie si une catégorie avec le libellé spécifié existe déjà dans la base de
+	 * données.
+	 * 
+	 * @param libelle Le libellé de la catégorie à vérifier.
+	 * @return Vrai si la catégorie existe déjà, sinon faux.
+	 */
 	@Override
 	public boolean existe(String libelle) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -102,6 +131,12 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 		return false;
 	}
 
+	/**
+	 * Récupère toutes les catégories présentes dans la base de données
+	 * 
+	 * @return Une liste contenant toutes les catégories présentes dans la base de
+	 *         données.
+	 */
 	@Override
 	public List<Categorie> selectAll() {
 		List<Categorie> listCategorie = new ArrayList<>();
@@ -121,6 +156,13 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 		return listCategorie;
 	}
 
+	/**
+	 * Construit une catégorie à partir d'un ResultSet.
+	 * 
+	 * @param rs Le ResultSet à partir duquel construire la catégorie.
+	 * @return La catégorie construite à partir du ResultSet.
+	 * @throws SQLException
+	 */
 	static Categorie categorieBuilder(ResultSet rs) throws SQLException {
 		Categorie categorieCourant;
 		categorieCourant = new Categorie();
@@ -130,6 +172,13 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 		return categorieCourant;
 	}
 
+	/**
+	 * Récupère une catégorie à partir de son identifiant.
+	 * 
+	 * @param id L'identifiant de la catégorie à récupérer.
+	 * @return La catégorie correspondant à l'identifiant spécifié, ou null si
+	 *         aucune catégorie n'est trouvée.
+	 */
 	@Override
 	public Categorie getById(int id) {
 		if (id == 0) {

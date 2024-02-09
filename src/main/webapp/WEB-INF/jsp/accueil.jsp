@@ -89,7 +89,7 @@
 							aria-label="Close"></button>
 					</div>
 				</c:if>
-				<div id="accordion" class="d-none d-md-table-cell">
+				<div id="accordion">
 					<div class="card">
 						<div class="card-header" id="headingOne">
 							<h5 class="mb-0">Filtres :</h5>
@@ -116,7 +116,7 @@
 										</div>
 									</div>
 									<div class="row justify-content-center">
-										<div class="col-6 mt-3">
+										<div class="col-6 mt-3 d-none d-md-table-cell">
 											<div class="input-group">
 												<label class="input-group-text" for="inputGroupSelect01">Catégorie
 												</label> <select class="form-control" name="listCategorie"
@@ -141,53 +141,53 @@
 									<c:choose>
 										<c:when test="${not empty sessionScope.isConnected}">
 											<div
-												class="row justify-content-center">
+												class="row justify-content-center ">
 												<div class="col-6 mt-3">
 													<div class="input-group d-flex justify-content-center">
-														<div class="form-check col-6">
+														<div class="form-check col-6 d-none d-md-table-cell">
 															<input class="form-check-input" type="radio"
 																name="option" id="achats" value="achats" checked
 																onclick="gestionCheckBoxes()"> <label
 																class="form-check-label" for="achats"> Achats </label>
 														</div>
-														<div class="form-check col-6">
+														<div class="form-check col-6 d-none d-md-table-cell">
 															<input class="form-check-input" type="radio"
 																name="option" id="ventes" value="ventes"
 																onclick="gestionCheckBoxes()"> <label
 																class="form-check-label" for="ventes"> Mes
 																ventes </label>
 														</div>
-														<div class="form-check col-6">
+														<div class="form-check col-6 d-none d-md-table-cell">
 															<input class="form-check-input" type="checkbox"
 																name="encheresOuvertes" id="encheresOuvertes"> <label
 																class="form-check-label" for="encheresOuvertes">
 																enchères ouvertes </label>
 														</div>
-														<div class="form-check col-6">
+														<div class="form-check col-6 d-none d-md-table-cell">
 															<input class="form-check-input" type="checkbox"
 																name="ventesEnCours" id="ventesEnCours" disabled>
 															<label class="form-check-label" for="ventesEnCours">
 																mes ventes en cours </label>
 														</div>
-														<div class="form-check col-6">
+														<div class="form-check col-6 d-none d-md-table-cell">
 															<input class="form-check-input" type="checkbox"
 																name="encheresEnCours" id="encheresEnCours"> <label
 																class="form-check-label" for="encheresEnCours">
 																mes enchères en cours </label>
 														</div>
-														<div class="form-check col-6">
+														<div class="form-check col-6 d-none d-md-table-cell">
 															<input class="form-check-input" type="checkbox"
 																name="venteNonDebutees" id="venteNonDebutees" disabled>
 															<label class="form-check-label" for="venteNonDebutees">
 																ventes non débutées </label>
 														</div>
-														<div class="form-check col-6">
+														<div class="form-check col-6 d-none d-md-table-cell">
 															<input class="form-check-input" type="checkbox"
 																name="mesEncheresWin" id="mesEncheresWin"> <label
 																class="form-check-label" for="mesEncheresWin">
 																mes enchères remportées </label>
 														</div>
-														<div class="form-check col-6">
+														<div class="form-check col-6 d-none d-md-table-cell">
 															<input class="form-check-input" type="checkbox"
 																name="ventesTerminees" id="ventesTerminees" disabled>
 															<label class="form-check-label" for="ventesTerminees">

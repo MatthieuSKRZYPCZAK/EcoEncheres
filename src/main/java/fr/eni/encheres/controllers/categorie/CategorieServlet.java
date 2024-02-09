@@ -49,7 +49,6 @@ public class CategorieServlet extends HttpServlet {
 			if (session != null) {
 				Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
 				if (utilisateurSession.isAdministrateur()) {
-					System.out.println("connecté en admin sur categorie lors de la création");
 					CategorieManager categorieManager = new CategorieManager();
 					String libelle = request.getParameter("categorie");
 					if (categorieManager.existe(libelle)) {

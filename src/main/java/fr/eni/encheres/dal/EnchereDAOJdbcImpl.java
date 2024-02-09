@@ -29,6 +29,12 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 	private static final String REFUND = "UPDATE UTILISATEURS SET credit=? WHERE no_utilisateur=?;";
 	private static final String UPDATE = "UPDATE ENCHERES SET no_utilisateur=?, date_enchere=?, montant_enchere=? WHERE no_article=?;";
 
+	/**
+	 * Vérifie si une enchère existe pour un article donné dans la base de données.
+	 *
+	 * @param noArticle Le numéro de l'article pour lequel vérifier l'existence de l'enchère.
+	 * @return L'enchère associée à l'article s'il en existe une, sinon null.
+	 */
 	@Override
 	public Encheres enchereExist(int noArticle) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -47,6 +53,13 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 		return null;
 	}
 
+	/**
+	 * Construit un objet Encheres à partir des données d'un ResultSet.
+	 *
+	 * @param rs Le ResultSet contenant les données de l'enchère.
+	 * @return L'enchère construite à partir des données.
+	 * @throws SQLException Si une erreur SQL survient lors de la récupération des données.
+	 */
 	public Encheres enchereBuilder(ResultSet rs) throws SQLException {
 		Encheres encheresCourant;
 		encheresCourant = new Encheres();
@@ -64,6 +77,13 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 		return encheresCourant;
 	}
 
+	/**
+	 * Enregistre une nouvelle enchère pour un article dans la base de données.
+	 *
+	 * @param noUtilisateur    L'identifiant de l'utilisateur plaçant l'enchère.
+	 * @param noArticle        Le numéro de l'article sur lequel placer l'enchère.
+	 * @param montantDeLEnchere Le montant de l'enchère à placer.
+	 */
 	@Override
 	public void placeBid(int noUtilisateur, int noArticle, int montantDeLEnchere) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -79,6 +99,13 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 
 	}
 
+	/**
+	 * Place une nouvelle enchère pour un article dans la base de données.
+	 *
+	 * @param noUtilisateur    L'identifiant de l'utilisateur plaçant l'enchère.
+	 * @param noArticle        Le numéro de l'article sur lequel placer l'enchère.
+	 * @param montantDeLEnchere Le montant de l'enchère à placer.
+	 */
 	@Override
 	public void placeNewBid(int noUtilisateur, int noArticle, int montantDeLEnchere) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -94,6 +121,12 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 
 	}
 
+	/**
+	 * Rembourse le montant de l'enchère précédente à l'utilisateur précédent dans la base de données.
+	 *
+	 * @param credit Le montant à rembourser.
+	 * @param bidder L'identifiant de l'enchérisseur à rembourser.
+	 */
 	@Override
 	public void refundPreviousBidder(int credit, int bidder) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -106,6 +139,12 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 		}
 	}
 
+	/**
+	 * Marque une enchère comme payée dans la base de données.
+	 *
+	 * @param utilisateur      L'identifiant de l'utilisateur ayant payé l'enchère.
+	 * @param montantDeLEnchere Le montant payé.
+	 */
 	@Override
 	public void paidBid(int utilisateur, int montantDeLEnchere) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -119,6 +158,11 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 
 	}
 
+	/**
+	 * Récupère toutes les enchères de la base de données.
+	 *
+	 * @return Une liste contenant toutes les enchères.
+	 */
 	@Override
 	public List<Encheres> getAll() {
 		List<Encheres> listeEncheres = new ArrayList<>();
@@ -137,6 +181,12 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 		return listeEncheres;
 	}
 
+	/**
+	 * Récupère toutes les enchères d'un utilisateur donné.
+	 *
+	 * @param id L'identifiant de l'utilisateur pour lequel récupérer les enchères.
+	 * @return Une liste contenant toutes les enchères de l'utilisateur.
+	 */
 	@Override
 	public List<Article> getEncheresByUserId(int id) {
 		List<Article> list = new ArrayList<Article>();

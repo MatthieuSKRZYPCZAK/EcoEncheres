@@ -35,10 +35,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	private static final String DELETE = "DELETE FROM ARTICLES_VENDUS WHERE no_article=?;";
 
 	/**
-	 * 
-	 * @param rs
-	 * @return
-	 * @throws SQLException
+	 * Construit un objet Article à partir d'un ResultSet.
+	 *
+	 * @param rs Le ResultSet à partir duquel construire l'objet Article.
+	 * @return L'objet Article construit à partir du ResultSet.
+	 * @throws SQLException Si une erreur SQL survient lors de la construction de l'objet Article.
 	 */
 	private Article articleBuilder(ResultSet rs) throws SQLException {
 		Article articleCourant;
@@ -69,7 +70,10 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	}
 
 	/**
-	 * 
+	 * Récupère un Article à partir de son identifiant.
+	 *
+	 * @param id L'identifiant de l'Article à récupérer.
+	 * @return L'Article correspondant à l'identifiant spécifié, ou null si aucun Article n'est trouvé.
 	 */
 	@Override
 	public Article getById(int id) {
@@ -93,7 +97,10 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	}
 
 	/**
-	 * 
+	 * Crée un nouvel Article dans la base de données.
+	 *
+	 * @param article L'Article à créer dans la base de données.
+	 * @return L'Article créé, ou null si la création a échoué.
 	 */
 	@Override
 	public Article create(Article article) {
@@ -120,6 +127,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return article;
 	}
 
+	/**
+	 * Récupère tous les articles de la base de données.
+	 *
+	 * @return Une liste contenant tous les articles.
+	 */
 	@Override
 	public List<Article> getAll() {
 		List<Article> listeArticles = new ArrayList<>();
@@ -137,6 +149,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return listeArticles;
 	}
 
+	/**
+	 * Récupère tous les articles en vente aux enchères de la base de données.
+	 *
+	 * @return Une liste contenant tous les articles en vente aux enchères.
+	 */
 	@Override
 	public List<Article> getAllArticleEnchere() {
 		List<Article> listeArticles = new ArrayList<>();
@@ -154,6 +171,12 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return listeArticles;
 	}
 
+	/**
+	 * Met à jour l'état de vente d'un article dans la base de données.
+	 *
+	 * @param etat     Le nouvel état de vente de l'article.
+	 * @param noArticle Le numéro de l'article à mettre à jour.
+	 */
 	@Override
 	public void articleUpdateEtat(String etat, int noArticle) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -166,6 +189,12 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		}
 	}
 
+	/**
+	 * Met à jour le prix de vente d'un article dans la base de données.
+	 *
+	 * @param montantEnchere Le nouveau prix de vente de l'article.
+	 * @param noArticle      Le numéro de l'article à mettre à jour.
+	 */
 	@Override
 	public void updatePrixVente(int montantEnchere, int noArticle) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -178,6 +207,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		}
 	}
 
+	/**
+	 * Récupère tous les articles de la base de données avec les dates de début et de fin formattées.
+	 *
+	 * @return Une liste contenant tous les articles avec les dates formattées.
+	 */
 	@Override
 	public List<Article> getAllForDate() {
 		List<Article> listeArticles = new ArrayList<>();
@@ -216,6 +250,12 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return listeArticles;
 	}
 
+	/**
+	 * Met à jour les informations d'un article dans la base de données.
+	 *
+	 * @param article L'article avec les nouvelles informations.
+	 * @return L'article mis à jour.
+	 */
 	@Override
 	public Article update(Article article) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -242,6 +282,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		}
 	}
 
+	/**
+	 * Supprime un article de la base de données.
+	 *
+	 * @param noArticle Le numéro de l'article à supprimer.
+	 */
 	@Override
 	public void detele(int noArticle) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -253,6 +298,12 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		}
 	}
 
+	/**
+	 * Récupère tous les articles d'une catégorie en cours de vente aux enchères.
+	 *
+	 * @param noCategorie Le numéro de la catégorie des articles à récupérer.
+	 * @return Une liste contenant tous les articles de la catégorie en cours de vente aux enchères.
+	 */
 	@Override
 	public List<Article> getAllArticleByCategorieEnCours(int noCategorie) {
 		List<Article> listeArticles = new ArrayList<>();
@@ -271,6 +322,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return listeArticles;
 	}
 
+	/**
+	 * Récupère tous les articles de la base de données avec les informations sur les enchères associées.
+	 *
+	 * @return Une liste contenant tous les articles avec les informations sur les enchères associées.
+	 */
 	@Override
 	public List<Article> getAllArticlesWithEncheres() {
 		List<Article> list = new ArrayList<Article>();
@@ -311,6 +367,12 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return list;
 	}
 
+	/**
+	 * Récupère tous les articles d'un utilisateur donné.
+	 *
+	 * @param id L'identifiant de l'utilisateur.
+	 * @return Une liste contenant tous les articles de l'utilisateur.
+	 */
 	@Override
 	public List<Article> getAllByUserId(int id) {
 		List<Article> list = new ArrayList<Article>();

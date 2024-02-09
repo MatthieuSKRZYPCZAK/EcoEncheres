@@ -222,6 +222,12 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 		return utilisateur;
 	}
 
+	/**
+	 * Met à jour les informations d'un utilisateur dans la base de données.
+	 *
+	 * @param utilisateur L'utilisateur avec les informations mises à jour.
+	 * @return L'utilisateur mis à jour, ou null si la mise à jour a échoué.
+	 */
 	@Override
 	public Utilisateur updateUtilisateur(Utilisateur utilisateur) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -278,6 +284,12 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 		return listeUtilisateurs;
 	}
 
+	/**
+	 * Supprime un utilisateur de la base de données en utilisant son numéro
+	 * d'utilisateur.
+	 *
+	 * @param no_utilisateur Le numéro d'utilisateur de l'utilisateur à supprimer.
+	 */
 	@Override
 	public void delete(int no_utilisateur) {
 
@@ -292,6 +304,12 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 
 	}
 
+	/**
+	 * Désactive un utilisateur dans la base de données en utilisant son
+	 * identifiant.
+	 *
+	 * @param id L'identifiant de l'utilisateur à désactiver.
+	 */
 	@Override
 	public void disable(int id) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -305,6 +323,11 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 
 	}
 
+	/**
+	 * Active un utilisateur dans la base de données en utilisant son identifiant.
+	 *
+	 * @param id L'identifiant de l'utilisateur à activer.
+	 */
 	@Override
 	public void enable(int id) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
