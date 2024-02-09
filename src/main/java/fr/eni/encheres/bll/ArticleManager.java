@@ -13,15 +13,31 @@ import fr.eni.encheres.exception.ArticleException;
 public class ArticleManager {
 	private ArticleDAO articleDAO;
 
+	/**
+	 * Initialise un nouveau gestionnaire d'articles avec un DAO d'articles.
+	 */
 	public ArticleManager() {
 		this.articleDAO = DAOFactory.getArticleDAO();
 	}
 
+	/**
+	 * Récupère un article par son identifiant.
+	 *
+	 * @param id L'identifiant de l'article à récupérer.
+	 * @return L'article correspondant à l'identifiant spécifié.
+	 */
 	public Article getById(int id) {
 		return this.articleDAO.getById(id);
 
 	}
-
+	
+	/**
+	 * Crée un nouvel article dans la base de données.
+	 *
+	 * @param article L'article à créer.
+	 * @return L'article créé.
+	 * @throws ArticleException Si une erreur survient lors de la création de l'article.
+	 */
 	public Article create(Article article) throws ArticleException {
 		Date dateActuelle = new Date();
 		if (article.getNomArticle().isEmpty() || article.getNomArticle() == null) {
@@ -51,7 +67,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * méthode qui permet de mettre à jour l'état de vente des articles
+	 * Met à jour l'état de vente de tous les articles en fonction de leur date d'enchères.
 	 */
 	public void majEtatVenteAll() {
 		List<Article> listeArticles = new ArrayList<>();
@@ -80,27 +96,61 @@ public class ArticleManager {
 		}
 	}
 
+	/**
+	 * Met à jour le prix de vente d'un article dans la base de données.
+	 *
+	 * @param montantEnchere Le nouveau montant de l'enchère.
+	 * @param noArticle      L'identifiant de l'article à mettre à jour.
+	 */
 	private void articleUpdatePrixVente(int montantEnchere, int noArticle) {
 		this.articleDAO.updatePrixVente(montantEnchere, noArticle);
 
 	}
 
+	/**
+	 * Met à jour l'état de vente d'un article dans la base de données.
+	 *
+	 * @param etat     Le nouvel état de vente de l'article.
+	 * @param noArticle L'identifiant de l'article à mettre à jour.
+	 */
 	public void articleUpdateEtat(String etat, int noArticle) {
 		this.articleDAO.articleUpdateEtat(etat, noArticle);
 	}
 
+	/**
+	 * Récupère tous les articles de la base de données.
+	 *
+	 * @return Une liste contenant tous les articles.
+	 */
 	public List<Article> getAll() {
 		return this.articleDAO.getAll();
 	}
 
+	/**
+	 * Récupère tous les articles pour lesquels la date d'enchères est valide.
+	 *
+	 * @return Une liste contenant tous les articles pour lesquels la date d'enchères est valide.
+	 */
 	public List<Article> getAllForDate() {
 		return this.articleDAO.getAllForDate();
 	}
 
+	/**
+	 * Récupère tous les articles actuellement en enchères.
+	 *
+	 * @return Une liste contenant tous les articles actuellement en enchères.
+	 */
 	public List<Article> getAllArticleEnchere() {
 		return this.articleDAO.getAllArticleEnchere();
 	}
 
+	/**
+	 * Met à jour un article dans la base de données.
+	 *
+	 * @param article L'article à mettre à jour.
+	 * @return L'article mis à jour.
+	 * @throws ArticleException Si une erreur survient lors de la mise à jour de l'article.
+	 */
 	public Article update(Article article) throws ArticleException {
 		Date dateActuelle = new Date();
 		if (article.getNomArticle().isEmpty() || article.getNomArticle() == null) {
@@ -129,19 +179,41 @@ public class ArticleManager {
 		return this.articleDAO.update(article);
 	}
 
+	/**
+	 * Supprime un article de la base de données.
+	 *
+	 * @param noArticle L'identifiant de l'article à supprimer.
+	 */
 	public void delete(int noArticle) {
 		this.articleDAO.detele(noArticle);
 
 	}
 
+	/**
+	 * Récupère tous les articles d'une catégorie actuellement en enchères.
+	 *
+	 * @param noCategorie L'identifiant de la catégorie.
+	 * @return Une liste contenant tous les articles d'une catégorie actuellement en enchères.
+	 */
 	public List<Article> getAllArticleByCategorieEnCours(int noCategorie) {
 		return this.articleDAO.getAllArticleByCategorieEnCours(noCategorie);
 	}
 
+	/**
+	 * Récupère tous les articles avec des enchères associées.
+	 *
+	 * @return Une liste contenant tous les articles avec des enchères associées.
+	 */
 	public List<Article> getAllWithEncheres() {
 		return this.articleDAO.getAllArticlesWithEncheres();
 	}
 
+	/**
+	 * Récupère tous les articles associés à un utilisateur.
+	 *
+	 * @param id L'identifiant de l'utilisateur.
+	 * @return Une liste contenant tous les articles associés à un utilisateur.
+	 */
 	public List<Article> getByUserId(int id) {
 		return this.articleDAO.getAllByUserId(id);
 	}

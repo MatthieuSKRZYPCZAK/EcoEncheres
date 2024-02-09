@@ -17,6 +17,11 @@ public class RetraitsDAOJdbcImpl implements RetraitsDAO {
 	// UPDATE
 	private static final String UPDATE = "UPDATE RETRAITS SET rue=?, code_postal=?, ville=? WHERE no_article = ?;";
 
+	/**
+	 * Crée un nouveau retrait dans la base de données.
+	 *
+	 * @param retrait L'objet Retraits représentant le retrait à créer.
+	 */
 	@Override
 	public void create(Retraits retrait) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -33,6 +38,13 @@ public class RetraitsDAOJdbcImpl implements RetraitsDAO {
 
 	}
 
+	/**
+	 * Construit un objet Retraits à partir des données d'un ResultSet.
+	 *
+	 * @param rs Le ResultSet contenant les données du retrait.
+	 * @return Le retrait construit à partir des données.
+	 * @throws SQLException Si une erreur SQL survient lors de la récupération des données.
+	 */
 	static Retraits retraitsBuilder(ResultSet rs) throws SQLException {
 		Retraits retraitsCourant;
 		retraitsCourant = new Retraits();
@@ -46,6 +58,12 @@ public class RetraitsDAOJdbcImpl implements RetraitsDAO {
 		return retraitsCourant;
 	}
 
+	/**
+	 * Récupère un retrait à partir du numéro d'article associé.
+	 *
+	 * @param noArticle Le numéro de l'article associé au retrait à récupérer.
+	 * @return Le retrait associé à l'article, s'il existe ; sinon null.
+	 */
 	@Override
 	public Retraits getByNoArticle(int noArticle) {
 		if (noArticle == 0) {
@@ -67,6 +85,11 @@ public class RetraitsDAOJdbcImpl implements RetraitsDAO {
 		return null;
 	}
 
+	/**
+	 * Met à jour un retrait dans la base de données.
+	 *
+	 * @param retrait L'objet Retraits représentant le retrait à mettre à jour.
+	 */
 	@Override
 	public void update(Retraits retrait) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
