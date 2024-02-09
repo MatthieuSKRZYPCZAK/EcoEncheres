@@ -55,6 +55,7 @@ public class MesVentesServlet extends HttpServlet {
 			session.setAttribute("erreur", e.getMessage());
 			response.sendRedirect(request.getContextPath() + "/accueil");
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			response.sendRedirect(request.getContextPath() + "/accueil");
 		}
 	}

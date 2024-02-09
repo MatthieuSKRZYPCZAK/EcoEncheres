@@ -17,6 +17,8 @@ public class Article {
 	private Encheres encheres;
 	private Utilisateur acheteur;
 
+	
+
 	public Article() {
 		super();
 	}
@@ -185,5 +187,6 @@ public class Article {
 	public void setImage(String image) {
 		this.image = image;
 	}
+
 
 }

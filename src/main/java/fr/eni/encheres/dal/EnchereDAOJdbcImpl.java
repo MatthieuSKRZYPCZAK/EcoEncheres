@@ -22,7 +22,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 	// READ
 	private static final String SELECT_ID_ARTICLE = "SELECT * FROM ENCHERES WHERE no_article=?;";
 	private static final String SELECT_ALL = "SELECT * FROM ENCHERES;";
-	private static final String SELECT_ALL_BY_USER_ID = "SELECT ARTICLES_VENDUS.*, ENCHERES.no_utilisateur AS acheteur, ENCHERES.montant_enchere AS montantEnchere FROM ENCHERES LEFT JOIN ARTICLES_VENDUS ON ARTICLES_VENDUS.no_article = ENCHERES.no_article WHERE ENCHERES.no_utilisateur = ?";
+	private static final String SELECT_ALL_BY_USER_ID = "SELECT ARTICLES_VENDUS.*, ENCHERES.no_utilisateur AS acheteur, ENCHERES.montant_enchere AS montantEnchere, ENCHERES.date_enchere FROM ENCHERES LEFT JOIN ARTICLES_VENDUS ON ARTICLES_VENDUS.no_article = ENCHERES.no_article WHERE ENCHERES.no_utilisateur = ?";
 
 	// UPDATE
 	private static final String PAID = "UPDATE UTILISATEURS SET credit=? WHERE no_utilisateur=?;";

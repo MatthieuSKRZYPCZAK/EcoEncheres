@@ -24,7 +24,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	private static final String SELECT_ALL_START = "SELECT *FROM ARTICLES_VENDUS WHERE etat_vente = 'en cours';";
 	private static final String SELECT_ALL_START_CAT = "SELECT *FROM ARTICLES_VENDUS WHERE etat_vente = 'en cours' AND no_categorie=?;";
 	private static final String SELECT_ALL_WITH_ENCHERES = "SELECT ARTICLES_VENDUS.*, ENCHERES.*, CATEGORIES.*, ENCHERES.no_utilisateur AS acheteur, ARTICLES_VENDUS.no_utilisateur AS vendeur FROM ARTICLES_VENDUS LEFT JOIN ENCHERES ON ARTICLES_VENDUS.no_article = ENCHERES.no_article LEFT JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie;";
-	private static final String SELECT_ALL_BY_USER_ID = "SELECT ARTICLES_VENDUS.*, ENCHERES.no_utilisateur AS acheteur, ENCHERES.montant_enchere AS montantEnchere FROM ARTICLES_VENDUS LEFT JOIN ENCHERES ON ARTICLES_VENDUS.no_article = ENCHERES.no_article WHERE ARTICLES_VENDUS.no_utilisateur = ?;";
+	private static final String SELECT_ALL_BY_USER_ID = "SELECT ARTICLES_VENDUS.*, ENCHERES.no_utilisateur AS acheteur, ENCHERES.montant_enchere AS montantEnchere, ENCHERES.date_enchere FROM ARTICLES_VENDUS LEFT JOIN ENCHERES ON ARTICLES_VENDUS.no_article = ENCHERES.no_article WHERE ARTICLES_VENDUS.no_utilisateur = ?;";
 
 	// UPDATE
 	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET nom_article=?, description=?, date_debut_encheres=?, date_fin_encheres=?, prix_initial=?, no_utilisateur=?, no_categorie=?, image=? WHERE no_article=?;";

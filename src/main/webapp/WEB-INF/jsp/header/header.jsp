@@ -123,23 +123,28 @@
 					</ul>
 
 				</div>
-				<ul class="navbar-nav ms-auto d-none d-lg-table-cell">
+				<div class="d-none d-lg-table-cell">
+				<ul class="navbar-nav ms-auto ">
 					<li class="nav-item"><a class="nav-link effect-nav"
 						href="<%=request.getContextPath()%>/profil?id=${sessionScope.isConnected.noUtilisateur}">Mon
 							profil : ${sessionScope.isConnected.pseudo}</a></li>
 					<li class="nav-item"><a class="nav-link effect-nav"
 						href="<%=request.getContextPath()%>/logout">Se déconnecter</a></li>
 				</ul>
+				</div>
 			</c:when>
 			<c:otherwise>
-				<ul class="navbar-nav ms-auto d-none d-lg-table-cell">
+			<div class="d-none d-lg-table-cell">
+				<ul class="navbar-nav ms-auto ">
 					<li class="nav-item"><a class="nav-link effect-nav"
 						href="<%=request.getContextPath()%>/register">S'inscrire</a></li>
 					<li class="nav-item"></li>
 					<li class="nav-item"><a class="nav-link effect-nav"
 						href="<%=request.getContextPath()%>/login">Se connecter</a></li>
 				</ul>
+				</div>
 			</c:otherwise>
+			
 		</c:choose>
 	</nav>
 </header>
