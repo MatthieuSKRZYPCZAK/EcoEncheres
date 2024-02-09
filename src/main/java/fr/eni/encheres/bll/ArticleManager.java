@@ -134,4 +134,16 @@ public class ArticleManager {
 		
 	}
 
+	public List<Article> getAllArticleByCategorieEnCours(int noCategorie) {
+		return this.articleDAO.getAllArticleByCategorieEnCours(noCategorie);
+	}
+
+	public List<Article> getAllWithEncheres() {
+		return this.articleDAO.getAllArticlesWithEncheres();
+	}
+
+	public List<Article> getByUserId(int id) {
+		return this.articleDAO.getAllByUserId(id);
+	}
+
 }

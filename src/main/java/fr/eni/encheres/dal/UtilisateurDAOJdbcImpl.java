@@ -42,7 +42,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	@Override
 	public Utilisateur selectById(int id) {
 		if (id == 0) {
-			System.out.println("Pas d'id, prévoir l'erreur (exception)");
+			return null;
 		}
 		
 		try(Connection cnx = ConnectionProvider.getConnection())

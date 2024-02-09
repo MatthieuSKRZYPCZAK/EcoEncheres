@@ -24,8 +24,8 @@ public class Encheres {
 		return dateEnchere;
 	}
 
-	public void setDateEnchere(Date dateEnchere) {
-		this.dateEnchere = dateEnchere;
+	public void setDateEnchere(java.util.Date dateEnchereOfficiel) {
+		this.dateEnchere = (Date) dateEnchereOfficiel;
 	}
 
 	public int getMontantEnchere() {

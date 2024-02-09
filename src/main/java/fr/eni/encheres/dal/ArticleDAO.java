@@ -26,6 +26,11 @@ public interface ArticleDAO {
 
 	void detele(int noArticle);
 
+	List<Article> getAllArticleByCategorieEnCours(int noCategorie);
+
+	List<Article> getAllArticlesWithEncheres();
+
+	List<Article> getAllByUserId(int id);
 
 	
 

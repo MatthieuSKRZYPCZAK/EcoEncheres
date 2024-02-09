@@ -1,7 +1,34 @@
 <%@ include file="/WEB-INF/jsp/head/head.jsp"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <title>ÉcoEnchères - Accueil</title>
 </head>
+<script>
+function gestionCheckBoxes() {
+    var optionSelectionnee = document.querySelector('input[name="option"]:checked').value;
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    
+    if (optionSelectionnee === 'achats') {
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.name === 'ventesEnCours' || checkbox.name === 'venteNonDebutees' || checkbox.name === 'ventesTerminees') {
+                checkbox.disabled = true;
+                checkbox.checked = false; // Désélectionne la case si elle était cochée
+            } else {
+                checkbox.disabled = false;
+            }
+        });
+    } else if (optionSelectionnee === 'ventes') {
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.name === 'encheresOuvertes' || checkbox.name === 'encheresEnCours' || checkbox.name === 'mesEncheresWin'){
+                checkbox.disabled = true;
+                checkbox.checked = false; // Désélectionne la case si elle était cochée
+            } else {
+                checkbox.disabled = false;
+            }
+        });
+    }
+}
+</script>
 <body>
 	<%@ include file="/WEB-INF/jsp/header/header.jsp"%>
 	<main>
@@ -55,7 +82,7 @@
  
 </div>
 			</c:if>
-				<div id="accordion">
+				<div id="accordion" class="d-none d-md-table-cell">
 					<div class="card">
 						<div class="card-header" id="headingOne">
 							<h5 class="mb-0">Filtres :</h5>
@@ -63,14 +90,17 @@
 						<div id="collapseOne" class="collapse show"
 							aria-labelledby="headingOne" data-parent="#accordion">
 							<div class="card-body">
-								<form id="filtre" class="form-inline" action="accueil"
-									method="get">
+								<form id="search" class="form-inline" action="accueil"
+									method="post">
 									<div class="row justify-content-center">
 										<div class="col-5 mt-1">
 											<div class="input-group-append">
-												<input class="form-control mr-sm-2" type="search"
+												<input class="form-control mr-sm-2" type="text"
 													placeholder="Le nom de l'article contient"
-													aria-label="Search">
+													value="${rechercheTape}"
+													aria-label="Recherche"
+													id="recherche"
+													name="recherche">
 											</div>
 										</div>
 										<div class="col-1 mt-1">
@@ -86,6 +116,15 @@
 												<label class="input-group-text" for="inputGroupSelect01">Catégorie
 												</label> <select class="form-control" name="listCategorie"
 													id="listCategorie">
+													<c:choose>
+														<c:when test="${not empty selectedCategorie}">
+															<option value="${selectedCategorie.noCategorie}" selected>${selectedCategorie.libelle}</option>
+														</c:when>
+														<c:otherwise>
+															<option value="toutes" selected>Toutes</option>
+														</c:otherwise>
+													</c:choose>
+													<option value="toutes">Toutes</option>
 													<c:forEach var="categorie" items="${listCategorie}">
 														<option value="${categorie.noCategorie}"
 															id="listCategorie">${categorie.libelle}</option>
@@ -94,6 +133,66 @@
 											</div>
 										</div>
 									</div>
+									<c:choose>
+										<c:when test="${not empty sessionScope.isConnected}">
+											<div class="row justify-content-center d-none d-md-table-cell">
+												<div class="col-6 mt-3">
+													<div class="input-group d-flex justify-content-center">
+														<div class="form-check col-6">
+															<input class="form-check-input" type="radio" name="option" id="achats" value="achats" checked onclick="gestionCheckBoxes()">
+															<label class="form-check-label" for="achats">
+																Achats
+															</label>
+														</div>
+														<div class="form-check col-6">
+															<input class="form-check-input" type="radio" name="option" id="ventes" value="ventes" onclick="gestionCheckBoxes()">
+															<label class="form-check-label" for="ventes">
+																Mes ventes
+															</label>
+														</div>
+														<div class="form-check col-6">
+															<input class="form-check-input" type="checkbox" name="encheresOuvertes" id="encheresOuvertes">
+															<label class="form-check-label" for="encheresOuvertes">
+																enchères ouvertes
+															</label>
+														</div>
+														<div class="form-check col-6">
+															<input class="form-check-input" type="checkbox" name="ventesEnCours" id="ventesEnCours" disabled>
+															<label class="form-check-label" for="ventesEnCours">
+																mes ventes en cours
+															</label>
+														</div>
+														<div class="form-check col-6">
+															<input class="form-check-input" type="checkbox" name="encheresEnCours" id="encheresEnCours">
+															<label class="form-check-label" for="encheresEnCours">
+																mes enchères en cours
+															</label>
+														</div>
+														<div class="form-check col-6">
+															<input class="form-check-input" type="checkbox" name="venteNonDebutees" id="venteNonDebutees" disabled>
+															<label class="form-check-label" for="venteNonDebutees">
+																ventes non débutées
+															</label>
+														</div>
+														<div class="form-check col-6">
+															<input class="form-check-input" type="checkbox" name="mesEncheresWin" id="mesEncheresWin">
+															<label class="form-check-label" for="mesEncheresWin">
+																mes enchères remportées
+															</label>
+														</div>
+														<div class="form-check col-6">
+															<input class="form-check-input" type="checkbox" name="ventesTerminees" id="ventesTerminees" disabled>
+															<label class="form-check-label" for="ventesTerminees">
+																ventes terminées
+															</label>
+														</div>
+														
+													</div>
+												</div>
+											</div> 
+
+										</c:when>
+									</c:choose>
 								</form>
 							</div>
 						</div>
@@ -133,7 +232,11 @@
 										</div>
 										<h5 class="card-title">${article.nomArticle}</h5>
 										<p>${article.description}</p>
-										<p>Fin de l'enchère : ${article.dateFinEncheres}</p>
+										<p>Fin de l'enchère :<br><br> Le <fmt:formatDate type="date"
+													value = "${article.dateFinEncheres}" /> à
+										<fmt:formatDate pattern = "HH" 
+													value = "${article.dateFinEncheres}" />h<fmt:formatDate pattern = "mm" 
+													value = "${article.dateFinEncheres}" /> </p>
 										<c:if test="${not empty sessionScope.isConnected}">
 										<div class="text-center my-4">
 											<a href="${pageContext.request.contextPath}/article?id=${article.noArticle}" class="btn btn-warning">voir l'offre</a>

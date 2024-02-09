@@ -14,14 +14,41 @@ public class Article {
 	private Categorie categorie;
 	private String etatVente;
 	private String image;
+	private Encheres encheres;
+	private Utilisateur acheteur;
 
 	public Article() {
 		super();
 	}
 
+	public Article(int noArticle, String nomArticle, Date dateDebutEncheres, Date dateFinEncheres,
+			int prixInitial, int prixVente, String etatVente, Utilisateur utilisateur, Categorie categorie,
+			String image, Utilisateur acheteur) {
+		super();
+		this.noArticle = noArticle;
+		this.nomArticle = nomArticle;
+		this.dateDebutEncheres = dateDebutEncheres;
+		this.dateFinEncheres = dateFinEncheres;
+		this.prixInitial = prixInitial;
+		this.prixVente = prixVente;
+		this.etatVente = etatVente;
+		this.utilisateur = utilisateur;
+		this.categorie = categorie;
+		this.image = image;
+		this.acheteur = acheteur;
+	}
+	
+	public Utilisateur getAcheteur() {
+		return acheteur;
+	}
+
+	public void setAcheteur(Utilisateur acheteur) {
+		this.acheteur = acheteur;
+	}
+
 	public Article(int noArticle, String nomArticle, String description, Date dateDebutEncheres, Date dateFinEncheres,
 			int prixInitial, int prixVente, String etatVente, Utilisateur utilisateur, Categorie categorie,
-			String image) {
+			String image, Encheres encheres) {
 		super();
 		this.noArticle = noArticle;
 		this.nomArticle = nomArticle;
@@ -36,6 +63,14 @@ public class Article {
 		this.image = image;
 	}
 	
+	public Encheres getEncheres() {
+		return encheres;
+	}
+
+	public void setEncheres(Encheres encheres) {
+		this.encheres = encheres;
+	}
+
 	public Article(int noArticle, String nomArticle, String description, Date dateDebutEncheres, Date dateFinEncheres, int prixInitial,
 			Utilisateur utilisateur, Categorie categorie, String image) {
 		super();
@@ -150,5 +185,7 @@ public class Article {
 	public void setImage(String image) {
 		this.image = image;
 	}
+
+	
 
 }

@@ -44,7 +44,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 		return null;
 	}
 
-	private Encheres enchereBuilder(ResultSet rs) throws SQLException {
+	public Encheres enchereBuilder(ResultSet rs) throws SQLException {
 		Encheres encheresCourant;
 		encheresCourant = new Encheres();
 		encheresCourant.setDateEnchere(rs.getDate("date_enchere"));

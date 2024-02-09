@@ -58,7 +58,7 @@ public class LoginServlet extends HttpServlet {
 		String seSouvenir = request.getParameter("seSouvenir");
 		if ("on".equals(seSouvenir)) {
 			Cookie cookie = new Cookie("lastLogin", request.getParameter("pseudo"));
-			cookie.setMaxAge(8*24*60*60);
+			cookie.setMaxAge(8 * 24 * 60 * 60);
 			response.addCookie(cookie);
 			request.setAttribute("seSouvenir", true);
 		} else {

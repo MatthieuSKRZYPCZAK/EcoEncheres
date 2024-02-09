@@ -42,12 +42,12 @@
 					<tr class="table-primary">
 						<th scope="col">#</th>
 						<th scope="col">Pseudo</th>
-						<th scope="col">Nom</th>
-						<th scope="col">Prénom</th>
-						<th scope="col">Email</th>
-						<th scope="col">Téléphone</th>
-						<th scope="col">Adresse</th>
-						<th scope="col">Crédits</th>
+						<th scope="col" class="d-none d-md-table-cell">Nom</th>
+						<th scope="col" class="d-none d-md-table-cell">Prénom</th>
+						<th scope="col" class="d-none d-md-table-cell">Email</th>
+						<th scope="col" class="d-none d-md-table-cell">Téléphone</th>
+						<th scope="col" class="d-none d-md-table-cell">Adresse</th>
+						<th scope="col" class="d-none d-md-table-cell">Crédits</th>
 						<th scope="col">Admin</th>
 						<th scope="col">État</th>
 						<th>X</th>
@@ -57,12 +57,12 @@
 							<a class="bi bi-link-45deg" href="<%=request.getContextPath()%>/profil?id=${sessionScope.isConnected.noUtilisateur}">${sessionScope.isConnected.noUtilisateur}</a>	 
 						</td>
 						<td>${sessionScope.isConnected.pseudo}</td>
-						<td>${sessionScope.isConnected.nom}</td>
-						<td>${sessionScope.isConnected.prenom}</td>
-						<td>${sessionScope.isConnected.email}</td>
-						<td>${sessionScope.isConnected.telephone}</td>
-						<td>${sessionScope.isConnected.rue},</br>${sessionScope.isConnected.codePostal} ${sessionScope.isConnected.ville}</td>
-						<td>${sessionScope.isConnected.credit}</td>
+						<td class="d-none d-md-table-cell">${sessionScope.isConnected.nom}</td>
+						<td class="d-none d-md-table-cell">${sessionScope.isConnected.prenom}</td>
+						<td class="d-none d-md-table-cell">${sessionScope.isConnected.email}</td>
+						<td class="d-none d-md-table-cell">${sessionScope.isConnected.telephone}</td>
+						<td class="d-none d-md-table-cell">${sessionScope.isConnected.rue},</br>${sessionScope.isConnected.codePostal} ${sessionScope.isConnected.ville}</td>
+						<td class="d-none d-md-table-cell">${sessionScope.isConnected.credit}</td>
 						<td>
 						<c:choose>
 							<c:when test="${sessionScope.isConnected.administrateur eq true}">
@@ -79,12 +79,12 @@
 									<a class="bi bi-link-45deg" href="<%=request.getContextPath()%>/profil?id=${u.noUtilisateur}">${u.noUtilisateur}</a>
 								 </td>
 								<td>${u.pseudo}</td>
-								<td>${u.nom}</td>
-								<td>${u.prenom}</td>
-								<td>${u.email}</td>
-								<td>${u.telephone}</td>
-								<td>${u.rue}, </br>${u.codePostal} ${u.ville}</td>
-								<td>${u.credit}</td>
+								<td class="d-none d-md-table-cell">${u.nom}</td>
+								<td class="d-none d-md-table-cell">${u.prenom}</td>
+								<td class="d-none d-md-table-cell">${u.email}</td>
+								<td class="d-none d-md-table-cell">${u.telephone}</td>
+								<td class="d-none d-md-table-cell">${u.rue}, </br>${u.codePostal} ${u.ville}</td>
+								<td class="d-none d-md-table-cell">${u.credit}</td>
 								<td>
 								<c:choose>
 									<c:when test="${u.administrateur eq true}">
@@ -95,7 +95,7 @@
 								<td>
 								<c:if test="${not u.administrateur}">
 									<div class="form-check form-switch">
-										<form id="checkActif_${u.noUtilisateur}" action="<%=request.getContextPath()%>/actif?id=${u.noUtilisateur}" method="post" onclick="return confirm('Êtes-vous sûr de vouloir désactiver ce compte ?');">
+										<form id="checkActif_${u.noUtilisateur}" action="<%=request.getContextPath()%>/actif?id=${u.noUtilisateur}" method="post">
 											<input data-user-id="${u.noUtilisateur}" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" 
 											${u.actif eq true ? 'checked' : '' }
 											onchange="submitForm(this, ${u.noUtilisateur})">
@@ -121,20 +121,7 @@
 										<td></td>
 									</c:otherwise>
 								</c:choose>
-								
 							</tr>
-							<script>
-								function toggleActif(u.noUtilisateur) {
-								const checkbox = document.getElementById(`actifCheckbox_${u.noUtilisateur}`);
-								const form = document.getElementById(`actifForm_${u.noUtilisateur}`);
-
-								// Mettre à jour la valeur du champ actif dans le formulaire en fonction de l'état de la checkbox
-								form.elements["actif"].value = checkbox.checked ? 1 : 0;
-
-								// Soumettre automatiquement le formulaire lorsque la checkbox est cochée ou décochée
-								form.submit();
-								}
-							</script>
 						</c:if>
 					</c:forEach>
 				</table>

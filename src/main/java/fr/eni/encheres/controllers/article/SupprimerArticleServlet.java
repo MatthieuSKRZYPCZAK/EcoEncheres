@@ -44,6 +44,12 @@ public class SupprimerArticleServlet extends HttpServlet {
 			} else if (utilisateurSession.isAdministrateur()) {
 				articleManager.delete(article.getNoArticle());
 			}
+			if(request.getParameter("ventes") != null) {
+				request.setAttribute("successMessage", "Enchère supprimée avec succès.");
+				request.getRequestDispatcher("/encheres").forward(request, response);
+				return;
+				
+			}
 			request.setAttribute("successMessage", "Enchère annulée avec succès.");
 			request.getRequestDispatcher("/accueil").forward(request, response);
 

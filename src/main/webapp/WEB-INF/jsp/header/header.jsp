@@ -19,7 +19,7 @@
 						</button>
 						<ul class="dropdown-menu dropdown-menu-dark">
 							<li><a class="dropdown-item" href="<%=request.getContextPath()%>/utilisateurs">Liste utilisateurs</a></li>
-							<li><a class="dropdown-item" href="<%=request.getContextPath()%>/utilisateurs">Liste des ventes</a></li>
+							<li><a class="dropdown-item" href="<%=request.getContextPath()%>/encheres">Liste des ventes</a></li>
 							<li><a class="dropdown-item" href="<%=request.getContextPath()%>/categorie">Liste des catégories</a></li>
 						</ul>
 					</li>
@@ -35,6 +35,12 @@
 					</li>
 					<li class="nav-item">
 						<a class="nav-link effect-nav" href="vendre">Vendre un article</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/mesAchats?id=${sessionScope.isConnected.noUtilisateur}">Mes achats</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link effect-nav" href="<%=request.getContextPath()%>/mesVentes?id=${sessionScope.isConnected.noUtilisateur}">Mes ventes</a>
 					</li>
 				</ul>
 				
