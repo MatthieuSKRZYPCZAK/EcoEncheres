@@ -10,17 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import fr.eni.encheres.bll.ArticleManager;
+import fr.eni.encheres.bll.EnchereManager;
 import fr.eni.encheres.bll.UtilisateurManager;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.UtilisateurException;
 
 /**
- * Servlet implementation class MesVentesServlet
+ * Servlet implementation class MesAchatsServlet
  */
-@WebServlet("/mesVentes")
-public class MesVentesServlet extends HttpServlet {
+@WebServlet("/mesAchats")
+public class MesAchatsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -44,12 +44,13 @@ public class MesVentesServlet extends HttpServlet {
 			if (utilisateurSession.getNoUtilisateur() != utilisateur.getNoUtilisateur()) {
 				throw new UtilisateurException("Ce contenu ne vous concerne pas.");
 			}
-			ArticleManager articleManager = new ArticleManager();
-			List<Article> listEncheres = articleManager.getByUserId(Integer.parseInt(request.getParameter("id")));
+			EnchereManager enchereManager = new EnchereManager();
+			List<Article> listEncheres = enchereManager
+					.getEncheresByUserId(Integer.parseInt(request.getParameter("id")));
 
 			request.setAttribute("utilisateur", utilisateur);
 			request.setAttribute("listeEncheres", listEncheres);
-			request.getRequestDispatcher("/WEB-INF/jsp/ventes-user.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/jsp/achats-user.jsp").forward(request, response);
 
 		} catch (UtilisateurException e) {
 			session.setAttribute("erreur", e.getMessage());

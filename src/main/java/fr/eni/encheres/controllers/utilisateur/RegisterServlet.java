@@ -1,6 +1,7 @@
 package fr.eni.encheres.controllers.utilisateur;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,8 +13,6 @@ import fr.eni.encheres.bll.UtilisateurManager;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.RegisterException;
 
-
-
 /**
  * Servlet implementation class RegisterServlet
  */
@@ -22,20 +21,24 @@ public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		request.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		
-		//Je récupère les informations saisie dans le formulaire
+
+		// Je récupère les informations saisie dans le formulaire
 		String pseudo = request.getParameter("pseudo");
 		String nom = request.getParameter("nom");
 		String prenom = request.getParameter("prenom");
@@ -46,17 +49,18 @@ public class RegisterServlet extends HttpServlet {
 		String ville = request.getParameter("ville");
 		String motDePasse = request.getParameter("motDePasse");
 		String confirmationMotDePasse = request.getParameter("confirmationMotDePasse");
-		
+
 		try {
 			UtilisateurManager utilisateurManager = new UtilisateurManager();
-			Utilisateur utilisateur = utilisateurManager.createUtilisateur(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, confirmationMotDePasse);
+			Utilisateur utilisateur = utilisateurManager.createUtilisateur(pseudo, nom, prenom, email, telephone, rue,
+					codePostal, ville, motDePasse, confirmationMotDePasse);
 			HttpSession ses;
 			ses = request.getSession();
 			ses.setAttribute("isConnected", utilisateur);
 			ses.setAttribute("successMessage", "Votre compte a été créé avec succès");
 			response.sendRedirect(request.getContextPath() + "/accueil");
-			
-		}catch(RegisterException e) {
+
+		} catch (RegisterException e) {
 			System.out.println("erreur message : " + e.getMessage());
 			request.setAttribute("errorMessage", e.getMessage());
 			request.setAttribute("pseudo", pseudo);

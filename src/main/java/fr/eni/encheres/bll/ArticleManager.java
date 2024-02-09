@@ -131,7 +131,7 @@ public class ArticleManager {
 
 	public void delete(int noArticle) {
 		this.articleDAO.detele(noArticle);
-		
+
 	}
 
 	public List<Article> getAllArticleByCategorieEnCours(int noCategorie) {

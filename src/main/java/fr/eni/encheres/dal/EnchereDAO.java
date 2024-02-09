@@ -2,6 +2,7 @@ package fr.eni.encheres.dal;
 
 import java.util.List;
 
+import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Encheres;
 
 public interface EnchereDAO {
@@ -17,5 +18,7 @@ public interface EnchereDAO {
 	void paidBid(int utilisateur, int montantDeLEnchere);
 
 	List<Encheres> getAll();
+
+	List<Article> getEncheresByUserId(int id);
 
 }

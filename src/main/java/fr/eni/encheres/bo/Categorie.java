@@ -1,22 +1,19 @@
 package fr.eni.encheres.bo;
 
-
 public class Categorie {
 	private int noCategorie;
 	private String libelle;
-	
-	
+
 	public Categorie() {
 		super();
 	}
 
-	
 	public Categorie(int no_categorie, String libelle) {
 		super();
 		this.noCategorie = no_categorie;
 		this.libelle = libelle;
 	}
-	
+
 	public Categorie(String libelle) {
 		this.libelle = libelle;
 	}
@@ -36,11 +33,10 @@ public class Categorie {
 	public void setLibelle(String libelle) {
 		this.libelle = libelle;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Categorie [noCategorie=" + noCategorie + ", libelle=" + libelle + "]";
 	}
-	
 
 }

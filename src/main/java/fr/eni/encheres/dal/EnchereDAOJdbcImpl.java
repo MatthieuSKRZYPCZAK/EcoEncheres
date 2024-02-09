@@ -6,9 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import fr.eni.encheres.bo.Article;
+import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Encheres;
 import fr.eni.encheres.bo.Utilisateur;
 
@@ -20,6 +22,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 	// READ
 	private static final String SELECT_ID_ARTICLE = "SELECT * FROM ENCHERES WHERE no_article=?;";
 	private static final String SELECT_ALL = "SELECT * FROM ENCHERES;";
+	private static final String SELECT_ALL_BY_USER_ID = "SELECT ARTICLES_VENDUS.*, ENCHERES.no_utilisateur AS acheteur, ENCHERES.montant_enchere AS montantEnchere FROM ENCHERES LEFT JOIN ARTICLES_VENDUS ON ARTICLES_VENDUS.no_article = ENCHERES.no_article WHERE ENCHERES.no_utilisateur = ?";
 
 	// UPDATE
 	private static final String PAID = "UPDATE UTILISATEURS SET credit=? WHERE no_utilisateur=?;";
@@ -132,6 +135,45 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 		}
 
 		return listeEncheres;
+	}
+
+	@Override
+	public List<Article> getEncheresByUserId(int id) {
+		List<Article> list = new ArrayList<Article>();
+		try (Connection cnx = ConnectionProvider.getConnection();) {
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ALL_BY_USER_ID);
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				int categorie = rs.getInt("no_categorie");
+				Categorie cat = new Categorie();
+				CategorieDAOJdbcImpl cDAOJdbc = new CategorieDAOJdbcImpl();
+				cat = cDAOJdbc.getById(categorie);
+				int no_article = rs.getInt("no_article");
+				String nom_article = rs.getString("nom_article");
+				int prix_initial = rs.getInt("prix_initial");
+				Timestamp debut = rs.getTimestamp("date_debut_encheres");
+				Date dateDebut = new Date(debut.getTime());
+				Timestamp fin = rs.getTimestamp("date_fin_encheres");
+				Date dateFin = new Date(fin.getTime());
+				String etat_vente = rs.getString("etat_vente");
+				int montant_enchere = rs.getInt("montantEnchere");
+				int idVendeur = rs.getInt("no_utilisateur");
+				String image = (rs.getString("image"));
+				Utilisateur acheteur = new Utilisateur();
+				UtilisateurDAOJdbcImpl aDAOJdbc = new UtilisateurDAOJdbcImpl();
+				Utilisateur vendeur = new Utilisateur();
+				UtilisateurDAOJdbcImpl vDAOJdbc = new UtilisateurDAOJdbcImpl();
+				vendeur = aDAOJdbc.selectById(idVendeur);
+				acheteur = vDAOJdbc.selectById(id);
+				Article art = new Article(no_article, nom_article, dateDebut, dateFin, prix_initial, montant_enchere,
+						etat_vente, vendeur, cat, image, acheteur);
+				list.add(art);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 }

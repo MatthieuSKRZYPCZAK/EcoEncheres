@@ -27,7 +27,6 @@ import fr.eni.encheres.bo.Retraits;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.ArticleException;
 
-
 /**
  * Servlet implementation class DetailVenteServlet
  */
@@ -174,14 +173,14 @@ public class DetailVenteServlet extends HttpServlet {
 			Date dateDebutEncheres = (Date) sdf.parse(dateDebutEncheresStr);
 			Date dateFinEncheres = (Date) sdf.parse(dateFinEncheresStr);
 			int newId = Integer.parseInt(id);
-			Article article = new Article(newId,nomArticle, description, dateDebutEncheres, dateFinEncheres, prixInitial,
-					utilisateur, categorie, image);
+			Article article = new Article(newId, nomArticle, description, dateDebutEncheres, dateFinEncheres,
+					prixInitial, utilisateur, categorie, image);
 			ArticleManager articleManager = new ArticleManager();
 			Article articleUpdate = articleManager.update(article);
 			Retraits retrait = new Retraits(articleUpdate, rue, codePostal, ville);
 			RetraitsManager retraitsManager = new RetraitsManager();
 			retraitsManager.update(retrait);
-	
+
 			response.sendRedirect(request.getContextPath() + "/article?id=" + id);
 
 		} catch (ArticleException e) {
@@ -198,10 +197,9 @@ public class DetailVenteServlet extends HttpServlet {
 			request.setAttribute("rue", utilisateur.getRue());
 			request.setAttribute("codePostal", utilisateur.getCodePostal());
 			request.setAttribute("ville", utilisateur.getVille());
-			
+
 			response.sendRedirect(request.getContextPath() + "/article?id=" + id);
 
-		
 		} catch (Exception e) {
 			System.out.println("erreur post vente" + e);
 			session.setAttribute("erreur", "une erreur est survenue");
@@ -220,6 +218,5 @@ public class DetailVenteServlet extends HttpServlet {
 		}
 		return "Default.file";
 	}
-
 
 }

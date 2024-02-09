@@ -1,6 +1,7 @@
 package fr.eni.encheres.controllers.retrait;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +16,6 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Encheres;
 import fr.eni.encheres.bo.Retraits;
 import fr.eni.encheres.bo.Utilisateur;
-
 import fr.eni.encheres.exception.RetraitException;
 
 /**
@@ -25,11 +25,12 @@ import fr.eni.encheres.exception.RetraitException;
 public class retraitServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
 		try {
@@ -39,19 +40,20 @@ public class retraitServlet extends HttpServlet {
 			if (request.getParameter("id") != null) {
 				ArticleManager articleManager = new ArticleManager();
 				Article article = articleManager.getById(Integer.parseInt(request.getParameter("id")));
-				
-				if(article == null) {
+
+				if (article == null) {
 					throw new RetraitException("L'article n'existe pas");
 				}
-				if(!article.getEtatVente().contains("terminé")) {
+				if (!article.getEtatVente().contains("terminé")) {
 					throw new RetraitException("L'enchère n'est pas encore terminé ou l'article a déjà été retiré.");
 				}
 				EnchereManager enchereManager = new EnchereManager();
 				Encheres enchere = enchereManager.enchereExist(article.getNoArticle());
 				Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
-				if((utilisateurSession.getNoUtilisateur() == enchere.getUtilisateur().getNoUtilisateur()) && article.getEtatVente().contains("terminé")) {
+				if ((utilisateurSession.getNoUtilisateur() == enchere.getUtilisateur().getNoUtilisateur())
+						&& article.getEtatVente().contains("terminé")) {
 					articleManager.articleUpdateEtat("retiré", article.getNoArticle());
-					
+
 				} else {
 					throw new RetraitException("Vous ne pouvez pas retirer un article que vous n'avez pas gagné.");
 				}
@@ -60,18 +62,16 @@ public class retraitServlet extends HttpServlet {
 				Retraits retrait = retraitManager.getByNoArticle(article.getNoArticle());
 				request.setAttribute("retrait", retrait);
 				request.setAttribute("article", article);
-				request.getRequestDispatcher("/article?id="+article.getNoArticle()).forward(request, response);
-				
-				
+				request.getRequestDispatcher("/article?id=" + article.getNoArticle()).forward(request, response);
+
 			} else {
 				throw new RetraitException("La page demandé n'existe pas");
 			}
-		}catch(RetraitException e) {
+		} catch (RetraitException e) {
 			session.setAttribute("erreur", e);
 			response.sendRedirect("accueil");
-			
+
 		}
 	}
-
 
 }

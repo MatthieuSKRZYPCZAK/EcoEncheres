@@ -5,12 +5,11 @@ public class Retraits {
 	private String rue;
 	private String codePostal;
 	private String ville;
-	
-	
+
 	public Retraits() {
 		super();
 	}
-	
+
 	public Retraits(Article article, String rue, String codePostal, String ville) {
 		super();
 		this.article = article;
@@ -51,6 +50,4 @@ public class Retraits {
 		this.ville = ville;
 	}
 
-	
-	
 }

@@ -13,7 +13,7 @@ public class RetraitsDAOJdbcImpl implements RetraitsDAO {
 	// INSERT
 	private static final String INSERT = "INSERT INTO RETRAITS (no_article, rue, code_postal, ville) VALUES(?,?,?,?);";
 	private static final String SELECT_BY_NO_ARTICLE = "SELECT * FROM RETRAITS WHERE no_article=?;";
-	
+
 	// UPDATE
 	private static final String UPDATE = "UPDATE RETRAITS SET rue=?, code_postal=?, ville=? WHERE no_article = ?;";
 
@@ -80,7 +80,7 @@ public class RetraitsDAOJdbcImpl implements RetraitsDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

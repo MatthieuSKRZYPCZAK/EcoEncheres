@@ -15,7 +15,6 @@ import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.CategorieException;
 
-
 /**
  * Servlet implementation class CategorieServlet
  */
@@ -23,11 +22,12 @@ import fr.eni.encheres.exception.CategorieException;
 public class CategorieServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		CategorieManager categorieManager = new CategorieManager();
 		List<Categorie> listeCategories = categorieManager.allCategories();
@@ -37,23 +37,25 @@ public class CategorieServlet extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		try {
-			//Vérifie si l'utilisateur est connecté et si il est administrateur
+			// Vérifie si l'utilisateur est connecté et si il est administrateur
 			HttpSession session = request.getSession();
-			if(session != null) {
+			if (session != null) {
 				Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
-				if(utilisateurSession.isAdministrateur()) {
+				if (utilisateurSession.isAdministrateur()) {
 					System.out.println("connecté en admin sur categorie lors de la création");
 					CategorieManager categorieManager = new CategorieManager();
 					String libelle = request.getParameter("categorie");
-					if(categorieManager.existe(libelle)) {
+					if (categorieManager.existe(libelle)) {
 						throw new CategorieException("Ce libellé existe déjà");
 					} else {
-						if(libelle != null && !"".equals(libelle)) {
+						if (libelle != null && !"".equals(libelle)) {
 							System.out.println("je vais créer");
 							categorieManager.create(libelle);
 							request.setAttribute("successMessage", "Libellé créé avec succès");
@@ -62,10 +64,10 @@ public class CategorieServlet extends HttpServlet {
 				}
 			}
 			doGet(request, response);
-		} catch(CategorieException e) {	
+		} catch (CategorieException e) {
 			request.setAttribute("erreur", e.getMessage());
 			doGet(request, response);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			request.setAttribute("erreur", e.getMessage());
 			doGet(request, response);
 		}

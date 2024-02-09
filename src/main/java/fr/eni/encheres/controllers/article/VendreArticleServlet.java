@@ -53,7 +53,7 @@ public class VendreArticleServlet extends HttpServlet {
 			request.setAttribute("erreur", "une erreur est survenue");
 			request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp").forward(request, response);
 		}
-		
+
 	}
 
 	/**
@@ -157,7 +157,6 @@ public class VendreArticleServlet extends HttpServlet {
 			request.setAttribute("ville", utilisateur.getVille());
 			request.getRequestDispatcher("/WEB-INF/jsp/vendre.jsp").forward(request, response);
 
-		
 		} catch (Exception e) {
 			System.out.println("erreur post vente" + e);
 			session.setAttribute("erreur", "une erreur est survenue");

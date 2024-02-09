@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<title>ÉcoEnchères - Mes ventes</title>
+<title>ÉcoEnchères - Mes achats</title>
 </head>
 <body>
 	<%@ include file="/WEB-INF/jsp/header/header.jsp"%>
@@ -10,7 +10,7 @@
 		<c:choose>
 			<c:when
 				test="${sessionScope.isConnected.noUtilisateur eq utilisateur.noUtilisateur }">
-				<h1>Liste de mes ventes</h1>
+				<h1>Mes achats</h1>
 				<c:choose>
 					<c:when test="${not empty requestScope.erreur}">
 						<div class="container mt-1">
@@ -43,7 +43,7 @@
 				<tr class="table-primary">
 					<th scope="col">#</th>
 					<th scope="col">Nom de l'article</th>
-					<th scope="col">Acheteur</th>
+					<th scope="col">Vendeur</th>
 					<th scope="col">Prix initial</th>
 					<th scope="col">Prix enchère</th>
 					<th scope="col" class="d-none d-md-table-cell">Date début</th>
@@ -58,7 +58,7 @@
 							href="<%=request.getContextPath()%>/article?id=${e.noArticle}">${e.noArticle}</a>
 						</td>
 						<td>${e.nomArticle}</td>
-						<td>${e.acheteur.pseudo}</td>
+						<td>${e.utilisateur.pseudo}</td>
 						<td>${e.prixInitial}</td>
 						<td>${e.prixVente}</td>
 						<td class="d-none d-md-table-cell"><fmt:formatDate

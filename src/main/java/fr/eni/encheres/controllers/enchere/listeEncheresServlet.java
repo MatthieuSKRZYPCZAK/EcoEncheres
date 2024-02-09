@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import fr.eni.encheres.bll.ArticleManager;
 import fr.eni.encheres.bo.Article;
 
-
 /**
  * Servlet implementation class listeEncheresServlet
  */

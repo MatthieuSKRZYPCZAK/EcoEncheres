@@ -14,19 +14,19 @@ import fr.eni.encheres.bll.CategorieManager;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 
-
 /**
  * Servlet implementation class ModifierCategorieServlet
  */
 @WebServlet("/modifierCategorie")
 public class ModifierCategorieServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		CategorieManager categorieManager = new CategorieManager();
 		List<Categorie> listeCategories = categorieManager.allCategories();
@@ -35,22 +35,23 @@ public class ModifierCategorieServlet extends HttpServlet {
 		request.getRequestDispatcher("/WEB-INF/jsp/categorie.jsp").forward(request, response);
 	}
 
-
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String libelle = request.getParameter("categorie");
 		System.out.println("je rentre bien sur modifier categorie voila le libelle" + libelle);
 		try {
-			//Vérifie si l'utilisateur est connecté et si il est administrateur
+			// Vérifie si l'utilisateur est connecté et si il est administrateur
 			HttpSession session = request.getSession();
-			if(session != null) {
+			if (session != null) {
 				Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("isConnected");
-				if(utilisateurSession.isAdministrateur()) {
+				if (utilisateurSession.isAdministrateur()) {
 					CategorieManager categorieManager = new CategorieManager();
-					if(categorieManager.existe(libelle)) {
+					if (categorieManager.existe(libelle)) {
 						System.out.println("libelle existe deja servler ModifierCategorie nom = " + libelle);
 					} else {
 						categorieManager.update(Integer.parseInt(request.getParameter("id")), libelle);
@@ -59,7 +60,7 @@ public class ModifierCategorieServlet extends HttpServlet {
 				}
 			}
 			doGet(request, response);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			request.setAttribute("erreur", e.getMessage());
 			doGet(request, response);
 		}

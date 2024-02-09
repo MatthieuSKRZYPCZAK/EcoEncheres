@@ -81,7 +81,8 @@ public class EnchereManager {
 		return this.enchereDAO.getAll();
 	}
 
-
-
+	public List<Article> getEncheresByUserId(int id) {
+		return this.enchereDAO.getEncheresByUserId(id);
+	}
 
 }

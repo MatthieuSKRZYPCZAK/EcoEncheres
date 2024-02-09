@@ -24,9 +24,8 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	private static final String SELECT_ALL_START = "SELECT *FROM ARTICLES_VENDUS WHERE etat_vente = 'en cours';";
 	private static final String SELECT_ALL_START_CAT = "SELECT *FROM ARTICLES_VENDUS WHERE etat_vente = 'en cours' AND no_categorie=?;";
 	private static final String SELECT_ALL_WITH_ENCHERES = "SELECT ARTICLES_VENDUS.*, ENCHERES.*, CATEGORIES.*, ENCHERES.no_utilisateur AS acheteur, ARTICLES_VENDUS.no_utilisateur AS vendeur FROM ARTICLES_VENDUS LEFT JOIN ENCHERES ON ARTICLES_VENDUS.no_article = ENCHERES.no_article LEFT JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie;";
-	private static final String SELECT_ALL_BY_USER_ID ="SELECT ARTICLES_VENDUS.*, ENCHERES.no_utilisateur AS acheteur, ENCHERES.montant_enchere AS montantEnchere FROM ARTICLES_VENDUS INNER JOIN ENCHERES ON ARTICLES_VENDUS.no_article = ENCHERES.no_article WHERE ENCHERES.no_utilisateur = ?;";
-	
-	
+	private static final String SELECT_ALL_BY_USER_ID = "SELECT ARTICLES_VENDUS.*, ENCHERES.no_utilisateur AS acheteur, ENCHERES.montant_enchere AS montantEnchere FROM ARTICLES_VENDUS LEFT JOIN ENCHERES ON ARTICLES_VENDUS.no_article = ENCHERES.no_article WHERE ARTICLES_VENDUS.no_utilisateur = ?;";
+
 	// UPDATE
 	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET nom_article=?, description=?, date_debut_encheres=?, date_fin_encheres=?, prix_initial=?, no_utilisateur=?, no_categorie=?, image=? WHERE no_article=?;";
 	private static final String UPDATE_ETAT = "UPDATE ARTICLES_VENDUS SET etat_vente = ? WHERE no_article=?;";
@@ -86,7 +85,6 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 				return articleBuilder(rs);
 			}
 			return null;
-
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,9 +97,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	 */
 	@Override
 	public Article create(Article article) {
-		try (Connection cnx = ConnectionProvider.getConnection())
-
-		{
+		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, article.getNomArticle());
 			pstmt.setString(2, article.getDescription());
@@ -117,7 +113,6 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 				int id = rs.getInt(1);
 				article = getById(id);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -139,7 +134,6 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return listeArticles;
 	}
 
@@ -157,7 +151,6 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return listeArticles;
 	}
 
@@ -183,7 +176,6 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
@@ -221,7 +213,6 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return listeArticles;
 	}
 
@@ -257,11 +248,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			PreparedStatement pstmt = cnx.prepareStatement(DELETE);
 			pstmt.setInt(1, noArticle);
 			pstmt.executeUpdate();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
@@ -279,7 +268,6 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return listeArticles;
 	}
 
@@ -288,9 +276,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		List<Article> list = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection();) {
 			PreparedStatement ps = cnx.prepareStatement(SELECT_ALL_WITH_ENCHERES);
-
 			ResultSet rs = ps.executeQuery();
-
 			while (rs.next()) {
 				int categorie = rs.getInt("no_categorie");
 				Categorie cat = new Categorie();
@@ -314,9 +300,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 				Utilisateur vendeur = new Utilisateur();
 				UtilisateurDAOJdbcImpl vDAOJdbc = new UtilisateurDAOJdbcImpl();
 				vendeur = vDAOJdbc.selectById(idVendeur);
-				
-				
-				Article art = new Article(no_article, nom_article, dateDebut, dateFin, prix_initial, montant_enchere, etat_vente, vendeur, cat, image, acheteur);
+
+				Article art = new Article(no_article, nom_article, dateDebut, dateFin, prix_initial, montant_enchere,
+						etat_vente, vendeur, cat, image, acheteur);
 				list.add(art);
 			}
 		} catch (SQLException e) {
@@ -332,40 +318,36 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ALL_BY_USER_ID);
 			pstmt.setInt(1, id);
 			ResultSet rs = pstmt.executeQuery();
-			if (rs.next()) {
-				while (rs.next()) {
-					int categorie = rs.getInt("no_categorie");
-					Categorie cat = new Categorie();
-					CategorieDAOJdbcImpl cDAOJdbc = new CategorieDAOJdbcImpl();
-					cat = cDAOJdbc.getById(categorie);
-					int no_article = rs.getInt("no_article");
-					String nom_article = rs.getString("nom_article");
-					int prix_initial = rs.getInt("prix_initial");
-					Timestamp debut = rs.getTimestamp("date_debut_encheres");
-					Date dateDebut = new Date(debut.getTime());
-					Timestamp fin = rs.getTimestamp("date_fin_encheres");
-					Date dateFin = new Date(fin.getTime());
-					String etat_vente = rs.getString("etat_vente");
-					int montant_enchere = rs.getInt("montant_enchere");
-					int idAcheteur = rs.getInt("acheteur");
-					String image = (rs.getString("image"));
-					Utilisateur acheteur = new Utilisateur();
-					UtilisateurDAOJdbcImpl aDAOJdbc = new UtilisateurDAOJdbcImpl();
-					acheteur = aDAOJdbc.selectById(idAcheteur);
-					Utilisateur vendeur = new Utilisateur();
-					UtilisateurDAOJdbcImpl vDAOJdbc = new UtilisateurDAOJdbcImpl();
-					vendeur = vDAOJdbc.selectById(id);
-					
-					
-					Article art = new Article(no_article, nom_article, dateDebut, dateFin, prix_initial, montant_enchere, etat_vente,vendeur, cat, image, acheteur);
-					list.add(art);
-				}
-				return list;
+			while (rs.next()) {
+				int categorie = rs.getInt("no_categorie");
+				Categorie cat = new Categorie();
+				CategorieDAOJdbcImpl cDAOJdbc = new CategorieDAOJdbcImpl();
+				cat = cDAOJdbc.getById(categorie);
+				int no_article = rs.getInt("no_article");
+				String nom_article = rs.getString("nom_article");
+				int prix_initial = rs.getInt("prix_initial");
+				Timestamp debut = rs.getTimestamp("date_debut_encheres");
+				Date dateDebut = new Date(debut.getTime());
+				Timestamp fin = rs.getTimestamp("date_fin_encheres");
+				Date dateFin = new Date(fin.getTime());
+				String etat_vente = rs.getString("etat_vente");
+				int montant_enchere = rs.getInt("montantEnchere");
+				int idAcheteur = rs.getInt("acheteur");
+				String image = (rs.getString("image"));
+				Utilisateur acheteur = new Utilisateur();
+				UtilisateurDAOJdbcImpl aDAOJdbc = new UtilisateurDAOJdbcImpl();
+				acheteur = aDAOJdbc.selectById(idAcheteur);
+				Utilisateur vendeur = new Utilisateur();
+				UtilisateurDAOJdbcImpl vDAOJdbc = new UtilisateurDAOJdbcImpl();
+				vendeur = vDAOJdbc.selectById(id);
+				Article art = new Article(no_article, nom_article, dateDebut, dateFin, prix_initial, montant_enchere,
+						etat_vente, vendeur, cat, image, acheteur);
+				list.add(art);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return list;
 	}
 
 }

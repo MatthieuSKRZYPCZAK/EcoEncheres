@@ -10,11 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.bll.ArticleManager;
-
 import fr.eni.encheres.bll.EnchereManager;
 import fr.eni.encheres.bll.RetraitsManager;
 import fr.eni.encheres.bo.Article;
-
 import fr.eni.encheres.bo.Encheres;
 import fr.eni.encheres.bo.Retraits;
 import fr.eni.encheres.bo.Utilisateur;

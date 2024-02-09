@@ -1,30 +1,28 @@
 package fr.eni.encheres.bo;
 
-
-
 public class Utilisateur {
 
 	private int noUtilisateur;
-    private String pseudo;
-    private String nom;
-    private String prenom;
-    private String email;
-    private String telephone;
-    private String rue;
-    private String codePostal;
-    private String ville;
-    private String motDePasse;
-    private int credit;
-    private boolean administrateur;
+	private String pseudo;
+	private String nom;
+	private String prenom;
+	private String email;
+	private String telephone;
+	private String rue;
+	private String codePostal;
+	private String ville;
+	private String motDePasse;
+	private int credit;
+	private boolean administrateur;
 	private boolean actif;
 
-	
 	public Utilisateur() {
 		super();
 	}
-	
+
 	public Utilisateur(int noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone,
-			String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur, boolean actif) {
+			String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur,
+			boolean actif) {
 		super();
 		this.noUtilisateur = noUtilisateur;
 		this.pseudo = pseudo;
@@ -40,9 +38,9 @@ public class Utilisateur {
 		this.administrateur = administrateur;
 		this.actif = actif;
 	}
-	
-	public Utilisateur(String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal,
-			String ville, String motDePasse) {
+
+	public Utilisateur(String pseudo, String nom, String prenom, String email, String telephone, String rue,
+			String codePostal, String ville, String motDePasse) {
 		super();
 		this.pseudo = pseudo;
 		this.nom = nom;
@@ -158,7 +156,6 @@ public class Utilisateur {
 	public void setActif(boolean actif) {
 		this.actif = actif;
 	}
-
 
 	@Override
 	public String toString() {

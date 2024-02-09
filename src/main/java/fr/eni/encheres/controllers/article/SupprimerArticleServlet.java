@@ -1,6 +1,7 @@
 package fr.eni.encheres.controllers.article;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,7 +30,7 @@ public class SupprimerArticleServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 
 		try {
-			if(request.getParameter("id") == null) {
+			if (request.getParameter("id") == null) {
 				throw new Error("La page demandée n'existe pas");
 			}
 			if (session == null) {
@@ -44,12 +45,7 @@ public class SupprimerArticleServlet extends HttpServlet {
 			} else if (utilisateurSession.isAdministrateur()) {
 				articleManager.delete(article.getNoArticle());
 			}
-			if(request.getParameter("ventes") != null) {
-				request.setAttribute("successMessage", "Enchère supprimée avec succès.");
-				request.getRequestDispatcher("/encheres").forward(request, response);
-				return;
-				
-			}
+
 			request.setAttribute("successMessage", "Enchère annulée avec succès.");
 			request.getRequestDispatcher("/accueil").forward(request, response);
 
