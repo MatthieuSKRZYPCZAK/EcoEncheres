@@ -1,16 +1,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-<style>
-    h1 {
-        font-family: 'Pacifico', sans-serif;
-        font-size: 40px;
-        font-weight: bold;
-        color: #008000;
-    }
-</style>
 
 
-
-# <div style="display: flex; align-items: center;"><img src="src/main/webapp/img/logo.png"width="80" height="80" style="margin-right: 20px;"> <h1> ÉcoEnchères </h1></div>
+# <div style="display: flex; align-items: center;"><img src="src/main/webapp/img/logo.png"width="80" height="80" style="margin-right: 20px;"> <h1 style="font-family: 'Pacifico', sans-serif; font-size:40px; font-weight:bold; color:#008000;"> ÉcoEnchères </h1></div>
 
 
 ## Présentation du projet
