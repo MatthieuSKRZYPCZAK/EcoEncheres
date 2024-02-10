@@ -228,7 +228,8 @@
 												class="d-inline-block align-text-mid">
 										</p>
 										<p class="card-text">
-											<b>Fin de l'enchère :</b> ${article.dateFinEncheres}
+											<b>Fin de l'enchère :</b> <fmt:formatDate pattern="dd MMMM yyyy à HH'h'mm" 
+         dateStyle = "long" timeStyle = "long" value = "${article.dateFinEncheres}" />
 										</p>
 										<p class="card-text">
 											<b>Retrait :</b> ${retrait.rue}<br /> ${retrait.codePostal}

@@ -115,7 +115,8 @@ public class EnchereServlet extends HttpServlet {
 			response.sendRedirect("article?id=" + request.getParameter("noArticle"));
 
 		} catch (Exception e) {
-			session.setAttribute("erreur", e);
+			System.out.println(e.getMessage());
+			session.setAttribute("erreur", e.getMessage());
 			response.sendRedirect(request.getContextPath() + "/article?id=" + request.getParameter("noArticle"));
 		}
 

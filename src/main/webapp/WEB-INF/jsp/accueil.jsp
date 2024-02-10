@@ -129,7 +129,7 @@
 															<option value="toutes" selected>Toutes</option>
 														</c:otherwise>
 													</c:choose>
-													<option value="toutes">Toutes</option>
+													
 													<c:forEach var="categorie" items="${listCategorie}">
 														<option value="${categorie.noCategorie}"
 															id="listCategorie">${categorie.libelle}</option>
