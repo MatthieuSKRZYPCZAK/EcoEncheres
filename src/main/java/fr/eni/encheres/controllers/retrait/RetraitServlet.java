@@ -22,7 +22,7 @@ import fr.eni.encheres.exception.RetraitException;
  * Servlet implementation class retraitServlet
  */
 @WebServlet("/retrait")
-public class retraitServlet extends HttpServlet {
+public class RetraitServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**

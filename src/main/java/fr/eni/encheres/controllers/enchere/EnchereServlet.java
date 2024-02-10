@@ -22,7 +22,7 @@ import fr.eni.encheres.exception.ArticleException;
  * Servlet implementation class enchereServlet
  */
 @WebServlet("/enchere")
-public class enchereServlet extends HttpServlet {
+public class EnchereServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
