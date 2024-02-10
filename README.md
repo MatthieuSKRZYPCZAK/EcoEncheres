@@ -1,6 +1,6 @@
 
 
-# <img src="img/logo.png"width="50" height="50" style="margin-right: 20px;">  ÉcoEnchères 
+# <img src="img/logo.png" width="50" height="50" >  ÉcoEnchères 
 
 
 
