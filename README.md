@@ -1,7 +1,7 @@
 
 
 # 
-<img src="src/main/webapp/img/logo.png"width="80" height="80" style="margin-right: 20px;"> <h1 style="font-size:40px; font-weight:bold; color:#008000;"> ÉcoEnchères </h1>
+<img src="img/logo.png"width="80" height="80" style="margin-right: 20px;"> <h1 style="font-size:40px; font-weight:bold; color:#008000;"> ÉcoEnchères </h1>
 
 
 ## Présentation du projet
